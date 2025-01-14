@@ -1,10 +1,11 @@
+package org.docksidestage.handson.unit;
+
 import javax.annotation.Resource;
 
 import org.dbflute.cbean.result.ListResultBean;
 import org.dbflute.optional.OptionalEntity;
 import org.docksidestage.handson.dbflute.exbhv.MemberBhv;
 import org.docksidestage.handson.dbflute.exentity.Member;
-import org.docksidestage.handson.unit.UnitContainerTestCase;
 
 public class HandsOn02Test extends UnitContainerTestCase {
     @Resource
@@ -58,6 +59,7 @@ public class HandsOn02Test extends UnitContainerTestCase {
         });
 
         assertTrue(members.stream().allMatch(member -> member.getBirthdate() == null));
+        log("　こん日は");
         System.out.println(members);
     }
 }
