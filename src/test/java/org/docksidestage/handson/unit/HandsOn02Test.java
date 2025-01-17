@@ -40,7 +40,7 @@ public class HandsOn02Test extends UnitContainerTestCase {
         //依存関係は問題なさそうだった。一旦System.out.printlnで進める
 
         assertTrue(members.stream().allMatch(member -> member.getMemberName().startsWith("S")));
-        System.out.println(members);
+        log("members:" + members.getSelectedList());
     }
 
     public void test_searchMembers_memberId_equal_1() throws Exception {
@@ -49,7 +49,7 @@ public class HandsOn02Test extends UnitContainerTestCase {
         });
 
         assertTrue(members.stream().allMatch(member -> member.getMemberId() == 1));
-        System.out.println(members);
+        log("members:" + members.get());
     }
 
     public void test_searchMembers_birthDate_isNull() throws Exception {
@@ -59,8 +59,7 @@ public class HandsOn02Test extends UnitContainerTestCase {
         });
 
         assertTrue(members.stream().allMatch(member -> member.getBirthdate() == null));
-        log("　こん日は");
-        System.out.println(members);
+        log("members:" + members.getSelectedList());
     }
 }
 
