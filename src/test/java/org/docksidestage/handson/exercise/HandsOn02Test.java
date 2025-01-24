@@ -1,4 +1,4 @@
-package org.docksidestage.handson.unit;
+package org.docksidestage.handson.exercise;
 
 import javax.annotation.Resource;
 
@@ -7,18 +7,25 @@ import org.dbflute.optional.OptionalEntity;
 import org.docksidestage.handson.dbflute.exbhv.MemberBhv;
 import org.docksidestage.handson.dbflute.exentity.Member;
 
-// TODO tanaryo javadocお願いします by jflute (2025/01/17)
-// TODO tanaryo package, 正しくは、exercise パッケージです by jflute (2025/01/17)
+// TODO done tanaryo javadocお願いします by jflute (2025/01/17)
+// TODO done tanaryo package, 正しくは、exercise パッケージです by jflute (2025/01/17)
 
+/**
+ * @author tanaryo
+ */
 public class HandsOn02Test extends UnitContainerTestCase {
     @Resource
     private MemberBhv memberBhv;
 
-    // TODO tanaryo Arrange, Act, Assert のコメントを入れてるようにお願いします by jflute (2025/01/17)
+    // TODO done tanaryo Arrange, Act, Assert のコメントを入れてるようにお願いします by jflute (2025/01/17)
     // Arrangeないときは空っぽでOK
     public void test_existsTestData() throws Exception {
+        // ## Arrange ##
+        // ## Act ##
         int count = memberBhv.selectCount(cb ->{});
-        assertTrue(count != 0);
+
+        // ## Assert ##
+        assertTrue(count > 0);
 
         /////////////////////////////////////////////////////////////////////////////////
         // 20-member.xls と 30-product.xls を配置してReplaceSchemaしたらエラー出た
@@ -44,6 +51,9 @@ public class HandsOn02Test extends UnitContainerTestCase {
     	// littleAdjustmentMap.dfprop にて、以下が設定されてるとJava8版でもJava6版の挙動になる。
     	// ; isNullOrEmptyQueryAllowed = true
     	// こういう現場があれば、できれば移行して欲しい。
+
+        // ## Arrange ##
+        // ## Act ##
         ListResultBean<Member> members = memberBhv.selectList(cb -> {
             cb.query().setMemberName_LikeSearch("S",op -> op.likePrefix());
             cb.query().addOrderBy_MemberName_Asc();
@@ -55,25 +65,32 @@ public class HandsOn02Test extends UnitContainerTestCase {
         //なぜかログが出力されない。
         //依存関係は問題なさそうだった。一旦System.out.printlnで進める
 
-        // TODO tanaryo 万が一、テストデータが空っぽとかで検索0件だったら...素通りgreenになっちゃう by jflute (2025/01/17)
+        // TODO done tanaryo 万が一、テストデータが空っぽとかで検索0件だったら...素通りgreenになっちゃう by jflute (2025/01/17)
         // allMatch()のjavadocを見ると、空っぽの時はtrueを戻す、とのこと。空っぽでallMatch(),anyMatch()のときは気を付けて。
         // Optionalのアリナシと同じ用に、リストの0か1以上かってのもわりと大違いなので常に意識を。
         // ということで、素通りgreenならないように素通り防止をしましょう。(この後のエクササイズすべて同じ)
-        // TODO tanaryo ログ出すなら、assertよりも前の方が、落ちたとき見れる by jflute (2025/01/17)
-        // TODO tanaryo ListResultBean自体が、ListでtoString()オーバーライドしてるので、getSelectedList()の必要ない by jflute (2025/01/17)
-        assertTrue(members.stream().allMatch(member -> member.getMemberName().startsWith("S")));
-        log("members:" + members.getSelectedList());
+        // TODO done tanaryo ログ出すなら、assertよりも前の方が、落ちたとき見れる by jflute (2025/01/17)
+        // TODO done tanaryo ListResultBean自体が、ListでtoString()オーバーライドしてるので、getSelectedList()の必要ない by jflute (2025/01/17)
+
+        // ## Assert ##
+        log("members:" + members);
+
+        assertTrue(members.getAllRecordCount() > 0);
+        assertTrue(members.getSelectedList().stream().allMatch(member -> member.getMemberName().startsWith("S")));
     }
 
     public void test_searchMembers_memberId_equal_1() throws Exception {
-    	// TODO tanaryo membersではない、単体なので by jflute (2025/01/17)
+    	// TODO done tanaryo membersではない、単体なので by jflute (2025/01/17)
     	// でもこのまま members を member にすると、本物の member と変数名がかぶる。
     	// OptionalEntityの変数名は？
     	// https://dbflute.seasar.org/ja/manual/function/ormapper/behavior/select/selectentity.html#optionalname
     	// の通り、optMember がオススメではあります。
     	// 一方で、Optionalを極力変数で置かないやり方(メソッドチェーン)もあります。
     	// ただこのケースではちょっと向かないかも。
-        OptionalEntity<Member> members = memberBhv.selectEntity(cb -> {
+
+        // ## Arrange ##
+        // ## Act ##
+        OptionalEntity<Member> optMember = memberBhv.selectEntity(cb -> {
             cb.query().setMemberId_Equal(1);
         });
 
@@ -90,23 +107,34 @@ public class HandsOn02Test extends UnitContainerTestCase {
         // 業務的に必ず存在してるってケースでは積極的に使って良い。
         // (Java標準のOptionalの場合は、デバッグ情報ない例外が上がるだけなので問答無用get()はあまりしない)
 		
-        // TODO tanaryo Optionalをリスト的に扱ってるけど、ここでは一件なのでその必要がない by jflute (2025/01/17)
+        // TODO done tanaryo Optionalをリスト的に扱ってるけど、ここでは一件なのでその必要がない by jflute (2025/01/17)
         // Optional@stream() は、リストと区別なく抽象的に扱いたい時に使うもので普段はあまり使わなくていいかなと。
-        // TODO tanaryo 一応、Integerは == ではなく equals() で比較しておきましょう by jflute (2025/01/17)
+        // TODO done tanaryo 一応、Integerは == ではなく equals() で比較しておきましょう by jflute (2025/01/17)
         // https://dbflute.seasar.org/ja/manual/topic/programming/java/beginners.html#equalsequal
         // dotって打ってequals()が出てきたらequals()使うくらいでもいい。
-        assertTrue(members.stream().allMatch(member -> member.getMemberId() == 1));
-        log("members:" + members.get());
+        // enumはインスタンスが単一のため、比較は ==の方が望ましい？
+
+
+        // ## Assert ##
+        log("optMember:" + optMember);
+        assertTrue(optMember.get().getMemberId().equals(1));
     }
 
     public void test_searchMembers_birthDate_isNull() throws Exception {
+        // ## Arrange ##
+        // ## Act ##
         ListResultBean<Member> members = memberBhv.selectList(cb -> {
             cb.query().setBirthdate_IsNull();
             cb.query().addOrderBy_UpdateDatetime_Asc();
         });
 
-        assertTrue(members.stream().allMatch(member -> member.getBirthdate() == null));
-        log("members:" + members.getSelectedList());
+        // ## Assert ##
+        log("members:" + members);
+        assertTrue(members.getAllRecordCount() > 0);
+
+        //member.getBirthdate().equals(null)は常にfalseを返すようになっていた
+
+        members.getSelectedList().forEach(member -> assertNull(member.getBirthdate()));
     }
 }
 

@@ -1,4 +1,4 @@
-package org.docksidestage.handson.unit;
+package org.docksidestage.handson.exercise;
 
 import java.time.LocalDate;
 
