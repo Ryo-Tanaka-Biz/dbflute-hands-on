@@ -1,4 +1,4 @@
-package org.docksidestage.handson.exercise;
+package org.docksidestage.handson.unit;
 
 import java.sql.Connection;
 import java.sql.SQLException;

@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.dbflute.cbean.result.ListResultBean;
 import org.docksidestage.handson.dbflute.exbhv.MemberBhv;
 import org.docksidestage.handson.dbflute.exentity.Member;
+import org.docksidestage.handson.unit.UnitContainerTestCase;
 
 public class HandsOn03Test extends UnitContainerTestCase {
     @Resource

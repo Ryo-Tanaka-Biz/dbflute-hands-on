@@ -6,12 +6,13 @@ import org.dbflute.cbean.result.ListResultBean;
 import org.dbflute.optional.OptionalEntity;
 import org.docksidestage.handson.dbflute.exbhv.MemberBhv;
 import org.docksidestage.handson.dbflute.exentity.Member;
+import org.docksidestage.handson.unit.UnitContainerTestCase;
 
 // done tanaryo javadocお願いします by jflute (2025/01/17)
 // done tanaryo package, 正しくは、exercise パッケージです by jflute (2025/01/17)
-// TODO tanaryo UnitContainerTestCase も一緒に連れてきちゃってる (unit) by jflute (2025/01/24)
+// done tanaryo UnitContainerTestCase も一緒に連れてきちゃってる (unit) by jflute (2025/01/24)
 
-// TODO tanaryo [読み物課題] 既存コードの甘い匂い (悪意なきチグハグコードの誕生) by jflute (2025/01/24)
+// done tanaryo [読み物課題] 既存コードの甘い匂い (悪意なきチグハグコードの誕生) by jflute (2025/01/24)
 // https://jflute.hatenadiary.jp/entry/20160203/existingcode
 
 /**
@@ -82,12 +83,12 @@ public class HandsOn02Test extends UnitContainerTestCase {
         // ## Assert ##
         log("members:" + members);
 
-        // TODO tanaryo [tips] こう書いてもらって全然OKですが、HandsOnでは専用のメソッドが用意されていて... by jflute (2025/01/24)
+        // TODO done tanaryo [tips] こう書いてもらって全然OKですが、HandsOnでは専用のメソッドが用意されていて... by jflute (2025/01/24)
         // assH -> assertHasAnyElement(members); もう定型的でよく呼ぶので、これを覚えちゃってください。
-        assertTrue(members.getAllRecordCount() > 0);
-        // TODO tanaryo ここも似た話で、ListResultBean自体がListなので、stream()直接呼べます by jflute (2025/01/24)
+        assertHasAnyElement(members);
+        // TODO done tanaryo ここも似た話で、ListResultBean自体がListなので、stream()直接呼べます by jflute (2025/01/24)
         // ちなみに、ListResultBeanはEntityの一覧を意識したクラスで便利メソッドが付いてるから具象クラスで受け取っている。
-        assertTrue(members.getSelectedList().stream().allMatch(member -> member.getMemberName().startsWith("S")));
+        assertTrue(members.stream().allMatch(member -> member.getMemberName().startsWith("S")));
     }
 
     public void test_searchMembers_memberId_equal_1() throws Exception {
@@ -188,11 +189,11 @@ public class HandsOn02Test extends UnitContainerTestCase {
         // [1on1でのふぉろー] 改めてここで ListResultBean から、概念と実装は別物、ということを学べたかなと。
         // 以前紹介した「HashSet は内部では HashMap を new して使ってるだけ」にちょっと構造が近い。
         log("members:" + members);
-        assertTrue(members.getAllRecordCount() > 0);
+        assertHasAnyElement(members);
 
         //member.getBirthdate().equals(null)は常にfalseを返すようになっていた
 
-        members.getSelectedList().forEach(member -> assertNull(member.getBirthdate()));
+        members.forEach(member -> assertNull(member.getBirthdate()));
         
         // [1on1でのふぉろー] ListResultBean の固有メソッドの紹介
         //List<String> memberNameList = members.extractColumnList(member -> {
