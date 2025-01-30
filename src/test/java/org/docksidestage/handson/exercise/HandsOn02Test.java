@@ -83,10 +83,10 @@ public class HandsOn02Test extends UnitContainerTestCase {
         // ## Assert ##
         log("members:" + members);
 
-        // TODO done tanaryo [tips] こう書いてもらって全然OKですが、HandsOnでは専用のメソッドが用意されていて... by jflute (2025/01/24)
+        // done tanaryo [tips] こう書いてもらって全然OKですが、HandsOnでは専用のメソッドが用意されていて... by jflute (2025/01/24)
         // assH -> assertHasAnyElement(members); もう定型的でよく呼ぶので、これを覚えちゃってください。
         assertHasAnyElement(members);
-        // TODO done tanaryo ここも似た話で、ListResultBean自体がListなので、stream()直接呼べます by jflute (2025/01/24)
+        // done tanaryo ここも似た話で、ListResultBean自体がListなので、stream()直接呼べます by jflute (2025/01/24)
         // ちなみに、ListResultBeanはEntityの一覧を意識したクラスで便利メソッドが付いてるから具象クラスで受け取っている。
         assertTrue(members.stream().allMatch(member -> member.getMemberName().startsWith("S")));
     }
