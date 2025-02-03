@@ -49,7 +49,7 @@ public class HandsOn03Test extends UnitContainerTestCase {
         log(members);
         assertHasAnyElement(members);
         members.forEach(member -> {
-            // TODO tanaryo ちょっとコードが膨れてるなと思ったら変数抽出して欲しい。 by jflute (2025/01/30)
+            // TODO done tanaryo ちょっとコードが膨れてるなと思ったら変数抽出して欲しい。 by jflute (2025/01/30)
             // 特にここは判定ロジック入るところで、できるだけ判定ロジックがパット見で認識できるようにしたい。
             // IntelliJのショートカットでサクッとできるはず。
             // 一方で、最初から変数に出すのではなく後から出すでOK。書くときは流れに任せてどっとどっとした方が速いってもあるので。
