@@ -436,6 +436,10 @@ public class HandsOn03Test extends UnitContainerTestCase {
         }
         LocalDateTime startTime = LocalDateTime.of(2005, 6, 1, 0, 0, 0);//を含む
         LocalDateTime endTime = LocalDateTime.of(2005, 7, 1, 0, 0, 0);//を含まない
+        return isWithinRange(formalizedDatetime, startTime, endTime);
+    }
+
+    private static boolean isWithinRange(LocalDateTime formalizedDatetime, LocalDateTime startTime, LocalDateTime endTime) {
         return (formalizedDatetime.isAfter(startTime) || formalizedDatetime.equals(startTime)) && formalizedDatetime.isBefore(endTime);
     }
 }
