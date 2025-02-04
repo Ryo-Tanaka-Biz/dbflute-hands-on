@@ -173,6 +173,9 @@ public class HandsOn03Test extends UnitContainerTestCase {
                 if (statusCodes.contains(memberStatusCode)) {
                     return false;
                 }
+                // TODO tanaryo tips: 切り替わったときにじゃなくても、常にaddと=代入して問題ないので... by jflute (2025/02/04)
+                // シンプルにするためにifの外に出すやり方もあります。
+                // statusCodesはとにかく登場したステータスのset, lastStatusCodeはとにかく一個前のステータス、というニュアンスで。
                 statusCodes.add(memberStatusCode);
                 lastStatusCode = memberStatusCode;
             }
@@ -187,6 +190,7 @@ public class HandsOn03Test extends UnitContainerTestCase {
     //    購入に紐づく会員の生年月日が存在することをアサート
     public void test_searchMembers_gold_5() {
         // ## Arrange ##
+    	// TODO tanaryo [いいね] 完璧ですな by jflute (2025/02/04)
         // ## Act ##
         ListResultBean<Purchase> purchaseList = purchaseBhv.selectList(cb -> {
             //MEMBER_IDはNotnullでmemberのFK
@@ -225,6 +229,7 @@ public class HandsOn03Test extends UnitContainerTestCase {
     //    会員の正式会員日時が指定された条件の範囲内であることをアサート
     public void test_searchMembers_gold_6() {
         // ## Arrange ##
+    	// TODO tanaryo これまた完璧。一応、補足に書いてあった adjust... のところもやってみてください by jflute (2025/02/04)
         String targetStartDateString = "2005/10/01";//00:00:00を含む
         String targetEndDateString = "2005/10/03";//翌日の00:00:00を含まない
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
@@ -268,6 +273,7 @@ public class HandsOn03Test extends UnitContainerTestCase {
     public void test_searchMembers_platinum_7() {
         // ## Arrange ##
         // ## Act ##
+    	// TODO jflute 1on1で一週間以内の解釈議論 (2025/02/04)
         //　正式会員日時＜＝　購入日時　＜＝正式会員日時＋24h*7
         ListResultBean<Purchase> purchaseList = purchaseBhv.selectList(cb -> {
             cb.setupSelect_Member().withMemberStatus();
@@ -287,6 +293,8 @@ public class HandsOn03Test extends UnitContainerTestCase {
             String categoryName =
                     purchase.getProduct().get().getProductCategory().get().getProductCategorySelf().get().getProductCategoryName();
             LocalDateTime formalizedDatetime = purchase.getMember().get().getFormalizedDatetime();
+            // TODO tanaryo (formalizedDatetime) の () は無くてOKです by jflute (2025/02/04)
+            // TODO tanaryo queryの方は truncTime() してるけど、こっちは trunc 的な処理が見当たらないけど大丈夫かな？ by jflute (2025/02/04)
             LocalDateTime formalizedDatetimeAfterOneWeek = (formalizedDatetime).plusDays(7);//丁度24h*7後
             LocalDateTime purchaseDatetime = purchase.getPurchaseDatetime();
 
@@ -323,6 +331,7 @@ public class HandsOn03Test extends UnitContainerTestCase {
             cb.setupSelect_MemberSecurityAsOne();
             cb.setupSelect_MemberWithdrawalAsOne();
             cb.orScopeQuery(orCB -> {
+            	// TODO tanaryo なるほどぅ。fromがないから西暦1年からにしたということですね。opでダミー値を使わないようにもできます by jflute (2025/02/04)
                 orCB.query().setBirthdate_FromTo(LocalDate.of(1, 1, 1), targetBirthDate, op -> op.compareAsYear());//1975/1/1は含まない
                 orCB.query().setBirthdate_IsNull();
             });
@@ -331,12 +340,15 @@ public class HandsOn03Test extends UnitContainerTestCase {
 
         // ## Assert ##
         assertHasAnyElement(memberList);
+        // TODO tanaryo [いいね] 良い変数名 by jflute (2025/02/04)
         boolean containsLimitBirthDateMember = false;
         for (Member member : memberList) {
             MemberStatus status = member.getMemberStatus().get();
             MemberSecurity security = member.getMemberSecurityAsOne().get();
             OptionalEntity<MemberWithdrawal> optWithdrawal = member.getMemberWithdrawalAsOne();//データがないこともある
             String reason = optWithdrawal.map(withdrawal -> withdrawal.getWithdrawalReasonInputText()).orElse("none");
+            // TODO tanaryo 一応、カラム名表現が Birthdate なので、それに合わせて D は d にしましょう by jflute (2025/02/04)
+            // (文法的にどっちが合ってるか？ってのは置いておいて、すでに定義されているカラムに合わせたほうが無難ということで)
             LocalDate birthDate = member.getBirthdate();
 
             log("会員ステータス名称={}, リマインダ質問={}, リマインダ回答={}, 退会理由入力テキスト={}", status.getMemberStatusName(),
@@ -349,6 +361,7 @@ public class HandsOn03Test extends UnitContainerTestCase {
             }
         }
         assertTrue(containsLimitBirthDateMember);
+        // TODO tanaryo [いいね] これよく気づきました。先頭ってありますからこれでOKです by jflute (2025/02/04)
         assertNull(memberList.get(0).getBirthdate());
     }
 
@@ -381,6 +394,7 @@ public class HandsOn03Test extends UnitContainerTestCase {
         LocalDateTime startTime = LocalDateTime.of(2005, 6, 1, 0, 0, 0);//を含む
         LocalDateTime endTime = LocalDateTime.of(2005, 7, 1, 0, 0, 0);//を含まない
         LocalDate anyBirthDate = LocalDate.of(2000, 1, 1);
+        // TODO tanaryo [いいね] 応用できてて素晴らしい by jflute (2025/02/04)
         createTest9Member(1, startTime, anyBirthDate);//正式会員日時の条件を満たし、かつ生年月日がnullじゃない
         createTest9Member(2, endTime, null);//正式会員日時の条件を満たさない、かつ生年月日がnullじゃない
         createTest9Member(3, startTime, null);//正式会員日時の条件を満たし、かつ生年月日がnull
