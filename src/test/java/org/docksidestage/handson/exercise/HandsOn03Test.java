@@ -34,22 +34,22 @@ public class HandsOn03Test extends UnitContainerTestCase {
         // ## Arrange ##
         LocalDate targetDate = LocalDate.of(1968, 1, 1);
         // ## Act ##
-        // TODO done tanaryo targetDateはArrangeでOKです。Actは純粋にテスト対象の実行のみするのが慣習 by jflute (2025/01/30)
+        // done tanaryo targetDateはArrangeでOKです。Actは純粋にテスト対象の実行のみするのが慣習 by jflute (2025/01/30)
         ListResultBean<Member> members = memberBhv.selectList(cb -> {
-            // TODO done tanaryo メソッド呼び出し順序、慣習ではあるけれども、select句、where句、order by句に合わせて by jflute (2025/01/30)
+            // done tanaryo メソッド呼び出し順序、慣習ではあるけれども、select句、where句、order by句に合わせて by jflute (2025/01/30)
             // http://dbflute.seasar.org/ja/manual/function/ormapper/conditionbean/effective.html#implorder
             cb.setupSelect_MemberStatus();
             cb.query().setBirthdate_LessEqual(targetDate);
             cb.query().setMemberName_LikeSearch("S", op -> op.likePrefix());
             cb.query().addOrderBy_Birthdate_Asc();
         });
-        // TODO done tanaryo log()も似たような話で、logはAssert配下でOK。アサートじゃないと言えるかもだけど、目視確認の一環なので by jflute (2025/01/30)
+        // done tanaryo log()も似たような話で、logはAssert配下でOK。アサートじゃないと言えるかもだけど、目視確認の一環なので by jflute (2025/01/30)
 
         // ## Assert ##
         log(members);
         assertHasAnyElement(members);
         members.forEach(member -> {
-            // TODO done tanaryo ちょっとコードが膨れてるなと思ったら変数抽出して欲しい。 by jflute (2025/01/30)
+            // done tanaryo ちょっとコードが膨れてるなと思ったら変数抽出して欲しい。 by jflute (2025/01/30)
             // 特にここは判定ロジック入るところで、できるだけ判定ロジックがパット見で認識できるようにしたい。
             // IntelliJのショートカットでサクッとできるはず。
             // 一方で、最初から変数に出すのではなく後から出すでOK。書くときは流れに任せてどっとどっとした方が速いってもあるので。
@@ -67,8 +67,8 @@ public class HandsOn03Test extends UnitContainerTestCase {
             //生年月日がない人は後ろに回す
             cb.setupSelect_MemberStatus();
             cb.setupSelect_MemberSecurityAsOne();
-            // TODO done tanaryo [いいね] nullの制御できててGood by jflute (2025/01/30)
-            // TODO done tanaryo 一方で、若い順になってない。「若いと数字が若いは別 by tanaryo」 by jflute (2025/01/30)
+            // done tanaryo [いいね] nullの制御できててGood by jflute (2025/01/30)
+            // done tanaryo 一方で、若い順になってない。「若いと数字が若いは別 by tanaryo」 by jflute (2025/01/30)
             // 実は、DescにするとMySQLだと自然とnullは後ろになるので、nullsLastさんなくても良かったとは言える。
             // ただ、nullを小さな値と解釈して並べるのが世界標準かどうかは？はちょと怪しい。別のDBMSだったら違うかも。
             // ということなので、MySQLのデフォルト挙動に依存したSQLにしてると、いつかDBMS移行したときに痛い目に遭う。
@@ -107,7 +107,7 @@ public class HandsOn03Test extends UnitContainerTestCase {
     public void test_searchMembers_silver_3() {
         // ## Arrange ##
         // ## Act ##
-        // TODO done tanaryo 試しに、cbの条件をなくしてわざと落とすようにしてみたけど、落ちない by jflute (2025/01/30)
+        // done tanaryo 試しに、cbの条件をなくしてわざと落とすようにしてみたけど、落ちない by jflute (2025/01/30)
         // コメントアウトしてテストが落ちることを確認（by tanaryo 2025/02/01）
         // 一度は、assertがredになってちゃんとassertのロジックが合ってることを確認しましょう。
         ListResultBean<Member> members = memberBhv.selectList(cb -> {
@@ -117,8 +117,12 @@ public class HandsOn03Test extends UnitContainerTestCase {
         log(members);
         // ## Assert ##
         assertHasAnyElement(members);
-        // TODO done tanaryo さすがに、インライン過ぎて見逃しとかしやすいので、もうちょい変数出してstep踏んでもいいかなと by jflute (2025/01/30)
+        // done tanaryo さすがに、インライン過ぎて見逃しとかしやすいので、もうちょい変数出してstep踏んでもいいかなと by jflute (2025/01/30)
+        // TODO jflute 1on1にて、ループ内getの話 (2025/02/04)
         members.forEach(member -> {
+        	// TODO tanaryo あるかどうか？だけを見るのであれば、selectCount()を使う習慣を by jflute (2025/02/04)
+        	// UnitTestなので妥協はできますが、mainコードだったら無駄に1レコード分のデータを取得することになります。
+        	// countであればint型のデータが転送されるだけになるのでネットワーク負荷が低くなります。
             OptionalEntity<MemberSecurity> optMemberSecurity = memberSecurityBhv.selectEntity(cb -> {
                 cb.query().setMemberId_Equal(member.getMemberId());
                 cb.query().setReminderQuestion_LikeSearch("2", op -> op.likeContain());
@@ -141,7 +145,8 @@ public class HandsOn03Test extends UnitContainerTestCase {
         members.forEach(member -> {
             assertTrue(member.getMemberStatus().isEmpty());
         });
-        // TODO done tanaryo やりかけのときは、todoコメントで書いておきましょう。忘れちゃうケースがよくあるので by jflute (2025/01/30)
+        // TODO jflute tanaryo ここは1on1にて聞く (2025/02/04)
+        // done tanaryo やりかけのときは、todoコメントで書いておきましょう。忘れちゃうケースがよくあるので by jflute (2025/01/30)
         // よもやま: 働き方の多様性のためにも、自分のやりかけをしっかり管理する習慣を付けておいたほうが良い。
         //ここから再開（by tanaryo 2025/02/01）
         //会員ステータスコードごとに固まっていることをアサート
