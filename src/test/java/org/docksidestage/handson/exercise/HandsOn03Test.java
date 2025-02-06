@@ -92,6 +92,12 @@ public class HandsOn03Test extends UnitContainerTestCase {
             // member_idはmemberのPKカラム(NotNull)かつ会員セキュリティのFKカラム(Notnull)である（by tanaryo 2025/02/01）
             // そのため、共通のmember_idを持つmemberレコードと会員セキュリティレコードが必ず存在する（by tanaryo 2025/02/01）
             //
+        	// ↑1on1でふぉろー、探しに行く方向とFKの方向が逆なので、そのセオリーは通じない。
+        	// ER図の黒まるやSchemaHTMLのテーブルコメントにヒントがあった。
+        	// 業務的な制約で必ず存在する、という風に人間が決めている。
+        	//
+        	// 1:1と言ったとき、必ず存在する1:1なのか？いないかもしれない1:1なのか？わからない。
+        	// (ファーストレベルの表現だけの1:1なのか？セカンドレベルまで表現してて必ず存在する1:1のことを言ってるのか？)
             //
             // 学び:
             // データベースの構造がそうなっているから、プログラムがこうなっている、の関係性に注目。
@@ -118,7 +124,12 @@ public class HandsOn03Test extends UnitContainerTestCase {
         // ## Assert ##
         assertHasAnyElement(members);
         // done tanaryo さすがに、インライン過ぎて見逃しとかしやすいので、もうちょい変数出してstep踏んでもいいかなと by jflute (2025/01/30)
-        // TODO jflute 1on1にて、ループ内getの話 (2025/02/04)
+        // done jflute 1on1にて、ループ内getの話 (2025/02/04)
+        // n+1問題と言われる。パフォーマンス劣化の代表選手。ぐるぐる系のSQLとも呼ばれる。
+        // 1発1発は早いSQLなんだけど、全体としてはボディーブローのように「うっ」とくる遅さになる。
+        // DBに無駄に負荷(CPU)を掛けるきっかけになったりする。
+        // これは業務でもめちゃくちゃ気をつけて欲しい。ループの中で検索は基本的に危ないと考えてもいいくらい。
+        // TODO tanaryo securityだけで一回のSQLにしてみましょう by jflute (2025/02/06)
         members.forEach(member -> {
         	// TODO tanaryo あるかどうか？だけを見るのであれば、selectCount()を使う習慣を by jflute (2025/02/04)
         	// UnitTestなので妥協はできますが、mainコードだったら無駄に1レコード分のデータを取得することになります。
@@ -159,10 +170,21 @@ public class HandsOn03Test extends UnitContainerTestCase {
         //AABBCCBB
         //値が切り替わった後に切り替わる前の値が再登場したら固まっていないとする
         assertTrue(isGroupedByMemberStatusCode(members));
+        
+        // [tips] 別のやり方の紹介。
+        // 値が切り替わったタイミングの回数と、登場したステータスの種類数が...
+        // 「値が切り替わったタイミングの回数 = 登場したステータスの種類数 - 1」のはず。
+        // という考え方。
+        // この場合、assertはloopの外になる。でも、持つデータはほとんど変わらない。
+        // 別にこのやり方が良いというわけではないけど。
     }
 
     private boolean isGroupedByMemberStatusCode(ListResultBean<Member> members) {
+    	// TODO tanaryo せっかくなのでinterfaceのSetで扱いましょう by jflute (2025/02/06)
         HashSet<String> statusCodes = new HashSet<>();
+        // [1on1でのふぉろー] Stringの初期値の質問の回答: こういうやり方もあるので悪くはない。
+        // ただ個人的には空文字ってあんまり使わないようにしてて null にしてる。
+        // 空文字で下手に動いちゃってロジック間違ったのに落ちないとかいやなので。
         String lastStatusCode = "";
 
         for (Member member : members) {
@@ -191,6 +213,7 @@ public class HandsOn03Test extends UnitContainerTestCase {
     public void test_searchMembers_gold_5() {
         // ## Arrange ##
     	// TODO tanaryo [いいね] 完璧ですな by jflute (2025/02/04)
+    	// [1on1でのふぉろー] 基点テーブルの話
         // ## Act ##
         ListResultBean<Purchase> purchaseList = purchaseBhv.selectList(cb -> {
             //MEMBER_IDはNotnullでmemberのFK
@@ -250,6 +273,7 @@ public class HandsOn03Test extends UnitContainerTestCase {
         // ## Assert ##
         assertHasAnyElement(memberList);
         memberList.forEach(member -> {
+        	// TODO tanaryo 変数名の省略ポイントの統一性がちょっと微妙なので修正してみましょう by jflute (2025/02/06)
             String name = member.getMemberName();
             LocalDateTime formalizedDatetime = member.getFormalizedDatetime();
             MemberStatus memberStatus = member.getMemberStatus().get();
@@ -262,6 +286,8 @@ public class HandsOn03Test extends UnitContainerTestCase {
             //getMemberStatusCodeではテスト通らないことを確認
             assertException(NonSpecifiedColumnAccessException.class, () -> memberStatus.getDescription());
             assertException(NonSpecifiedColumnAccessException.class, () -> memberStatus.getDisplayOrder());
+            
+            // TODO tanaryo 実装漏れ "会員の正式会員日時が指定された条件の範囲内であることをアサート" by jflute (2025/02/06)
         });
     }
 
@@ -272,9 +298,25 @@ public class HandsOn03Test extends UnitContainerTestCase {
     //    購入日時が正式会員になってから一週間以内であることをアサート
     public void test_searchMembers_platinum_7() {
         // ## Arrange ##
+    	// TODO tanaryo 補足にあった、adjustを使ったエクササイズをやってみてください by jflute (2025/02/06)
         // ## Act ##
-    	// TODO jflute 1on1で一週間以内の解釈議論 (2025/02/04)
+    	// done jflute 1on1で一週間以内の解釈議論 (2025/02/04)
+    	//
+        // 10/3                    10/10     10/11
+        //  13h                      0h  13h   0h
+        //   |                       |    |    |
+        //   |       D               | I  |    | P
+        // A |                       |H  J|L   |O
+        //   |C                  E   G    K    N
+        //   B                      F|    |   M|
+        //   |                       |         |
+        //
         //　正式会員日時＜＝　購入日時　＜＝正式会員日時＋24h*7
+    	//
+    	// たなりょうさんの一週間は、24h*7のとおり K まで。
+    	// but truncTime()は不要では？ これだと G になっちゃう。
+    	// TODO tanaryo ↑自分の意図通りに実装ができていないので、それはそれは直しましょう。 by jflute (2025/02/06)
+    	// 
         ListResultBean<Purchase> purchaseList = purchaseBhv.selectList(cb -> {
             cb.setupSelect_Member().withMemberStatus();
             cb.setupSelect_Member().withMemberSecurityAsOne();
@@ -365,7 +407,25 @@ public class HandsOn03Test extends UnitContainerTestCase {
         assertNull(memberList.get(0).getBirthdate());
     }
 
+    // [1on1でのふぉろー] ちょこっと更新でテストデータを作るのGood。
+    // このやり方の最大の敵は、既存テーブルに1レコードも入っていない状況。
+    // テストデータは、最低1レコードは作りたいところ。
     private void makeLimitBirthDateMember() {
+    	// [1on1でのふぉろー] UnitTestでのテストデータへの依存の話
+    	// テストデータに依存しない方がいいかどうかは、現場のポリシー次第。
+    	// がんがん依存してアサート書いていこうってわりきってうまくやってる現場もあるし。
+    	// (その現場では、依存度を下げるためにUnitTestでロジックを書くことが良くないという考え方をしてる)
+    	// (UnitTestはできるだけベタに書いて難しいことをしない方が逆に間違い少ないという考え方)
+    	// (UnitTestは業務仕様のドキュメントとも言えるので、ロジックで抽象化をしない方がいいだろうという考え方)
+    	// 
+    	// ちなみに、ちょこっと更新のやり方は、このケースだとIDくらいしか依存していないので、依存度は低い。
+    	// さらに依存度を下げるのであれば、こんな実装もある。
+		//Member existingMember = memberBhv.selectEntity(cb -> {
+		//	cb.fetchFirst(1);
+		//}).get();
+		//existingMember.setBirthdate(LocalDate.of(1974, 12, 31));
+		//memberBhv.updateNonstrict(existingMember);
+    	
         Member member = new Member();
         member.setMemberId(1);
         member.setBirthdate(LocalDate.of(1974, 12, 31));
@@ -379,6 +439,7 @@ public class HandsOn03Test extends UnitContainerTestCase {
         memberBhv.updateNonstrict(member);
     }
 
+    // TODO jflute 次回1on1でのふぉろーここから (2025/02/06)
     //    [9] 2005年6月に正式会員になった会員を先に並べて生年月日のない会員を検索
     //            画面からの検索条件で2005年6月がリクエストされたと想定
     //    Arrange で String の "2005/06/01" を一度宣言してから日付クラスに変換
