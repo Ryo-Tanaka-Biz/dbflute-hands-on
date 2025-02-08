@@ -349,7 +349,7 @@ public class HandsOn03Test extends UnitContainerTestCase {
             LocalDateTime formalizedDatetime = purchase.getMember().get().getFormalizedDatetime();
             // TODO done tanaryo (formalizedDatetime) の () は無くてOKです by jflute (2025/02/04)
             // TODO done tanaryo queryの方は truncTime() してるけど、こっちは trunc 的な処理が見当たらないけど大丈夫かな？ by jflute (2025/02/04)
-            LocalDateTime formalizedDatetimeAfterOneWeek = formalizedDatetime.plusDays(8).withHour(0).withMinute(0).withSecond(0);//丁度24h*7後
+            LocalDateTime formalizedDatetimeAfterOneWeek = formalizedDatetime.plusDays(8).withHour(0).withMinute(0).withSecond(0);
             LocalDateTime purchaseDatetime = purchase.getPurchaseDatetime();
 
             log(categoryName);
