@@ -338,7 +338,7 @@ public class HandsOn03Test extends UnitContainerTestCase {
                     .greaterEqual(colCB -> colCB.specify().specifyMember().columnFormalizedDatetime());//丁度は含む
             cb.columnQuery(colCB -> colCB.specify().columnPurchaseDatetime())
                     .lessThan(colCB -> colCB.specify().specifyMember().columnFormalizedDatetime())
-                    .convert(op -> op.addDay(8).truncTime());//丁度1週間後は含む
+                    .convert(op -> op.addDay(8).truncTime());
         });
 
         // ## Assert ##
