@@ -33,4 +33,22 @@ public class MemberCQ extends BsMemberCQ {
     //                                                                       Arrange Query
     //                                                                       =============
     // You can make your arranged query methods here. e.g. public void arrangeXxx()
+
+    /**
+     * ナイスな最年少会員
+     */
+    public void arrangeYoungestNiceMember(){
+        //scalar_(条件)は特定カラムで絞り込み。cb.query().〜の粒度で使用される
+        //selectScalarは特定カラムの取得。selectListやselectEntityと同じ粒度で使用される
+        scalar_Equal().max(memberCB -> {
+            memberCB.specify().columnBirthdate();
+            memberCB.query().existsPurchase(purchaseCB -> {
+                purchaseCB.query().existsPurchasePayment(purchasePaymentCB -> {
+                    purchasePaymentCB.query().setPaymentMethodCode_Equal_BankTransfer();
+                });
+            });
+        }).partitionBy(memberCB -> {
+            memberCB.specify().columnMemberStatusCode();
+        });
+    }
 }

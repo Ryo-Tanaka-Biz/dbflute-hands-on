@@ -1,6 +1,8 @@
 package org.docksidestage.handson.exercise;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -10,10 +12,7 @@ import org.dbflute.optional.OptionalScalar;
 import org.docksidestage.handson.dbflute.allcommon.CDef;
 import org.docksidestage.handson.dbflute.exbhv.MemberBhv;
 import org.docksidestage.handson.dbflute.exbhv.PurchaseBhv;
-import org.docksidestage.handson.dbflute.exentity.Member;
-import org.docksidestage.handson.dbflute.exentity.MemberWithdrawal;
-import org.docksidestage.handson.dbflute.exentity.ProductStatus;
-import org.docksidestage.handson.dbflute.exentity.Purchase;
+import org.docksidestage.handson.dbflute.exentity.*;
 import org.docksidestage.handson.unit.UnitContainerTestCase;
 
 /**
@@ -84,16 +83,15 @@ public class HandsOn04Test extends UnitContainerTestCase {
         // ## Arrange ##
         // ## Act ##
         ListResultBean<Member> memberList = memberBhv.selectList(cb -> {
-//            /**
-//             * Equal(=). As 仮会員 (PRV). And OnlyOnceRegistered. <br>
-//             * 仮会員: 入会直後のステータスで一部のサイトサービスが利用可能
-//             */
+            //            /**
+            //             * Equal(=). As 仮会員 (PRV). And OnlyOnceRegistered. <br>
+            //             * 仮会員: 入会直後のステータスで一部のサイトサービスが利用可能
+            //             */
             cb.setupSelect_MemberStatus();
             cb.query().scalar_Equal().max(memberCB -> {
                 memberCB.specify().columnBirthdate();
                 memberCB.query().setMemberStatusCode_Equal_仮会員();
             });
-            cb.query().setMemberStatusCode_Equal_仮会員();
         });
 
         // ## Assert ##
@@ -104,25 +102,47 @@ public class HandsOn04Test extends UnitContainerTestCase {
         });
     }
 
-    //    支払済みの購入の中で一番若い正式会員のものだけ検索//若いは会員番号？生年月日？
+    //    支払済みの購入の中で一番若い正式会員のものだけ検索
     //    会員ステータス名称も取得する(ログに出力)
-    //    購入日時の降順で並べる。//並べるということは複数を想定？会員番号に重複はあり得ないので、生年月日で進める。
+    //    購入日時の降順で並べる。
     //            購入の紐づいている会員が正式会員であることをアサート
     public void test_4() {
         // ## Arrange ##
         // ## Act ##
-        OptionalScalar<LocalDate> maxBirthDate = purchaseBhv.selectScalar(LocalDate.class).max(cb -> {
-            cb.specify().specifyMember().columnBirthdate();
-            cb.query().setPaymentCompleteFlg_Equal_True();
-            cb.query().queryMember().setMemberStatusCode_Equal_正式会員();
-        });
-        //memberからpurchaseはone-to-manyなのでsetupできない
+        //        OptionalScalar<LocalDate> maxBirthDate = purchaseBhv.selectScalar(LocalDate.class).max(cb -> {
+        //            cb.specify().specifyMember().columnBirthdate();
+        //            cb.query().setPaymentCompleteFlg_Equal_True();
+        //            cb.query().queryMember().setMemberStatusCode_Equal_正式会員();
+        //        });
+
+        //        OptionalScalar<LocalDate> maxBirthDate = memberBhv.selectScalar(LocalDate.class).max(cb -> {
+        //            cb.specify().columnBirthdate();
+        //            cb.query().existsPurchase(purchaseCB -> {
+        //                purchaseCB.query().setPaymentCompleteFlg_Equal_True();
+        //            });
+        //            cb.query().setMemberStatusCode_Equal_正式会員();
+        //        });
+        //        log(maxBirthDate.get());
+
+        //
+        //        ListResultBean<Purchase> purchaseList = purchaseBhv.selectList(cb -> {
+        //            cb.setupSelect_Member();
+        //            cb.query().setPaymentCompleteFlg_Equal_True();
+        //            cb.query().queryMember().setMemberStatusCode_Equal_正式会員();
+        //            cb.query().queryMember().setBirthdate_Equal(maxBirthDate.get());
+        //            cb.query().addOrderBy_PurchaseDatetime_Desc();
+        //        });
 
         ListResultBean<Purchase> purchaseList = purchaseBhv.selectList(cb -> {
             cb.setupSelect_Member();
             cb.query().setPaymentCompleteFlg_Equal_True();
-            cb.query().queryMember().setMemberStatusCode_Equal_正式会員();
-            cb.query().queryMember().setBirthdate_Equal(maxBirthDate.get());
+            cb.query().queryMember().scalar_Equal().max(memberCB -> {
+                memberCB.specify().columnBirthdate();
+                memberCB.query().setMemberStatusCode_Equal_正式会員();
+                memberCB.query().existsPurchase(purchaseCB -> {
+                    purchaseCB.query().setPaymentCompleteFlg_Equal_True();
+                });
+            });
             cb.query().addOrderBy_PurchaseDatetime_Desc();
         });
 
@@ -152,9 +172,9 @@ public class HandsOn04Test extends UnitContainerTestCase {
         assertHasAnyElement(purchaseList);
         purchaseList.forEach(purchase -> {
             ProductStatus productStatus = purchase.getProduct().get().getProductStatus().get();
-            OptionalEntity<MemberWithdrawal> optMemberWithdrawal =purchase.getMember().get().getMemberWithdrawalAsOne();
+            OptionalEntity<MemberWithdrawal> optMemberWithdrawal = purchase.getMember().get().getMemberWithdrawalAsOne();
             String reason = optMemberWithdrawal.map(op -> op.getWithdrawalReasonInputText()).orElse("none");//mapでいけた。flatmapでもいけるのか
-            log(productStatus.getProductStatusName(),reason);
+            log(productStatus.getProductStatusName(), reason);
             assertTrue(productStatus.isProductStatusCode生産販売可能());//productテーブルでもいける
         });
     }
@@ -167,10 +187,46 @@ public class HandsOn04Test extends UnitContainerTestCase {
     //    両方とも存在していることをアサート
     //            (検索されたデータに対して)Entity上だけで正式会員を退会会員に変更する
     //    変更した後、Entityが退会会員に変更されていることをアサート
+    //    変更した後、データベース上は退会会員に変更されて "いない" ことをアサート ※1
     public void test_6() {
         // ## Arrange ##
         // ## Act ##
+        ListResultBean<Member> memberList = memberBhv.selectList(cb -> {
+            cb.orScopeQuery(orCB -> {
+                orCB.query().setMemberStatusCode_Equal_正式会員();
+                orCB.query().setMemberStatusCode_Equal_退会会員();
+            });
+            cb.query().queryMemberStatus().addOrderBy_DisplayOrder_Asc();
+        });
+
         // ## Assert ##
+        assertHasAnyElement(memberList);
+        memberList.forEach(member -> {
+            assertTrue(member.isMemberStatusCode正式会員() || member.isMemberStatusCode退会会員());
+        });//この時点で正式会員または退会会員のいずれかであることを保証
+        List<String> statusCodeList = memberList.stream().map(Member::getMemberStatusCode).collect(Collectors.toList());
+        boolean containsFML = statusCodeList.contains(CDef.MemberStatus.正式会員.code());
+        boolean containsWDL = statusCodeList.contains(CDef.MemberStatus.退会会員.code());
+        assertTrue(containsFML && containsWDL);
+
+        List<Member> memberFMLList =
+                memberList.stream().filter(cb -> cb.isMemberStatusCode正式会員()).collect(Collectors.toList());
+
+        memberFMLList.forEach(member -> {
+            member.setMemberStatusCode_退会会員();
+        });
+
+        memberFMLList.forEach(member -> {
+            assertTrue(member.isMemberStatusCode退会会員());
+        });
+
+        ListResultBean<Member> members = memberBhv.selectList(cb -> {
+            cb.query().setMemberId_InScope(memberFMLList.stream().map(Member::getMemberId).collect(Collectors.toList()));
+        });
+
+        members.forEach(member -> {
+            assertTrue(member.isMemberStatusCode正式会員());
+        });
     }
 
     //    銀行振込で購入を支払ったことのある、会員ステータスごとに一番若い会員を検索
@@ -182,6 +238,29 @@ public class HandsOn04Test extends UnitContainerTestCase {
     public void test_7() {
         // ## Arrange ##
         // ## Act ##
+        ListResultBean<Member> memberList = memberBhv.selectList(cb -> {
+            cb.query().arrangeYoungestNiceMember();
+        });
+        //where dfloc.BIRTHDATE = (select max(sub1loc.BIRTHDATE)
+        //                            from member sub1loc
+        //                           where sub1loc.MEMBER_STATUS_CODE = dfloc.MEMBER_STATUS_CODE
+        //                             and exists (select sub2loc.MEMBER_ID
+        //                                           from purchase sub2loc
+        //                                          where sub2loc.MEMBER_ID = sub1loc.MEMBER_ID
+        //                                            and exists (select sub3loc.PURCHASE_ID
+        //                                                          from purchase_payment sub3loc
+        //                                                         where sub3loc.PURCHASE_ID = sub2loc.PURCHASE_ID
+        //                                                           and sub3loc.PAYMENT_METHOD_CODE = 'BAK'
+        //                                                )
+        //                                 )
+        //       )
+
         // ## Assert ##
+        assertHasAnyElement(memberList);
+        assertTrue(memberList.size() >= 3);
+        memberList.forEach(member -> {
+            log(member.getMemberStatusCode(), member.getBirthdate());
+        });
     }
+    //ここまでやった（by tanaryo 2025/02/08）
 }
