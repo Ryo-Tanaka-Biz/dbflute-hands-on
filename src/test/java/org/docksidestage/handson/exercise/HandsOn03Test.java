@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -92,12 +93,12 @@ public class HandsOn03Test extends UnitContainerTestCase {
             // member_idはmemberのPKカラム(NotNull)かつ会員セキュリティのFKカラム(Notnull)である（by tanaryo 2025/02/01）
             // そのため、共通のmember_idを持つmemberレコードと会員セキュリティレコードが必ず存在する（by tanaryo 2025/02/01）
             //
-        	// ↑1on1でふぉろー、探しに行く方向とFKの方向が逆なので、そのセオリーは通じない。
-        	// ER図の黒まるやSchemaHTMLのテーブルコメントにヒントがあった。
-        	// 業務的な制約で必ず存在する、という風に人間が決めている。
-        	//
-        	// 1:1と言ったとき、必ず存在する1:1なのか？いないかもしれない1:1なのか？わからない。
-        	// (ファーストレベルの表現だけの1:1なのか？セカンドレベルまで表現してて必ず存在する1:1のことを言ってるのか？)
+            // ↑1on1でふぉろー、探しに行く方向とFKの方向が逆なので、そのセオリーは通じない。
+            // ER図の黒まるやSchemaHTMLのテーブルコメントにヒントがあった。
+            // 業務的な制約で必ず存在する、という風に人間が決めている。
+            //
+            // 1:1と言ったとき、必ず存在する1:1なのか？いないかもしれない1:1なのか？わからない。
+            // (ファーストレベルの表現だけの1:1なのか？セカンドレベルまで表現してて必ず存在する1:1のことを言ってるのか？)
             //
             // 学び:
             // データベースの構造がそうなっているから、プログラムがこうなっている、の関係性に注目。
@@ -129,16 +130,17 @@ public class HandsOn03Test extends UnitContainerTestCase {
         // 1発1発は早いSQLなんだけど、全体としてはボディーブローのように「うっ」とくる遅さになる。
         // DBに無駄に負荷(CPU)を掛けるきっかけになったりする。
         // これは業務でもめちゃくちゃ気をつけて欲しい。ループの中で検索は基本的に危ないと考えてもいいくらい。
-        // TODO tanaryo securityだけで一回のSQLにしてみましょう by jflute (2025/02/06)
+        // TODO done tanaryo securityだけで一回のSQLにしてみましょう by jflute (2025/02/06)
+        // memberIDでsecurityは一意に特定できるので、getReminderQuestionで取得してそこでアサートする　by tanaryo(2025/02/08)
         members.forEach(member -> {
-        	// TODO tanaryo あるかどうか？だけを見るのであれば、selectCount()を使う習慣を by jflute (2025/02/04)
-        	// UnitTestなので妥協はできますが、mainコードだったら無駄に1レコード分のデータを取得することになります。
-        	// countであればint型のデータが転送されるだけになるのでネットワーク負荷が低くなります。
+            // TODO done tanaryo あるかどうか？だけを見るのであれば、selectCount()を使う習慣を by jflute (2025/02/04)
+            // UnitTestなので妥協はできますが、mainコードだったら無駄に1レコード分のデータを取得することになります。
+            // countであればint型のデータが転送されるだけになるのでネットワーク負荷が低くなります。
+            // 今回は使わずselectEntityのまま。selectCountはintを返す by tanaryo(2025/02/08)
             OptionalEntity<MemberSecurity> optMemberSecurity = memberSecurityBhv.selectEntity(cb -> {
                 cb.query().setMemberId_Equal(member.getMemberId());
-                cb.query().setReminderQuestion_LikeSearch("2", op -> op.likeContain());
             });
-            assertTrue(optMemberSecurity.isPresent());
+            assertTrue(optMemberSecurity.get().getReminderQuestion().contains("2"));
         });
     }
 
@@ -156,7 +158,7 @@ public class HandsOn03Test extends UnitContainerTestCase {
         members.forEach(member -> {
             assertTrue(member.getMemberStatus().isEmpty());
         });
-        // TODO jflute tanaryo ここは1on1にて聞く (2025/02/04)
+        // TODO done jflute tanaryo ここは1on1にて聞く (2025/02/04)
         // done tanaryo やりかけのときは、todoコメントで書いておきましょう。忘れちゃうケースがよくあるので by jflute (2025/01/30)
         // よもやま: 働き方の多様性のためにも、自分のやりかけをしっかり管理する習慣を付けておいたほうが良い。
         //ここから再開（by tanaryo 2025/02/01）
@@ -170,7 +172,7 @@ public class HandsOn03Test extends UnitContainerTestCase {
         //AABBCCBB
         //値が切り替わった後に切り替わる前の値が再登場したら固まっていないとする
         assertTrue(isGroupedByMemberStatusCode(members));
-        
+
         // [tips] 別のやり方の紹介。
         // 値が切り替わったタイミングの回数と、登場したステータスの種類数が...
         // 「値が切り替わったタイミングの回数 = 登場したステータスの種類数 - 1」のはず。
@@ -180,12 +182,12 @@ public class HandsOn03Test extends UnitContainerTestCase {
     }
 
     private boolean isGroupedByMemberStatusCode(ListResultBean<Member> members) {
-    	// TODO tanaryo せっかくなのでinterfaceのSetで扱いましょう by jflute (2025/02/06)
-        HashSet<String> statusCodes = new HashSet<>();
+        // TODO done tanaryo せっかくなのでinterfaceのSetで扱いましょう by jflute (2025/02/06)
+        Set<String> statusCodes = new HashSet<>();
         // [1on1でのふぉろー] Stringの初期値の質問の回答: こういうやり方もあるので悪くはない。
         // ただ個人的には空文字ってあんまり使わないようにしてて null にしてる。
         // 空文字で下手に動いちゃってロジック間違ったのに落ちないとかいやなので。
-        String lastStatusCode = "";
+        String lastStatusCode = null;
 
         for (Member member : members) {
             String memberStatusCode = member.getMemberStatusCode();
@@ -195,12 +197,14 @@ public class HandsOn03Test extends UnitContainerTestCase {
                 if (statusCodes.contains(memberStatusCode)) {
                     return false;
                 }
-                // TODO tanaryo tips: 切り替わったときにじゃなくても、常にaddと=代入して問題ないので... by jflute (2025/02/04)
+                // TODO done tanaryo tips: 切り替わったときにじゃなくても、常にaddと=代入して問題ないので... by jflute (2025/02/04)
                 // シンプルにするためにifの外に出すやり方もあります。
                 // statusCodesはとにかく登場したステータスのset, lastStatusCodeはとにかく一個前のステータス、というニュアンスで。
-                statusCodes.add(memberStatusCode);
-                lastStatusCode = memberStatusCode;
             }
+            // if文に入れなくて良いものは入れなくて良いというスタンスでいく by tanaryo (2025/02/08)
+            statusCodes.add(memberStatusCode);
+            log(statusCodes);
+            lastStatusCode = memberStatusCode;
         }
         return true;
     }
@@ -212,8 +216,8 @@ public class HandsOn03Test extends UnitContainerTestCase {
     //    購入に紐づく会員の生年月日が存在することをアサート
     public void test_searchMembers_gold_5() {
         // ## Arrange ##
-    	// TODO tanaryo [いいね] 完璧ですな by jflute (2025/02/04)
-    	// [1on1でのふぉろー] 基点テーブルの話
+        // TODO done tanaryo [いいね] 完璧ですな by jflute (2025/02/04)
+        // [1on1でのふぉろー] 基点テーブルの話
         // ## Act ##
         ListResultBean<Purchase> purchaseList = purchaseBhv.selectList(cb -> {
             //MEMBER_IDはNotnullでmemberのFK
@@ -252,12 +256,13 @@ public class HandsOn03Test extends UnitContainerTestCase {
     //    会員の正式会員日時が指定された条件の範囲内であることをアサート
     public void test_searchMembers_gold_6() {
         // ## Arrange ##
-    	// TODO tanaryo これまた完璧。一応、補足に書いてあった adjust... のところもやってみてください by jflute (2025/02/04)
+        // TODO done tanaryo これまた完璧。一応、補足に書いてあった adjust... のところもやってみてください by jflute (2025/02/04)
         String targetStartDateString = "2005/10/01";//00:00:00を含む
         String targetEndDateString = "2005/10/03";//翌日の00:00:00を含まない
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime targetStartDate = LocalDateTime.parse(targetStartDateString + " 00:00:00", formatter);
         LocalDateTime targetEndDate = LocalDateTime.parse(targetEndDateString + " 00:00:00", formatter);
+        adjustMember_FormalizedDatetime_FirstOnly(targetStartDate, "vi");//レコード数が2になっていることを確認
 
         // ## Act ##
         ListResultBean<Member> memberList = memberBhv.selectList(cb -> {
@@ -268,26 +273,28 @@ public class HandsOn03Test extends UnitContainerTestCase {
             cb.query().setFormalizedDatetime_FromTo(targetStartDate, targetEndDate, op -> op.compareAsDate());
             cb.query().setMemberName_LikeSearch("vi", op -> op.likeContain());
         });
-        log(memberList);
+        log(memberList.getAllRecordCount());
 
         // ## Assert ##
         assertHasAnyElement(memberList);
         memberList.forEach(member -> {
-        	// TODO tanaryo 変数名の省略ポイントの統一性がちょっと微妙なので修正してみましょう by jflute (2025/02/06)
+            // TODO done tanaryo 変数名の省略ポイントの統一性がちょっと微妙なので修正してみましょう by jflute (2025/02/06)
             String name = member.getMemberName();
             LocalDateTime formalizedDatetime = member.getFormalizedDatetime();
-            MemberStatus memberStatus = member.getMemberStatus().get();
-            log(memberStatus);
-            log(name, formalizedDatetime, memberStatus.getMemberStatusName());
+            MemberStatus status = member.getMemberStatus().get();
+            log(status);
+            log(name, formalizedDatetime, status.getMemberStatusName());
 
-            assertNotNull(memberStatus.getMemberStatusCode());
-            assertNotNull(memberStatus.getMemberStatusName());
+            assertNotNull(status.getMemberStatusCode());
+            assertNotNull(status.getMemberStatusName());
             //assertNull使うとエラー。そもそも該当からむが存在しないからgetできない。
             //getMemberStatusCodeではテスト通らないことを確認
-            assertException(NonSpecifiedColumnAccessException.class, () -> memberStatus.getDescription());
-            assertException(NonSpecifiedColumnAccessException.class, () -> memberStatus.getDisplayOrder());
-            
-            // TODO tanaryo 実装漏れ "会員の正式会員日時が指定された条件の範囲内であることをアサート" by jflute (2025/02/06)
+            assertException(NonSpecifiedColumnAccessException.class, () -> status.getDescription());
+            assertException(NonSpecifiedColumnAccessException.class, () -> status.getDisplayOrder());
+
+            // TODO done tanaryo 実装漏れ "会員の正式会員日時が指定された条件の範囲内であることをアサート" by jflute (2025/02/06)
+            assertTrue((formalizedDatetime.isAfter(targetStartDate) || formalizedDatetime.equals(targetStartDate))
+                    && formalizedDatetime.isBefore(targetEndDate.plusDays(1)));
         });
     }
 
@@ -298,10 +305,15 @@ public class HandsOn03Test extends UnitContainerTestCase {
     //    購入日時が正式会員になってから一週間以内であることをアサート
     public void test_searchMembers_platinum_7() {
         // ## Arrange ##
-    	// TODO tanaryo 補足にあった、adjustを使ったエクササイズをやってみてください by jflute (2025/02/06)
+        // TODO done tanaryo 補足にあった、adjustを使ったエクササイズをやってみてください by jflute (2025/02/06)
+        // Kまで仕様だとレコードは増えない
+        // ソースコード見ると、23:59:59にしてそうなので、Mにしてみる
+        //レコード1つ増えた
+        adjustPurchase_PurchaseDatetime_fromFormalizedDatetimeInWeek();
+
         // ## Act ##
-    	// done jflute 1on1で一週間以内の解釈議論 (2025/02/04)
-    	//
+        // done jflute 1on1で一週間以内の解釈議論 (2025/02/04)
+        //
         // 10/3                    10/10     10/11
         //  13h                      0h  13h   0h
         //   |                       |    |    |
@@ -312,11 +324,11 @@ public class HandsOn03Test extends UnitContainerTestCase {
         //   |                       |         |
         //
         //　正式会員日時＜＝　購入日時　＜＝正式会員日時＋24h*7
-    	//
-    	// たなりょうさんの一週間は、24h*7のとおり K まで。
-    	// but truncTime()は不要では？ これだと G になっちゃう。
-    	// TODO tanaryo ↑自分の意図通りに実装ができていないので、それはそれは直しましょう。 by jflute (2025/02/06)
-    	// 
+        //
+        // たなりょうさんの一週間は、24h*7のとおり K まで。
+        // but truncTime()は不要では？ これだと G になっちゃう。
+        // TODO done tanaryo ↑自分の意図通りに実装ができていないので、それはそれは直しましょう。 by jflute (2025/02/06)
+        //
         ListResultBean<Purchase> purchaseList = purchaseBhv.selectList(cb -> {
             cb.setupSelect_Member().withMemberStatus();
             cb.setupSelect_Member().withMemberSecurityAsOne();
@@ -325,8 +337,8 @@ public class HandsOn03Test extends UnitContainerTestCase {
             cb.columnQuery(colCB -> colCB.specify().columnPurchaseDatetime())
                     .greaterEqual(colCB -> colCB.specify().specifyMember().columnFormalizedDatetime());//丁度は含む
             cb.columnQuery(colCB -> colCB.specify().columnPurchaseDatetime())
-                    .lessEqual(colCB -> colCB.specify().specifyMember().columnFormalizedDatetime())
-                    .convert(op -> op.truncTime().addDay(7));//丁度1週間後は含む
+                    .lessThan(colCB -> colCB.specify().specifyMember().columnFormalizedDatetime())
+                    .convert(op -> op.addDay(8).truncTime());//丁度1週間後は含む
         });
 
         // ## Assert ##
@@ -335,17 +347,16 @@ public class HandsOn03Test extends UnitContainerTestCase {
             String categoryName =
                     purchase.getProduct().get().getProductCategory().get().getProductCategorySelf().get().getProductCategoryName();
             LocalDateTime formalizedDatetime = purchase.getMember().get().getFormalizedDatetime();
-            // TODO tanaryo (formalizedDatetime) の () は無くてOKです by jflute (2025/02/04)
-            // TODO tanaryo queryの方は truncTime() してるけど、こっちは trunc 的な処理が見当たらないけど大丈夫かな？ by jflute (2025/02/04)
-            LocalDateTime formalizedDatetimeAfterOneWeek = (formalizedDatetime).plusDays(7);//丁度24h*7後
+            // TODO done tanaryo (formalizedDatetime) の () は無くてOKです by jflute (2025/02/04)
+            // TODO done tanaryo queryの方は truncTime() してるけど、こっちは trunc 的な処理が見当たらないけど大丈夫かな？ by jflute (2025/02/04)
+            LocalDateTime formalizedDatetimeAfterOneWeek = formalizedDatetime.plusDays(8).withHour(0).withMinute(0).withSecond(0);//丁度24h*7後
             LocalDateTime purchaseDatetime = purchase.getPurchaseDatetime();
 
             log(categoryName);
             log("正式会員日時={}, 購入日時={}", formalizedDatetime, purchaseDatetime);
             assertNotNull(categoryName);
-            assertTrue(purchaseDatetime.isAfter(formalizedDatetime) || purchaseDatetime.equals(formalizedDatetime));
-            assertTrue(
-                    purchaseDatetime.isBefore(formalizedDatetimeAfterOneWeek) || purchaseDatetime.equals(formalizedDatetimeAfterOneWeek));
+            assertTrue((purchaseDatetime.isAfter(formalizedDatetime) || purchaseDatetime.equals(formalizedDatetime))
+                    && purchaseDatetime.isBefore(formalizedDatetimeAfterOneWeek));
         });
     }
 
@@ -372,38 +383,42 @@ public class HandsOn03Test extends UnitContainerTestCase {
             cb.setupSelect_MemberStatus();
             cb.setupSelect_MemberSecurityAsOne();
             cb.setupSelect_MemberWithdrawalAsOne();
-            cb.orScopeQuery(orCB -> {
-            	// TODO tanaryo なるほどぅ。fromがないから西暦1年からにしたということですね。opでダミー値を使わないようにもできます by jflute (2025/02/04)
-                orCB.query().setBirthdate_FromTo(LocalDate.of(1, 1, 1), targetBirthDate, op -> op.compareAsYear());//1975/1/1は含まない
-                orCB.query().setBirthdate_IsNull();
-            });
+            // where (dfloc.BIRTHDATE < '1975-01-01' or dfloc.BIRTHDATE is null)
+            cb.query().setBirthdate_FromTo(null, targetBirthDate, op -> op.compareAsYear().allowOneSide().orIsNull());
+//            cb.orScopeQuery(orCB -> {
+//                // TODO done tanaryo なるほどぅ。fromがないから西暦1年からにしたということですね。opでダミー値を使わないようにもできます by jflute (2025/02/04)
+//                //FromToのメソッド確認
+//                // (basically NotNull: if op.allowOneSide(), null allowed)とあった
+//                orCB.query().setBirthdate_FromTo(null, targetBirthDate, op -> op.compareAsYear().allowOneSide().or);//1975/1/1は含まない
+//                orCB.query().setBirthdate_IsNull();
+//            });
             cb.query().addOrderBy_Birthdate_Desc().withNullsFirst();
         });
 
         // ## Assert ##
         assertHasAnyElement(memberList);
-        // TODO tanaryo [いいね] 良い変数名 by jflute (2025/02/04)
+        // TODO done tanaryo [いいね] 良い変数名 by jflute (2025/02/04)
         boolean containsLimitBirthDateMember = false;
         for (Member member : memberList) {
             MemberStatus status = member.getMemberStatus().get();
             MemberSecurity security = member.getMemberSecurityAsOne().get();
             OptionalEntity<MemberWithdrawal> optWithdrawal = member.getMemberWithdrawalAsOne();//データがないこともある
             String reason = optWithdrawal.map(withdrawal -> withdrawal.getWithdrawalReasonInputText()).orElse("none");
-            // TODO tanaryo 一応、カラム名表現が Birthdate なので、それに合わせて D は d にしましょう by jflute (2025/02/04)
+            // TODO done tanaryo 一応、カラム名表現が Birthdate なので、それに合わせて D は d にしましょう by jflute (2025/02/04)
             // (文法的にどっちが合ってるか？ってのは置いておいて、すでに定義されているカラムに合わせたほうが無難ということで)
-            LocalDate birthDate = member.getBirthdate();
+            LocalDate birthdate = member.getBirthdate();
 
             log("会員ステータス名称={}, リマインダ質問={}, リマインダ回答={}, 退会理由入力テキスト={}", status.getMemberStatusName(),
                     security.getReminderQuestion(), security.getReminderAnswer(), reason);
-            if (birthDate != null) {
-                assertTrue(birthDate.isBefore(LocalDate.of(1975, 1, 1)));
-                if (birthDate.equals(LocalDate.of(1974, 12, 31))) {
+            if (birthdate != null) {
+                assertTrue(birthdate.isBefore(LocalDate.of(1975, 1, 1)));
+                if (birthdate.equals(LocalDate.of(1974, 12, 31))) {
                     containsLimitBirthDateMember = true;
                 }
             }
         }
         assertTrue(containsLimitBirthDateMember);
-        // TODO tanaryo [いいね] これよく気づきました。先頭ってありますからこれでOKです by jflute (2025/02/04)
+        // TODO done  tanaryo [いいね] これよく気づきました。先頭ってありますからこれでOKです by jflute (2025/02/04)
         assertNull(memberList.get(0).getBirthdate());
     }
 
@@ -411,21 +426,21 @@ public class HandsOn03Test extends UnitContainerTestCase {
     // このやり方の最大の敵は、既存テーブルに1レコードも入っていない状況。
     // テストデータは、最低1レコードは作りたいところ。
     private void makeLimitBirthDateMember() {
-    	// [1on1でのふぉろー] UnitTestでのテストデータへの依存の話
-    	// テストデータに依存しない方がいいかどうかは、現場のポリシー次第。
-    	// がんがん依存してアサート書いていこうってわりきってうまくやってる現場もあるし。
-    	// (その現場では、依存度を下げるためにUnitTestでロジックを書くことが良くないという考え方をしてる)
-    	// (UnitTestはできるだけベタに書いて難しいことをしない方が逆に間違い少ないという考え方)
-    	// (UnitTestは業務仕様のドキュメントとも言えるので、ロジックで抽象化をしない方がいいだろうという考え方)
-    	// 
-    	// ちなみに、ちょこっと更新のやり方は、このケースだとIDくらいしか依存していないので、依存度は低い。
-    	// さらに依存度を下げるのであれば、こんな実装もある。
-		//Member existingMember = memberBhv.selectEntity(cb -> {
-		//	cb.fetchFirst(1);
-		//}).get();
-		//existingMember.setBirthdate(LocalDate.of(1974, 12, 31));
-		//memberBhv.updateNonstrict(existingMember);
-    	
+        // [1on1でのふぉろー] UnitTestでのテストデータへの依存の話
+        // テストデータに依存しない方がいいかどうかは、現場のポリシー次第。
+        // がんがん依存してアサート書いていこうってわりきってうまくやってる現場もあるし。
+        // (その現場では、依存度を下げるためにUnitTestでロジックを書くことが良くないという考え方をしてる)
+        // (UnitTestはできるだけベタに書いて難しいことをしない方が逆に間違い少ないという考え方)
+        // (UnitTestは業務仕様のドキュメントとも言えるので、ロジックで抽象化をしない方がいいだろうという考え方)
+        //
+        // ちなみに、ちょこっと更新のやり方は、このケースだとIDくらいしか依存していないので、依存度は低い。
+        // さらに依存度を下げるのであれば、こんな実装もある。
+        //Member existingMember = memberBhv.selectEntity(cb -> {
+        //	cb.fetchFirst(1);
+        //}).get();
+        //existingMember.setBirthdate(LocalDate.of(1974, 12, 31));
+        //memberBhv.updateNonstrict(existingMember);
+
         Member member = new Member();
         member.setMemberId(1);
         member.setBirthdate(LocalDate.of(1974, 12, 31));
