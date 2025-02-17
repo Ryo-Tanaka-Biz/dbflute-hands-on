@@ -1,6 +1,6 @@
 package org.docksidestage.handson.exercise;
 
-import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,7 +8,6 @@ import javax.annotation.Resource;
 
 import org.dbflute.cbean.result.ListResultBean;
 import org.dbflute.optional.OptionalEntity;
-import org.dbflute.optional.OptionalScalar;
 import org.docksidestage.handson.dbflute.allcommon.CDef;
 import org.docksidestage.handson.dbflute.exbhv.MemberBhv;
 import org.docksidestage.handson.dbflute.exbhv.PurchaseBhv;
@@ -67,14 +66,20 @@ public class HandsOn04Test extends UnitContainerTestCase {
 
         // ## Assert ##
         assertHasAnyElement(memberList);
-        memberList.forEach(member -> {
-        	// 不意のバグや不意のデータ不備でもテストが(できるだけ)成り立つこと
-        	// TODO tanaryo 万が一、テストデータに退会会員でない会員がいなかったら？素通りしちゃう by jflute (2025/02/13)
+        boolean hasWithdrawnMember = false;
+        for (Member member : memberList) {
             if (!member.isMemberStatusCode退会会員()) {
+                // 不意のバグや不意のデータ不備でもテストが(できるだけ)成り立つこと
+                // TODO done tanaryo 万が一、テストデータに退会会員でない会員がいなかったら？素通りしちゃう by jflute (2025/02/13)
+                hasWithdrawnMember = true;
                 log(member.getMemberName(), member.getMemberStatusCode());
                 assertTrue(member.getMemberWithdrawalAsOne().isEmpty());
             }
-        });
+        }
+
+        if (!hasWithdrawnMember) {
+            fail("テストデータに退会会員が含まれていないため、退会会員のテストが実施されていません");
+        }
     }
 
     //    一番若い仮会員の会員を検索
@@ -84,15 +89,16 @@ public class HandsOn04Test extends UnitContainerTestCase {
     public void test_3() {
         // ## Arrange ##
         // ## Act ##
-    	// [1on1でのふぉろー] selectList() である理由は？ by jflute
-    	// => 同じ日付の人がいた場合に複数 by tanaryo
+        // [1on1でのふぉろー] selectList() である理由は？ by jflute
+        // => 同じ日付の人がいた場合に複数 by tanaryo
         ListResultBean<Member> memberList = memberBhv.selectList(cb -> {
             //            /**
             //             * Equal(=). As 仮会員 (PRV). And OnlyOnceRegistered. <br>
             //             * 仮会員: 入会直後のステータスで一部のサイトサービスが利用可能
             //             */
             cb.setupSelect_MemberStatus();
-            // TODO tanaryo 万が一、正式会員で同じ生年月日を持っている人がいたら？ by jflute (2025/02/13)
+            // TODO done tanaryo 万が一、正式会員で同じ生年月日を持っている人がいたら？ by jflute (2025/02/13)
+            //複数レコード取得することになる。そのためselectEntityではなく、selectListを使う。　by. tanaryo (2025/02/17)
             cb.query().scalar_Equal().max(memberCB -> {
                 memberCB.specify().columnBirthdate();
                 memberCB.query().setMemberStatusCode_Equal_仮会員();
@@ -140,12 +146,13 @@ public class HandsOn04Test extends UnitContainerTestCase {
 
         ListResultBean<Purchase> purchaseList = purchaseBhv.selectList(cb -> {
             cb.setupSelect_Member();
-            // TODO tanaryo 外側の条件、一個足りない by jflute (2025/02/13)
+            // TODO done tanaryo 外側の条件、一個足りない by jflute (2025/02/13)
+            cb.query().queryMember().setMemberStatusCode_Equal_正式会員();
             cb.query().setPaymentCompleteFlg_Equal_True();
             cb.query().queryMember().scalar_Equal().max(memberCB -> {
                 memberCB.specify().columnBirthdate();
                 memberCB.query().setMemberStatusCode_Equal_正式会員();
-                // TODO tanaryo [いいね] これを導き出したのは素晴らしい by jflute (2025/02/13)
+                // TODO done tanaryo [いいね] これを導き出したのは素晴らしい by jflute (2025/02/13)
                 memberCB.query().existsPurchase(purchaseCB -> {
                     purchaseCB.query().setPaymentCompleteFlg_Equal_True();
                 });
@@ -170,7 +177,7 @@ public class HandsOn04Test extends UnitContainerTestCase {
         // ## Act ##
         ListResultBean<Purchase> purchaseList = purchaseBhv.selectList(cb -> {
             cb.setupSelect_Product().withProductStatus();
-            cb.setupSelect_Member().withMemberWithdrawalAsOne();
+            cb.setupSelect_Member().withMemberWithdrawalAsOne().withWithdrawalReason();
             cb.query().queryProduct().setProductStatusCode_Equal_生産販売可能();
             cb.query().addOrderBy_PurchasePrice_Desc();
         });
@@ -180,8 +187,12 @@ public class HandsOn04Test extends UnitContainerTestCase {
         purchaseList.forEach(purchase -> {
             ProductStatus productStatus = purchase.getProduct().get().getProductStatus().get();
             OptionalEntity<MemberWithdrawal> optMemberWithdrawal = purchase.getMember().get().getMemberWithdrawalAsOne();
-            // TODO tanaryo "退会理由入力テキスト" ではなく "退会理由テキスト (退会理由テーブル) " です by jflute (2025/02/13)
-            String reason = optMemberWithdrawal.map(op -> op.getWithdrawalReasonInputText()).orElse("none");//mapでいけた。flatmapでもいけるのか
+            // TODO done tanaryo "退会理由入力テキスト" ではなく "退会理由テキスト (退会理由テーブル) " です by jflute (2025/02/13)
+            // OptionalEntity<>からOptionalEntity<>への変換をflatmapで行う。
+            // get()をするとnullを許容できないwithdrawalReasonクラスになってしまうので、optionalの状態でmapを使って変換する
+            String reason = optMemberWithdrawal.flatMap(withdrawal -> withdrawal.getWithdrawalReason())
+                    .map(withdrawalReason -> withdrawalReason.getWithdrawalReasonText())
+                    .orElse("none");
             log(productStatus.getProductStatusName(), reason);
             assertTrue(productStatus.isProductStatusCode生産販売可能());//productテーブルでもいける
         });
@@ -200,12 +211,14 @@ public class HandsOn04Test extends UnitContainerTestCase {
         // ## Arrange ##
         // ## Act ##
         ListResultBean<Member> memberList = memberBhv.selectList(cb -> {
-        	// TODO tanaryo 修行++: orScopeQuery()を使わずにやってみましょう by jflute (2025/02/13)
-        	// (同じカラムに対してEqualで複数指定するなら...違うのできるよね)
-            cb.orScopeQuery(orCB -> {
-                orCB.query().setMemberStatusCode_Equal_正式会員();
-                orCB.query().setMemberStatusCode_Equal_退会会員();
-            });
+            // TODO done tanaryo 修行++: orScopeQuery()を使わずにやってみましょう by jflute (2025/02/13)
+            // (同じカラムに対してEqualで複数指定するなら...違うのできるよね)
+//            cb.orScopeQuery(orCB -> {
+//                orCB.query().setMemberStatusCode_Equal_正式会員();
+//                orCB.query().setMemberStatusCode_Equal_退会会員();
+//            });
+            cb.query().setMemberStatusCode_InScope_AsMemberStatus(Arrays.asList(CDef.MemberStatus.正式会員, CDef.MemberStatus.退会会員));
+
             cb.query().queryMemberStatus().addOrderBy_DisplayOrder_Asc();
         });
 
@@ -220,31 +233,36 @@ public class HandsOn04Test extends UnitContainerTestCase {
         memberList.forEach(member -> {
             assertTrue(member.isMemberStatusCode正式会員() || member.isMemberStatusCode退会会員());
         });//この時点で正式会員または退会会員のいずれかであることを保証
-        // TODO tanaryo 修行++: Stringのcodeは使わずCDefで扱ってみましょう by jflute (2025/02/13)
+        // TODO done tanaryo 修行++: Stringのcodeは使わずCDefで扱ってみましょう by jflute (2025/02/13)
         // 基本的にStringのcodeで扱う場面はほとんどないと思ってよくて、enumがその抽象化された代わりのオブジェクトである。
-        List<String> statusCodeList = memberList.stream().map(Member::getMemberStatusCode).collect(Collectors.toList());
-        boolean containsFML = statusCodeList.contains(CDef.MemberStatus.正式会員.code());
-        boolean containsWDL = statusCodeList.contains(CDef.MemberStatus.退会会員.code());
-        // TODO tanaryo ここも分けたほうがいい by jflute (2025/02/13)
-        assertTrue(containsFML && containsWDL);
+        List<CDef.MemberStatus> statusCodeList = memberList.stream().map(op ->op.getMemberStatusCodeAsMemberStatus()).collect(Collectors.toList());
+        boolean containsFML = statusCodeList.contains(CDef.MemberStatus.正式会員);
+        boolean containsWDL = statusCodeList.contains(CDef.MemberStatus.退会会員);
+        // TODO done tanaryo ここも分けたほうがいい by jflute (2025/02/13)
+        assertTrue(containsFML);
+        assertTrue(containsWDL);
 
-        // TODO tanaryo もうちょいこのへんコメントがあるといいかなと by jflute (2025/02/13)
+        // TODO done tanaryo もうちょいこのへんコメントがあるといいかなと by jflute (2025/02/13)
 
-        List<Member> memberFMLList =
-                memberList.stream().filter(cb -> cb.isMemberStatusCode正式会員()).collect(Collectors.toList());
+        //正式会員を抽出
+        List<Member> memberFMLList = memberList.stream().filter(cb -> cb.isMemberStatusCode正式会員()).collect(Collectors.toList());
 
+        //Entityの会員ステータスを退会会員に変更
         memberFMLList.forEach(member -> {
             member.setMemberStatusCode_退会会員();
         });
 
+        //Entity上は退会会員であることをassert
         memberFMLList.forEach(member -> {
             assertTrue(member.isMemberStatusCode退会会員());
         });
 
+        //DB上でmemberFMLListを検索
         ListResultBean<Member> members = memberBhv.selectList(cb -> {
-            cb.query().setMemberId_InScope(memberFMLList.stream().map(Member::getMemberId).collect(Collectors.toList()));
+            cb.query().setMemberId_InScope(memberBhv.extractMemberIdList(memberFMLList));
         });
 
+        //DB上では正式会員であることをassert
         members.forEach(member -> {
             assertTrue(member.isMemberStatusCode正式会員());
         });
@@ -260,7 +278,7 @@ public class HandsOn04Test extends UnitContainerTestCase {
         // ## Arrange ##
         // ## Act ##
         ListResultBean<Member> memberList = memberBhv.selectList(cb -> {
-        	// TODO tanaryo MemberCQにもauthorをぜひお願い by jflute (2025/02/13)
+            // TODO done tanaryo MemberCQにもauthorをぜひお願い by jflute (2025/02/13)
             cb.query().arrangeYoungestNiceMember();
         });
         //where dfloc.BIRTHDATE = (select max(sub1loc.BIRTHDATE)
@@ -279,8 +297,9 @@ public class HandsOn04Test extends UnitContainerTestCase {
 
         // ## Assert ##
         assertHasAnyElement(memberList);
-        // TODO tanaryo この3は導出してみましょう by jflute (2025/02/13)
-        assertTrue(memberList.size() >= 3);
+        // TODO done tanaryo この3は導出してみましょう by jflute (2025/02/13)
+        int minimumRecordCount = CDef.MemberStatus.values().length;//会員ステータスの種類数
+        assertTrue(memberList.size() >= minimumRecordCount);
         memberList.forEach(member -> {
             log(member.getMemberStatusCode(), member.getBirthdate());
         });
