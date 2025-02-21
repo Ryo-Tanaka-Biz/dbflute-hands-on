@@ -1,15 +1,19 @@
 package org.docksidestage.handson.exercise;
 
+import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Resource;
 
 import org.dbflute.cbean.result.ListResultBean;
+import org.dbflute.cbean.result.PagingResultBean;
 import org.dbflute.exception.NonSpecifiedColumnAccessException;
 import org.dbflute.optional.OptionalEntity;
 import org.docksidestage.handson.dbflute.exbhv.MemberBhv;
@@ -28,6 +32,10 @@ public class HandsOn03Test extends UnitContainerTestCase {
     private MemberSecurityBhv memberSecurityBhv;
     @Resource
     private PurchaseBhv purchaseBhv;
+
+    // ===================================================================================
+    //                                                                      Silver Stretch
+    //                                                                        ============
 
     // [1on1でのふぉろー] 以前と言われたらどう思うか？どう実装するか？ => 実務では聞き返すがGood by たなりょうさん
     // 日本語の日付表現ってのは曖昧部分が多いので、勝手に解釈して決めるとよくすれ違い。どっちが文法的に正しいかはもはや関係ない。
@@ -137,18 +145,18 @@ public class HandsOn03Test extends UnitContainerTestCase {
         ListResultBean<MemberSecurity> memberSecurityList = memberSecurityBhv.selectList(cb -> {
             cb.query().setMemberId_InScope(memberBhv.extractMemberIdList(members));//単一のPK(memberId)を抽出
         });
-//        members.forEach(member -> {
-//            // done tanaryo あるかどうか？だけを見るのであれば、selectCount()を使う習慣を by jflute (2025/02/04)
-//            // UnitTestなので妥協はできますが、mainコードだったら無駄に1レコード分のデータを取得することになります。
-//            // countであればint型のデータが転送されるだけになるのでネットワーク負荷が低くなります。
-//            // 今回は使わずselectEntityのまま。selectCountはintを返す by tanaryo(2025/02/08)
-//        	// TODO done tanaryo 直後にget()しちゃってるくらいなら、メソッドチェーンで.get()しちゃってもいいかなと by jflute (2025/02/13)
-//        	// というか、その場で消費し終わるロジックなので、alwaysPresent()でいいんじゃないかと。
-//            OptionalEntity<MemberSecurity> optMemberSecurity = memberSecurityBhv.selectEntity(cb -> {
-//                cb.query().setMemberId_Equal(member.getMemberId());
-//            });
-//            assertTrue(optMemberSecurity.get().getReminderQuestion().contains("2"));
-//        });
+        //        members.forEach(member -> {
+        //            // done tanaryo あるかどうか？だけを見るのであれば、selectCount()を使う習慣を by jflute (2025/02/04)
+        //            // UnitTestなので妥協はできますが、mainコードだったら無駄に1レコード分のデータを取得することになります。
+        //            // countであればint型のデータが転送されるだけになるのでネットワーク負荷が低くなります。
+        //            // 今回は使わずselectEntityのまま。selectCountはintを返す by tanaryo(2025/02/08)
+        //        	// TODO done tanaryo 直後にget()しちゃってるくらいなら、メソッドチェーンで.get()しちゃってもいいかなと by jflute (2025/02/13)
+        //        	// というか、その場で消費し終わるロジックなので、alwaysPresent()でいいんじゃないかと。
+        //            OptionalEntity<MemberSecurity> optMemberSecurity = memberSecurityBhv.selectEntity(cb -> {
+        //                cb.query().setMemberId_Equal(member.getMemberId());
+        //            });
+        //            assertTrue(optMemberSecurity.get().getReminderQuestion().contains("2"));
+        //        });
         //会員と会員セキュリティは必ず1:1で存在する。
         memberSecurityList.forEach(security -> {
             assertTrue(security.getReminderQuestion().contains("2"));
@@ -156,6 +164,9 @@ public class HandsOn03Test extends UnitContainerTestCase {
 
     }
 
+    // ===================================================================================
+    //                                                                        Gold Stretch
+    //                                                                        ============
     public void test_searchMembers_gold_4() {
         // ## Arrange ##
         // ## Act ##
@@ -311,6 +322,9 @@ public class HandsOn03Test extends UnitContainerTestCase {
         });
     }
 
+    // ===================================================================================
+    //                                                                    Platinum Stretch
+    //                                                                        ============
     //    [7] 正式会員になってから一週間以内の購入を検索
     //    会員と会員ステータス、会員セキュリティ情報も一緒に取得
     //    商品と商品ステータス、商品カテゴリ、さらに上位の商品カテゴリも一緒に取得
@@ -400,13 +414,13 @@ public class HandsOn03Test extends UnitContainerTestCase {
             cb.setupSelect_MemberWithdrawalAsOne();
             // where (dfloc.BIRTHDATE < '1975-01-01' or dfloc.BIRTHDATE is null)
             cb.query().setBirthdate_FromTo(null, targetBirthDate, op -> op.compareAsYear().allowOneSide().orIsNull());
-//            cb.orScopeQuery(orCB -> {
-//                // done tanaryo なるほどぅ。fromがないから西暦1年からにしたということですね。opでダミー値を使わないようにもできます by jflute (2025/02/04)
-//                //FromToのメソッド確認
-//                // (basically NotNull: if op.allowOneSide(), null allowed)とあった
-//                orCB.query().setBirthdate_FromTo(null, targetBirthDate, op -> op.compareAsYear().allowOneSide().or);//1975/1/1は含まない
-//                orCB.query().setBirthdate_IsNull();
-//            });
+            //            cb.orScopeQuery(orCB -> {
+            //                // done tanaryo なるほどぅ。fromがないから西暦1年からにしたということですね。opでダミー値を使わないようにもできます by jflute (2025/02/04)
+            //                //FromToのメソッド確認
+            //                // (basically NotNull: if op.allowOneSide(), null allowed)とあった
+            //                orCB.query().setBirthdate_FromTo(null, targetBirthDate, op -> op.compareAsYear().allowOneSide().or);//1975/1/1は含まない
+            //                orCB.query().setBirthdate_IsNull();
+            //            });
             cb.query().addOrderBy_Birthdate_Desc().withNullsFirst();
         });
 
@@ -573,4 +587,92 @@ public class HandsOn03Test extends UnitContainerTestCase {
     private static boolean isWithinRange(LocalDateTime formalizedDatetime, LocalDateTime startTime, LocalDateTime endTime) {
         return (formalizedDatetime.isAfter(startTime) || formalizedDatetime.equals(startTime)) && formalizedDatetime.isBefore(endTime);
     }
+
+    // ===================================================================================
+    //                                                                              Paging
+    //                                                                        ============
+    /**
+     * 会員ステータス名称も取得
+     * 会員IDの昇順で並べる
+     * ページサイズは 3、ページ番号は 1 で検索すること
+     * 会員ID、会員名称、会員ステータス名称をログに出力
+     * SQLのログでカウント検索時と実データ検索時の違いを確認
+     * 総レコード件数が会員テーブルの全件であることをアサート
+     * 総ページ数が期待通りのページ数(計算で導出)であることをアサート
+     * 検索結果のページサイズ、ページ番号が指定されたものであることをアサート
+     * 検索結果が指定されたページサイズ分のデータだけであることをアサート
+     * PageRangeを 3 にして PageNumberList を取得し、[1, 2, 3, 4]であることをアサート
+     * 前のページが存在しないことをアサート
+     * 次のページが存在することをアサート
+     */
+    public void test_paging() {
+        // ## Arrange ##
+        int pageSize = 3;
+        int pageNumber = 1;
+
+        // ## Act ##
+        // 実データ：select sql_calc_found_rows dfloc.MEMBER_ID as MEMBER_ID,.....limit 0, 3
+        // カウント数：select found_rows()
+        PagingResultBean<Member> page = memberBhv.selectPage(cb -> {
+            cb.setupSelect_MemberStatus();
+            cb.query().addOrderBy_MemberId_Asc();
+            cb.paging(pageSize, pageNumber);//1~3を取得
+        });
+
+        // ## Assert ##
+        page.forEach(member -> {
+            int memberId = member.getMemberId();
+            String memberName = member.getMemberName();
+            String memberStatusName = member.getMemberStatus().get().getMemberStatusName();
+            log(memberId, memberName, memberStatusName);
+        });
+
+        int allRecordCount = page.getAllRecordCount();
+        int allRecordCountMember = memberBhv.selectCount(cb -> {});
+        assertEquals(allRecordCount, allRecordCountMember);
+
+        int allPageCount = page.getAllPageCount();
+        int totalPageNumber = (int) Math.ceil((double) allRecordCount / pageSize);//intの計算は整数の結果しか返さないので、doubleにキャスト
+        assertEquals(allPageCount, totalPageNumber);
+
+        int searchedPageSize = page.getPageSize();
+        assertEquals(pageSize, searchedPageSize);
+
+        int searchedPageNumber = page.getCurrentPageNumber();
+        assertEquals(pageNumber, searchedPageNumber);
+
+        assertEquals(pageSize, page.size());//getPageSize()は計算して出たページサイズ。size()はリストの要素数
+
+        //PageRange：前後 n ページのリンクが表示 されるようにする方式
+        // n =3、ページ番号6の場合、 3,4,5, 6 ,7,8,9のリンクが表示される
+        int pageRange = 3;
+        List<Integer> list = Arrays.asList(1, 2, 3, 4);
+        List<Integer> pageList =page.pageRange(op -> op.rangeSize(pageRange)).createPageNumberList();//pageNumberは1
+        assertEquals(list, pageList);
+        //pageNumberが2の場合（pageRangeは3）、[1,2,3,4,5]となる。pageNumberが存在するまで前後のページを表示する仕様。だから1も表示される。
+        //existsPreviousRangeはfalseだった。指定したレンジのページが全て存在していないといけない
+        //pageNumberが1,pageRangeが9の場合、[1, 2, 3, 4, 5, 6, 7]となる。指定したレンジのページが全て存在しない状態。
+        //existsNextRangeは予想通りfalse
+
+        //      assertException(IllegalStateException.class, () -> page.getPreviousPageNumber());
+        assertFalse(page.existsPreviousPage());
+        assertTrue(page.existsNextPage());
+    }
+
+    // ===================================================================================
+    //                                                                              Cursor
+    //                                                                        ============
+    /**
+     * 会員ステータスの "表示順" カラムの昇順で並べる
+     * 会員ステータスのデータも取得
+     * その次には、会員の会員IDの降順で並べる
+     * 会員ステータスが取れていることをアサート
+     * 会員が会員ステータスごとに固まって並んでいることをアサート
+     * 検索したデータをまるごとメモリ上に持ってはいけない
+     * (要は、検索結果レコード件数と同サイズのリストや配列の作成はダメ)
+     */
+    public void test_cursor() {
+
+    }
+
 }

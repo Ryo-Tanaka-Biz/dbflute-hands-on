@@ -198,7 +198,7 @@ public class HandsOn04Test extends UnitContainerTestCase {
         });
     }
     //ここまでやった（by tanaryo 2025/02/03）
-    //TODO tanaryo セクション3のページング忘れてたので次回以降やる
+    //TODO done tanaryo セクション3のページング忘れてたので次回以降やる
 
     //    正式会員と退会会員の会員を検索
     //            会員ステータスの表示順で並べる
