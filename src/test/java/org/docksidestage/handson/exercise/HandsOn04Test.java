@@ -61,16 +61,17 @@ public class HandsOn04Test extends UnitContainerTestCase {
         // ## Arrange ##
         // ## Act ##
         ListResultBean<Member> memberList = memberBhv.selectList(cb -> {
-            cb.setupSelect_MemberWithdrawalAsOne();
+            //cb.setupSelect_MemberWithdrawalAsOne();
         });
 
         // ## Assert ##
+        // TODO tanaryo 万が一、setupSelectし忘れたら？ (assertが曖昧に、意味的に素通りしてる) by jflute (2025/02/21)
         assertHasAnyElement(memberList);
         boolean hasWithdrawnMember = false;
         for (Member member : memberList) {
             if (!member.isMemberStatusCode退会会員()) {
                 // 不意のバグや不意のデータ不備でもテストが(できるだけ)成り立つこと
-                // TODO done tanaryo 万が一、テストデータに退会会員でない会員がいなかったら？素通りしちゃう by jflute (2025/02/13)
+                // done tanaryo 万が一、テストデータに退会会員でない会員がいなかったら？素通りしちゃう by jflute (2025/02/13)
                 hasWithdrawnMember = true;
                 log(member.getMemberName(), member.getMemberStatusCode());
                 assertTrue(member.getMemberWithdrawalAsOne().isEmpty());
@@ -97,8 +98,9 @@ public class HandsOn04Test extends UnitContainerTestCase {
             //             * 仮会員: 入会直後のステータスで一部のサイトサービスが利用可能
             //             */
             cb.setupSelect_MemberStatus();
-            // TODO done tanaryo 万が一、正式会員で同じ生年月日を持っている人がいたら？ by jflute (2025/02/13)
+            // done tanaryo 万が一、正式会員で同じ生年月日を持っている人がいたら？ by jflute (2025/02/13)
             //複数レコード取得することになる。そのためselectEntityではなく、selectListを使う。　by. tanaryo (2025/02/17)
+            // TODO tanaryo 複数件ヒットするのはその通りだけど、要件は仮会員のみなので、正式会員を取ってはいけない by jflute (2025/02/21)
             cb.query().scalar_Equal().max(memberCB -> {
                 memberCB.specify().columnBirthdate();
                 memberCB.query().setMemberStatusCode_Equal_仮会員();
@@ -146,13 +148,15 @@ public class HandsOn04Test extends UnitContainerTestCase {
 
         ListResultBean<Purchase> purchaseList = purchaseBhv.selectList(cb -> {
             cb.setupSelect_Member();
-            // TODO done tanaryo 外側の条件、一個足りない by jflute (2025/02/13)
+            // done tanaryo 外側の条件、一個足りない by jflute (2025/02/13)
             cb.query().queryMember().setMemberStatusCode_Equal_正式会員();
             cb.query().setPaymentCompleteFlg_Equal_True();
             cb.query().queryMember().scalar_Equal().max(memberCB -> {
                 memberCB.specify().columnBirthdate();
                 memberCB.query().setMemberStatusCode_Equal_正式会員();
-                // TODO done tanaryo [いいね] これを導き出したのは素晴らしい by jflute (2025/02/13)
+                // done tanaryo [いいね] これを導き出したのは素晴らしい by jflute (2025/02/13)
+                // [1on1でのふぉろー] ExistsReferrer は、DBFluteの力作。
+                // あと、ログのSQLのフォーマット、どんだけやってもインデントしっかりも重要。
                 memberCB.query().existsPurchase(purchaseCB -> {
                     purchaseCB.query().setPaymentCompleteFlg_Equal_True();
                 });
@@ -187,9 +191,12 @@ public class HandsOn04Test extends UnitContainerTestCase {
         purchaseList.forEach(purchase -> {
             ProductStatus productStatus = purchase.getProduct().get().getProductStatus().get();
             OptionalEntity<MemberWithdrawal> optMemberWithdrawal = purchase.getMember().get().getMemberWithdrawalAsOne();
-            // TODO done tanaryo "退会理由入力テキスト" ではなく "退会理由テキスト (退会理由テーブル) " です by jflute (2025/02/13)
+            // done tanaryo "退会理由入力テキスト" ではなく "退会理由テキスト (退会理由テーブル) " です by jflute (2025/02/13)
             // OptionalEntity<>からOptionalEntity<>への変換をflatmapで行う。
             // get()をするとnullを許容できないwithdrawalReasonクラスになってしまうので、optionalの状態でmapを使って変換する
+            // [1on1でのふぉろー] 一文字でも違ったら、本当にこのカラムかな？って疑うの大事。
+            // TODO tanaryo Lambda式の変数はわりと短めにする慣習があるので、せめて withdrawalReason は reason でもいいかなと by jflute (2025/02/21)
+            // もうちょい踏み込んで、withdrawal->wdl でも悪くはない。ただ、個人的には w はやらない。 
             String reason = optMemberWithdrawal.flatMap(withdrawal -> withdrawal.getWithdrawalReason())
                     .map(withdrawalReason -> withdrawalReason.getWithdrawalReasonText())
                     .orElse("none");
@@ -198,7 +205,7 @@ public class HandsOn04Test extends UnitContainerTestCase {
         });
     }
     //ここまでやった（by tanaryo 2025/02/03）
-    //TODO done tanaryo セクション3のページング忘れてたので次回以降やる
+    //done tanaryo セクション3のページング忘れてたので次回以降やる
 
     //    正式会員と退会会員の会員を検索
     //            会員ステータスの表示順で並べる
@@ -211,12 +218,13 @@ public class HandsOn04Test extends UnitContainerTestCase {
         // ## Arrange ##
         // ## Act ##
         ListResultBean<Member> memberList = memberBhv.selectList(cb -> {
-            // TODO done tanaryo 修行++: orScopeQuery()を使わずにやってみましょう by jflute (2025/02/13)
+            // done tanaryo 修行++: orScopeQuery()を使わずにやってみましょう by jflute (2025/02/13)
             // (同じカラムに対してEqualで複数指定するなら...違うのできるよね)
 //            cb.orScopeQuery(orCB -> {
 //                orCB.query().setMemberStatusCode_Equal_正式会員();
 //                orCB.query().setMemberStatusCode_Equal_退会会員();
 //            });
+        	// [1on1でのふぉろー] もしフィットするんであれば限定的な機能の方を使うほうが、パフォーマンスが早くなる可能性が高い。
             cb.query().setMemberStatusCode_InScope_AsMemberStatus(Arrays.asList(CDef.MemberStatus.正式会員, CDef.MemberStatus.退会会員));
 
             cb.query().queryMemberStatus().addOrderBy_DisplayOrder_Asc();
@@ -233,16 +241,18 @@ public class HandsOn04Test extends UnitContainerTestCase {
         memberList.forEach(member -> {
             assertTrue(member.isMemberStatusCode正式会員() || member.isMemberStatusCode退会会員());
         });//この時点で正式会員または退会会員のいずれかであることを保証
-        // TODO done tanaryo 修行++: Stringのcodeは使わずCDefで扱ってみましょう by jflute (2025/02/13)
+        // done tanaryo 修行++: Stringのcodeは使わずCDefで扱ってみましょう by jflute (2025/02/13)
         // 基本的にStringのcodeで扱う場面はほとんどないと思ってよくて、enumがその抽象化された代わりのオブジェクトである。
+        // TODO tanaryo CDefになったから、変数名 statusCodeList じゃなくて statusList でいいかなと by jflute (2025/02/21)
         List<CDef.MemberStatus> statusCodeList = memberList.stream().map(op ->op.getMemberStatusCodeAsMemberStatus()).collect(Collectors.toList());
         boolean containsFML = statusCodeList.contains(CDef.MemberStatus.正式会員);
         boolean containsWDL = statusCodeList.contains(CDef.MemberStatus.退会会員);
-        // TODO done tanaryo ここも分けたほうがいい by jflute (2025/02/13)
+        // done tanaryo ここも分けたほうがいい by jflute (2025/02/13)
         assertTrue(containsFML);
         assertTrue(containsWDL);
 
-        // TODO done tanaryo もうちょいこのへんコメントがあるといいかなと by jflute (2025/02/13)
+        // done tanaryo もうちょいこのへんコメントがあるといいかなと by jflute (2025/02/13)
+        // [1on1でのふぉろー] DBFluteのEntityの挙動と他のO/Rマッパーでの話
 
         //正式会員を抽出
         List<Member> memberFMLList = memberList.stream().filter(cb -> cb.isMemberStatusCode正式会員()).collect(Collectors.toList());
@@ -278,9 +288,10 @@ public class HandsOn04Test extends UnitContainerTestCase {
         // ## Arrange ##
         // ## Act ##
         ListResultBean<Member> memberList = memberBhv.selectList(cb -> {
-            // TODO done tanaryo MemberCQにもauthorをぜひお願い by jflute (2025/02/13)
+            // done tanaryo MemberCQにもauthorをぜひお願い by jflute (2025/02/13)
             cb.query().arrangeYoungestNiceMember();
         });
+        // TODO jflute 次回1on1で、ArrangeQueryの意義とコンセプトをもっと話す (2025/02/21)
         //where dfloc.BIRTHDATE = (select max(sub1loc.BIRTHDATE)
         //                            from member sub1loc
         //                           where sub1loc.MEMBER_STATUS_CODE = dfloc.MEMBER_STATUS_CODE
@@ -297,7 +308,8 @@ public class HandsOn04Test extends UnitContainerTestCase {
 
         // ## Assert ##
         assertHasAnyElement(memberList);
-        // TODO done tanaryo この3は導出してみましょう by jflute (2025/02/13)
+        // done tanaryo この3は導出してみましょう by jflute (2025/02/13)
+        // TODO tanaryo すべてのステータスが会員テーブルに存在するわけではない by jflute (2025/02/21)
         int minimumRecordCount = CDef.MemberStatus.values().length;//会員ステータスの種類数
         assertTrue(memberList.size() >= minimumRecordCount);
         memberList.forEach(member -> {

@@ -22,6 +22,9 @@ import org.docksidestage.handson.dbflute.exbhv.PurchaseBhv;
 import org.docksidestage.handson.dbflute.exentity.*;
 import org.docksidestage.handson.unit.UnitContainerTestCase;
 
+// TODO tanaryo 不要なimportがいる by jflute (2025/02/21)
+// [1on1でのふぉろー] Eclipseで言う Type Filters みたいなのしっかり設定していくと補完ノイズが少なくなる話。
+
 /**
  * @author tanaryo
  */
@@ -141,7 +144,7 @@ public class HandsOn03Test extends UnitContainerTestCase {
         // これは業務でもめちゃくちゃ気をつけて欲しい。ループの中で検索は基本的に危ないと考えてもいいくらい。
         // done tanaryo securityだけで一回のSQLにしてみましょう by jflute (2025/02/06)
         // memberIDでsecurityは一意に特定できるので、getReminderQuestionで取得してそこでアサートする　by tanaryo(2025/02/08)
-        // TODO done tanaryo ↑の修正はそれはそれでオウム返しがなくなって良い。一方で、SQLの発行回数を減らして欲しい by jflute (2025/02/13)
+        // done tanaryo ↑の修正はそれはそれでオウム返しがなくなって良い。一方で、SQLの発行回数を減らして欲しい by jflute (2025/02/13)
         ListResultBean<MemberSecurity> memberSecurityList = memberSecurityBhv.selectList(cb -> {
             cb.query().setMemberId_InScope(memberBhv.extractMemberIdList(members));//単一のPK(memberId)を抽出
         });
@@ -150,7 +153,7 @@ public class HandsOn03Test extends UnitContainerTestCase {
         //            // UnitTestなので妥協はできますが、mainコードだったら無駄に1レコード分のデータを取得することになります。
         //            // countであればint型のデータが転送されるだけになるのでネットワーク負荷が低くなります。
         //            // 今回は使わずselectEntityのまま。selectCountはintを返す by tanaryo(2025/02/08)
-        //        	// TODO done tanaryo 直後にget()しちゃってるくらいなら、メソッドチェーンで.get()しちゃってもいいかなと by jflute (2025/02/13)
+        //        	// done tanaryo 直後にget()しちゃってるくらいなら、メソッドチェーンで.get()しちゃってもいいかなと by jflute (2025/02/13)
         //        	// というか、その場で消費し終わるロジックなので、alwaysPresent()でいいんじゃないかと。
         //            OptionalEntity<MemberSecurity> optMemberSecurity = memberSecurityBhv.selectEntity(cb -> {
         //                cb.query().setMemberId_Equal(member.getMemberId());
@@ -214,7 +217,7 @@ public class HandsOn03Test extends UnitContainerTestCase {
 
         for (Member member : members) {
             String memberStatusCode = member.getMemberStatusCode();
-            // TODO done tanaryo [細かいtips] 横のすらすらコメントで表現するとプログラムだけにフォーカス当てやすくなる by jflute (2025/02/13)
+            // done tanaryo [細かいtips] 横のすらすらコメントで表現するとプログラムだけにフォーカス当てやすくなる by jflute (2025/02/13)
             // (ただ、長い文章のときは横長になって見づらいので、短いとき限定ではあるけど)
             if (!memberStatusCode.equals(lastStatusCode)) {//初回または値が切り替わった場合に通過
                 if (statusCodes.contains(memberStatusCode)) {//値が再登場していたらfalseを返す
@@ -316,7 +319,7 @@ public class HandsOn03Test extends UnitContainerTestCase {
             assertException(NonSpecifiedColumnAccessException.class, () -> status.getDisplayOrder());
 
             // done tanaryo 実装漏れ "会員の正式会員日時が指定された条件の範囲内であることをアサート" by jflute (2025/02/06)
-            // TODO done tanaryo 一気に全部assertTrue()すると、落ちたときにどの条件で落ちたのかがわからなくなるので分離した方がいい by jflute (2025/02/13)
+            // done tanaryo 一気に全部assertTrue()すると、落ちたときにどの条件で落ちたのかがわからなくなるので分離した方がいい by jflute (2025/02/13)
             assertTrue(formalizedDatetime.isAfter(targetStartDate) || formalizedDatetime.equals(targetStartDate));
             assertTrue(formalizedDatetime.isBefore(targetEndDate.plusDays(1)));
         });
@@ -376,14 +379,14 @@ public class HandsOn03Test extends UnitContainerTestCase {
             LocalDateTime formalizedDatetime = purchase.getMember().get().getFormalizedDatetime();
             // done tanaryo (formalizedDatetime) の () は無くてOKです by jflute (2025/02/04)
             // done tanaryo queryの方は truncTime() してるけど、こっちは trunc 的な処理が見当たらないけど大丈夫かな？ by jflute (2025/02/04)
-            // TODO done tanaryo 一応、.withNano(0) を入れないといけないんじゃないかな？ by jflute (2025/02/13)
+            // done tanaryo 一応、.withNano(0) を入れないといけないんじゃないかな？ by jflute (2025/02/13)
             LocalDateTime formalizedDatetimeAfterOneWeek = formalizedDatetime.plusDays(8).truncatedTo(ChronoUnit.DAYS);
             LocalDateTime purchaseDatetime = purchase.getPurchaseDatetime();
 
             log(categoryName);
             log("正式会員日時={}, 購入日時={}", formalizedDatetime, purchaseDatetime);
             assertNotNull(categoryName);
-            // TODO done tanaryo ここも分離 by jflute (2025/02/13)
+            // done tanaryo ここも分離 by jflute (2025/02/13)
             assertTrue(purchaseDatetime.isAfter(formalizedDatetime) || purchaseDatetime.equals(formalizedDatetime));
             assertTrue(purchaseDatetime.isBefore(formalizedDatetimeAfterOneWeek));
         });
@@ -523,7 +526,7 @@ public class HandsOn03Test extends UnitContainerTestCase {
             log(formalizedDatetime, memberId);
             assertNull(birthDate);
         }
-        // TODO done tanaryo [見比べ課題] 模範の実装と見比べてみて学んでみてください by jflute (2025/02/13)
+        // done tanaryo [見比べ課題] 模範の実装と見比べてみて学んでみてください by jflute (2025/02/13)
         //arrangeとactは大体一緒。assertは一見違う？
         // if文の中にassertを入れるのが一番の違いな気がする。こっちの方が簡潔に書けているし、1回のfor文ですむ。
         // 自分の場合isSortedFirstByValidFormalizedDatetimeはfor文の途中でreturnするロジックなので、各会員に対するアサートやログ出力とは共存できない。
@@ -613,6 +616,8 @@ public class HandsOn03Test extends UnitContainerTestCase {
         // ## Act ##
         // 実データ：select sql_calc_found_rows dfloc.MEMBER_ID as MEMBER_ID,.....limit 0, 3
         // カウント数：select found_rows()
+        // [1on1でのふぉろー] ページング検索のパフォーマンス的なジレンマの話
+        // DBFluteでそのジレンマへの配慮をしている話
         PagingResultBean<Member> page = memberBhv.selectPage(cb -> {
             cb.setupSelect_MemberStatus();
             cb.query().addOrderBy_MemberId_Asc();

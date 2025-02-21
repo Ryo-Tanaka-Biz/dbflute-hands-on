@@ -34,7 +34,7 @@ public class MemberCQ extends BsMemberCQ {
     //                                                                       Arrange Query
     //                                                                       =============
     // You can make your arranged query methods here. e.g. public void arrangeXxx()
-    // TODO done tanaryo 銀行振込のくだりくらいはjavadocに説明があったほうがいいかも by jflute (2025/02/13)
+    // done tanaryo 銀行振込のくだりくらいはjavadocに説明があったほうがいいかも by jflute (2025/02/13)
     // (あんまりオウム返しもしたくはないけど、重要な業務要件ではあるので)
     /**
      * 銀行振込で購入を支払ったことのあるナイスな最年少会員
@@ -42,7 +42,8 @@ public class MemberCQ extends BsMemberCQ {
     public void arrangeYoungestNiceMember(){
         //scalar_(条件)は特定カラムで絞り込み。cb.query().〜の粒度で使用される
         //selectScalarは特定カラムの取得。selectListやselectEntityと同じ粒度で使用される
-    	// TODO done tanaryo ここも外側の条件が足りない話 by jflute (2025/02/13)
+    	// done tanaryo ここも外側の条件が足りない話 by jflute (2025/02/13)
+    	// TODO tanaryo 修行++: existsがコピーになっちゃってるので、そこは再利用してみましょう by jflute (2025/02/21)
         existsPurchase(purchaseCB -> {
             purchaseCB.query().existsPurchasePayment(purchasePaymentCB ->{
                 purchasePaymentCB.query().setPaymentMethodCode_Equal_BankTransfer();
