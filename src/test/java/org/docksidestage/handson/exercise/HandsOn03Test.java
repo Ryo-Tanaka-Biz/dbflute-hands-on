@@ -1,6 +1,6 @@
 package org.docksidestage.handson.exercise;
 
-import java.awt.*;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -22,7 +22,7 @@ import org.docksidestage.handson.dbflute.exbhv.PurchaseBhv;
 import org.docksidestage.handson.dbflute.exentity.*;
 import org.docksidestage.handson.unit.UnitContainerTestCase;
 
-// TODO tanaryo 不要なimportがいる by jflute (2025/02/21)
+// TODO done tanaryo 不要なimportがいる by jflute (2025/02/21)
 // [1on1でのふぉろー] Eclipseで言う Type Filters みたいなのしっかり設定していくと補完ノイズが少なくなる話。
 
 /**
