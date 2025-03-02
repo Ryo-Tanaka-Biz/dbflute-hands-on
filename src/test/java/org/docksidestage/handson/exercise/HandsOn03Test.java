@@ -1,6 +1,5 @@
 package org.docksidestage.handson.exercise;
 
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -652,7 +651,7 @@ public class HandsOn03Test extends UnitContainerTestCase {
         // n =3、ページ番号6の場合、 3,4,5, 6 ,7,8,9のリンクが表示される
         int pageRange = 3;
         List<Integer> list = Arrays.asList(1, 2, 3, 4);
-        List<Integer> pageList =page.pageRange(op -> op.rangeSize(pageRange)).createPageNumberList();//pageNumberは1
+        List<Integer> pageList = page.pageRange(op -> op.rangeSize(pageRange)).createPageNumberList();//pageNumberは1
         assertEquals(list, pageList);
         //pageNumberが2の場合（pageRangeは3）、[1,2,3,4,5]となる。pageNumberが存在するまで前後のページを表示する仕様。だから1も表示される。
         //existsPreviousRangeはfalseだった。指定したレンジのページが全て存在していないといけない
@@ -669,15 +668,58 @@ public class HandsOn03Test extends UnitContainerTestCase {
     //                                                                        ============
     /**
      * 会員ステータスの "表示順" カラムの昇順で並べる
-     * 会員ステータスのデータも取得
-     * その次には、会員の会員IDの降順で並べる
+     * 会員ステータスのデータも
      * 会員ステータスが取れていることをアサート
      * 会員が会員ステータスごとに固まって並んでいることをアサート
      * 検索したデータをまるごとメモリ上に持ってはいけない
      * (要は、検索結果レコード件数と同サイズのリストや配列の作成はダメ)
      */
     public void test_cursor() {
+        // ## Arrange ##
+        Set<String> statusCodes = new HashSet<>();
+        String[] lastStatusCode = {null};
 
+
+        // ## Act ##
+        memberBhv.selectCursor(cb -> {
+            cb.setupSelect_MemberStatus();
+            cb.query().queryMemberStatus().addOrderBy_DisplayOrder_Asc();
+            cb.query().addOrderBy_MemberId_Desc();
+        }, member -> {
+            // ## Assert ##
+            String memberStatusCode = member.getMemberStatusCode();
+            assertTrue(member.getMemberStatus().isPresent());
+            if (!memberStatusCode.equals(lastStatusCode[0])) {//初回または種類が切り替わった場合
+                assertFalse(statusCodes.contains(memberStatusCode));//そのステータスが初登場であることをアサート
+            }
+            statusCodes.add(memberStatusCode);
+            lastStatusCode[0] = memberStatusCode;//
+        });
     }
 
+    // ===================================================================================
+    //                                                                 InnerJoinAutoDetect
+    //                                                                        ============
+
+    // left outer join でも inner join でも結果が変わらない結合を自動で判別して、inner joinにする機能
+    // NotNullのカラムでFK制約のあるリレーションの場合、相手側にデータは必ず存在するので、inner joinにできる
+    // where句で絞り込み条件として利用されているリレーションの場合、相手側にデータは必ず存在するので、inner joinにできる（一部例外あり）
+    public void test_innerJoinAutoDetect() {
+        // ## Act ##
+        // inner join member_status dfrel_0 on dfloc.MEMBER_STATUS_CODE = dfrel_0.MEMBER_STATUS_CODE
+        ListResultBean<Member> member_1 = memberBhv.selectList(cb -> {
+            cb.setupSelect_MemberStatus();
+        });
+
+        // left outer join member_withdrawal dfrel_3 on dfloc.MEMBER_ID = dfrel_3.MEMBER_ID
+        ListResultBean<Member> member_2 = memberBhv.selectList(cb -> {
+            cb.setupSelect_MemberWithdrawalAsOne();
+        });
+
+        // inner join member_withdrawal dfrel_3 on dfloc.MEMBER_ID = dfrel_3.MEMBER_ID
+        ListResultBean<Member> member_3 = memberBhv.selectList(cb -> {
+            cb.setupSelect_MemberWithdrawalAsOne();
+            cb.query().queryMemberWithdrawalAsOne().setWithdrawalReasonCode_Equal_Frt();
+        });
+    }
 }
