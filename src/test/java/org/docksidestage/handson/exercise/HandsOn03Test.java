@@ -21,7 +21,7 @@ import org.docksidestage.handson.dbflute.exbhv.PurchaseBhv;
 import org.docksidestage.handson.dbflute.exentity.*;
 import org.docksidestage.handson.unit.UnitContainerTestCase;
 
-// TODO done tanaryo 不要なimportがいる by jflute (2025/02/21)
+// done tanaryo 不要なimportがいる by jflute (2025/02/21)
 // [1on1でのふぉろー] Eclipseで言う Type Filters みたいなのしっかり設定していくと補完ノイズが少なくなる話。
 
 /**
@@ -696,6 +696,9 @@ public class HandsOn03Test extends UnitContainerTestCase {
             lastStatusCode[0] = memberStatusCode;//
         });
     }
+    
+    // [1on1でのふぉろー] カーソル検索のフォロー
+    // 現場でのselectCursor()も見つけた
 
     // ===================================================================================
     //                                                                 InnerJoinAutoDetect
@@ -707,6 +710,7 @@ public class HandsOn03Test extends UnitContainerTestCase {
     public void test_innerJoinAutoDetect() {
         // ## Act ##
         // inner join member_status dfrel_0 on dfloc.MEMBER_STATUS_CODE = dfrel_0.MEMBER_STATUS_CODE
+    	// TODO tanaryo 使わないなら戻り値を取らなくてもいい by jflute (2025/03/03)
         ListResultBean<Member> member_1 = memberBhv.selectList(cb -> {
             cb.setupSelect_MemberStatus();
         });
@@ -721,5 +725,7 @@ public class HandsOn03Test extends UnitContainerTestCase {
             cb.setupSelect_MemberWithdrawalAsOne();
             cb.query().queryMemberWithdrawalAsOne().setWithdrawalReasonCode_Equal_Frt();
         });
+        // TODO tanaryo [読み物課題] 結合方式は...外部結合"的"!? by jflute (2025/03/03)
+        // https://dbflute.seasar.org/ja/manual/function/ormapper/conditionbean/setupselect/index.html#joinway
     }
 }

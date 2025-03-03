@@ -43,7 +43,7 @@ public class MemberCQ extends BsMemberCQ {
         //scalar_(条件)は特定カラムで絞り込み。cb.query().〜の粒度で使用される
         //selectScalarは特定カラムの取得。selectListやselectEntityと同じ粒度で使用される
     	// done tanaryo ここも外側の条件が足りない話 by jflute (2025/02/13)
-    	// TODO done tanaryo 修行++: existsがコピーになっちゃってるので、そこは再利用してみましょう by jflute (2025/02/21)
+    	// done tanaryo 修行++: existsがコピーになっちゃってるので、そこは再利用してみましょう by jflute (2025/02/21)
         arrangeBankTransferPaymentMember();
         scalar_Equal().max(memberCB -> {
             memberCB.specify().columnBirthdate();
@@ -53,6 +53,7 @@ public class MemberCQ extends BsMemberCQ {
         });
     }
 
+    // [1on1でのふぉろー] すごく汎用的だから、publicでもいいかも話
     /**
      * 銀行振込で購入を支払ったことのある会員
      */

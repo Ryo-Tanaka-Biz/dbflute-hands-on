@@ -15,6 +15,7 @@ import org.docksidestage.handson.dbflute.exbhv.PurchaseBhv;
 import org.docksidestage.handson.dbflute.exentity.*;
 import org.docksidestage.handson.unit.UnitContainerTestCase;
 
+// TODO tanaryo タグコメント、こちらでもぜひ by jflute (2025/03/03)
 /**
  * @author tanaryo
  */
@@ -69,7 +70,8 @@ public class HandsOn04Test extends UnitContainerTestCase {
         });
 
         // ## Assert ##
-        // TODO done tanaryo 万が一、setupSelectし忘れたら？ (assertが曖昧に、意味的に素通りしてる) by jflute (2025/02/21)
+        // done tanaryo 万が一、setupSelectし忘れたら？ (assertが曖昧に、意味的に素通りしてる) by jflute (2025/02/21)
+        // TODO tanaryo 万が一、退会会員が一人もいなくてsetupSelectし忘れたら？ by jflute (2025/03/03)
         assertHasAnyElement(memberList);
         boolean hasWithdrawnMember = false;
         for (Member member : memberList) {
@@ -106,12 +108,13 @@ public class HandsOn04Test extends UnitContainerTestCase {
             cb.setupSelect_MemberStatus();
             // done tanaryo 万が一、正式会員で同じ生年月日を持っている人がいたら？ by jflute (2025/02/13)
             //複数レコード取得することになる。そのためselectEntityではなく、selectListを使う。　by. tanaryo (2025/02/17)
-            // TODO done tanaryo 複数件ヒットするのはその通りだけど、要件は仮会員のみなので、正式会員を取ってはいけない by jflute (2025/02/21)
+            // done tanaryo 複数件ヒットするのはその通りだけど、要件は仮会員のみなので、正式会員を取ってはいけない by jflute (2025/02/21)
             cb.query().setMemberStatusCode_Equal_仮会員();
             cb.query().scalar_Equal().max(memberCB -> {
                 memberCB.specify().columnBirthdate();
                 memberCB.query().setMemberStatusCode_Equal_仮会員();
             });
+            // [1on1でのふぉろー] ScalarConditionの現場の話
         });
 
         // ## Assert ##
@@ -202,7 +205,7 @@ public class HandsOn04Test extends UnitContainerTestCase {
             // OptionalEntity<>からOptionalEntity<>への変換をflatmapで行う。
             // get()をするとnullを許容できないwithdrawalReasonクラスになってしまうので、optionalの状態でmapを使って変換する
             // [1on1でのふぉろー] 一文字でも違ったら、本当にこのカラムかな？って疑うの大事。
-            // TODO done tanaryo Lambda式の変数はわりと短めにする慣習があるので、せめて withdrawalReason は reason でもいいかなと by jflute (2025/02/21)
+            // done tanaryo Lambda式の変数はわりと短めにする慣習があるので、せめて withdrawalReason は reason でもいいかなと by jflute (2025/02/21)
             // もうちょい踏み込んで、withdrawal->wdl でも悪くはない。ただ、個人的には w はやらない。 
             String reason = optMemberWithdrawal.flatMap(wdl -> wdl.getWithdrawalReason())
                     .map(wdlReason -> wdlReason.getWithdrawalReasonText())
@@ -250,7 +253,7 @@ public class HandsOn04Test extends UnitContainerTestCase {
         });//この時点で正式会員または退会会員のいずれかであることを保証
         // done tanaryo 修行++: Stringのcodeは使わずCDefで扱ってみましょう by jflute (2025/02/13)
         // 基本的にStringのcodeで扱う場面はほとんどないと思ってよくて、enumがその抽象化された代わりのオブジェクトである。
-        // TODO done tanaryo CDefになったから、変数名 statusCodeList じゃなくて statusList でいいかなと by jflute (2025/02/21)
+        // done tanaryo CDefになったから、変数名 statusCodeList じゃなくて statusList でいいかなと by jflute (2025/02/21)
         List<CDef.MemberStatus> statusList =
                 memberList.stream().map(op -> op.getMemberStatusCodeAsMemberStatus()).collect(Collectors.toList());
         boolean containsFML = statusList.contains(CDef.MemberStatus.正式会員);
@@ -299,7 +302,7 @@ public class HandsOn04Test extends UnitContainerTestCase {
             // done tanaryo MemberCQにもauthorをぜひお願い by jflute (2025/02/13)
             cb.query().arrangeYoungestNiceMember();
         });
-        // TODO jflute 次回1on1で、ArrangeQueryの意義とコンセプトをもっと話す (2025/02/21)
+        // done jflute 次回1on1で、ArrangeQueryの意義とコンセプトをもっと話す (2025/02/21)
         //where dfloc.BIRTHDATE = (select max(sub1loc.BIRTHDATE)
         //                            from member sub1loc
         //                           where sub1loc.MEMBER_STATUS_CODE = dfloc.MEMBER_STATUS_CODE
@@ -313,7 +316,13 @@ public class HandsOn04Test extends UnitContainerTestCase {
         //                                                )
         //                                 )
         //       )
+        //
+        // where句の再利用 (ArrangeQuery) | DBFlute
+        // https://dbflute.seasar.org/ja/manual/function/genbafit/implfit/whererecycle/index.html
 
+        // TODO tanaryo [読み物課題] ルーズなDaoパターンなら見たくない by jflute (2025/03/03)
+        // https://jflute.hatenadiary.jp/entry/20160906/loosedao
+        
         // ## Assert ##
         assertHasAnyElement(memberList);
         // done tanaryo この3は導出してみましょう by jflute (2025/02/13)
