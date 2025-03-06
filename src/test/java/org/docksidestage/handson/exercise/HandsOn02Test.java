@@ -19,11 +19,20 @@ import org.docksidestage.handson.unit.UnitContainerTestCase;
  * @author tanaryo
  */
 public class HandsOn02Test extends UnitContainerTestCase {
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
     @Resource
     private MemberBhv memberBhv;
 
     // done tanaryo Arrange, Act, Assert のコメントを入れてるようにお願いします by jflute (2025/01/17)
     // Arrangeないときは空っぽでOK
+    // ===================================================================================
+    //                                                                      ExistsTestData
+    //                                                                           =========
+    /**
+     * テストデータがあることをアサートするテスト
+     */
     public void test_existsTestData() throws Exception {
         // ## Arrange ##
         // ## Act ##
@@ -46,6 +55,15 @@ public class HandsOn02Test extends UnitContainerTestCase {
         // MySQLの中で例外の翻訳ができてない説
     }
 
+    // ===================================================================================
+    //                                                               ConditionBean Stretch
+    //                                                                        ============
+    /**
+     * 会員名称がSで始まる会員を検索 (これはタイトル、この中にも要件が含まれている)
+     * 会員名称の昇順で並べる (これは実装要件、Arrange or Act でこの通りに実装すること)
+     * (検索結果の)会員名称がSで始まっていることをアサート (これはアサート要件、Assert でこの通りに実装すること)
+     * "該当テストデータなし" や "条件間違い" 素通りgreenにならないように素通り防止を (今後ずっと同じ)
+     */
     public void test_searchMembers_memberName_startWith_S() throws Exception {
     	// [1on1でのふぉろー] DBFluteは、Java6版とJava8版があります。
     	//  Java6版(2014年まで): 条件値でnullを受け付けたら条件なしになる
@@ -91,6 +109,13 @@ public class HandsOn02Test extends UnitContainerTestCase {
         assertTrue(members.stream().allMatch(member -> member.getMemberName().startsWith("S")));
     }
 
+    /**
+     * 会員IDが1の会員を検索
+     * 一件検索として検索すること
+     * 会員IDが 1 であることをアサート
+     * ※修行++: 試しに一時的に会員IDを99999で検索して、発生する例外のメッセージを読んでみましょう。ぜひ、DBFluteの例外メッセージの特徴を知りましょう。
+     *
+     */
     public void test_searchMembers_memberId_equal_1() throws Exception {
     	// done tanaryo membersではない、単体なので by jflute (2025/01/17)
     	// でもこのまま members を member にすると、本物の member と変数名がかぶる。
@@ -177,6 +202,11 @@ public class HandsOn02Test extends UnitContainerTestCase {
         assertTrue(optMember.get().getMemberId().equals(1));
     }
 
+    /**
+     * 生年月日がない会員を検索
+     * 更新日時の降順で並べる
+     * 生年月日がないことをアサート
+     */
     public void test_searchMembers_birthDate_isNull() throws Exception {
         // ## Arrange ##
         // ## Act ##

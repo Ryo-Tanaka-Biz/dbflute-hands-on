@@ -15,11 +15,15 @@ import org.docksidestage.handson.dbflute.exbhv.PurchaseBhv;
 import org.docksidestage.handson.dbflute.exentity.*;
 import org.docksidestage.handson.unit.UnitContainerTestCase;
 
-// TODO tanaryo タグコメント、こちらでもぜひ by jflute (2025/03/03)
+// TODO done tanaryo タグコメント、こちらでもぜひ by jflute (2025/03/03)
+
 /**
  * @author tanaryo
  */
 public class HandsOn04Test extends UnitContainerTestCase {
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
     @Resource
     private MemberBhv memberBhv;
 
@@ -29,12 +33,17 @@ public class HandsOn04Test extends UnitContainerTestCase {
     @Resource
     private PurchaseBhv purchaseBhv;
 
-    //    退会会員の未払い購入を検索
-    //    退会会員のステータスコードは "WDL"。ひとまずベタで
-    //    支払完了フラグは "0" で未払い。ひとまずベタで
-    //            購入日時の降順で並べる
-    //    会員名称と商品名と一緒にログに出力
-    //            購入が未払いであることをアサート
+    // ===================================================================================
+    //                                                                    Betabeta Stretch
+    //                                                                        ============
+    /**
+     * 退会会員の未払い購入を検索
+     * 退会会員のステータスコードは "WDL"。ひとまずベタで
+     * 支払完了フラグは "0" で未払い。ひとまずベタで
+     * 購入日時の降順で並べる
+     * 会員名称と商品名と一緒にログに出力
+     * 購入が未払いであることをアサート
+     */
     public void test_1() {
         // ## Arrange ##
         // ## Act ##
@@ -58,10 +67,12 @@ public class HandsOn04Test extends UnitContainerTestCase {
         });
     }
 
-    //    会員退会情報も取得して会員を検索
-    //    退会会員でない会員は、会員退会情報を持っていないことをアサート
-    //    退会会員のステータスコードは "WDL"。ひとまずベタで
-    //    不意のバグや不意のデータ不備でもテストが(できるだけ)成り立つこと
+    /**
+     * 会員退会情報も取得して会員を検索
+     * 退会会員でない会員は、会員退会情報を持っていないことをアサート
+     * 退会会員のステータスコードは "WDL"。ひとまずベタで
+     * 不意のバグや不意のデータ不備でもテストが(できるだけ)成り立つこと
+     */
     public void test_2() {
         // ## Arrange ##
         // ## Act ##
@@ -71,18 +82,17 @@ public class HandsOn04Test extends UnitContainerTestCase {
 
         // ## Assert ##
         // done tanaryo 万が一、setupSelectし忘れたら？ (assertが曖昧に、意味的に素通りしてる) by jflute (2025/02/21)
-        // TODO tanaryo 万が一、退会会員が一人もいなくてsetupSelectし忘れたら？ by jflute (2025/03/03)
+        // TODO done tanaryo 万が一、退会会員が一人もいなくてsetupSelectし忘れたら？ by jflute (2025/03/03)
         assertHasAnyElement(memberList);
         boolean hasWithdrawnMember = false;
         for (Member member : memberList) {
+            assertTrue(member.getMemberWithdrawalAsOne().isPresent());//setupSelectできていることを確認
             if (!member.isMemberStatusCode退会会員()) {
                 // 不意のバグや不意のデータ不備でもテストが(できるだけ)成り立つこと
                 // done tanaryo 万が一、テストデータに退会会員でない会員がいなかったら？素通りしちゃう by jflute (2025/02/13)
                 hasWithdrawnMember = true;
                 log(member.getMemberName(), member.getMemberStatusCode());
                 assertTrue(member.getMemberWithdrawalAsOne().isEmpty());
-            } else {//setupSelectできていることを確認
-                assertTrue(member.getMemberWithdrawalAsOne().isPresent());
             }
         }
 
@@ -91,10 +101,15 @@ public class HandsOn04Test extends UnitContainerTestCase {
         }
     }
 
-    //    一番若い仮会員の会員を検索
-    //    区分値メソッドの JavaDoc コメントを確認する
-    //    会員ステータス名称も取得する(ログに出力)
-    //    会員が仮会員であることをアサート
+    // ===================================================================================
+    //                                                              Classification Stretch
+    //                                                                        ============
+    /**
+     * 一番若い仮会員の会員を検索
+     * 区分値メソッドの JavaDoc コメントを確認する
+     * 会員ステータス名称も取得する(ログに出力)
+     * 会員が仮会員であることをアサート
+     */
     public void test_3() {
         // ## Arrange ##
         // ## Act ##
@@ -125,10 +140,12 @@ public class HandsOn04Test extends UnitContainerTestCase {
         });
     }
 
-    //    支払済みの購入の中で一番若い正式会員のものだけ検索
-    //    会員ステータス名称も取得する(ログに出力)
-    //    購入日時の降順で並べる。
-    //            購入の紐づいている会員が正式会員であることをアサート
+    /**
+     * 支払済みの購入の中で一番若い正式会員のものだけ検索
+     * 会員ステータス名称も取得する(ログに出力)
+     * 購入日時の降順で並べる。
+     * 購入の紐づいている会員が正式会員であることをアサート
+     */
     public void test_4() {
         // ## Arrange ##
         // ## Act ##
@@ -182,10 +199,12 @@ public class HandsOn04Test extends UnitContainerTestCase {
         });
     }
 
-    //    生産販売可能な商品の購入を検索
-    //    商品ステータス名称、退会理由テキスト (退会理由テーブル) も取得する(ログに出力) ※1
-    //    購入価格の降順で並べる
-    //            購入の紐づいている商品が生産販売可能であることをアサート
+    /**
+     * 生産販売可能な商品の購入を検索
+     * 商品ステータス名称、退会理由テキスト (退会理由テーブル) も取得する(ログに出力) ※1
+     * 購入価格の降順で並べる
+     *     購入の紐づいている商品が生産販売可能であることをアサート
+     */
     public void test_5() {
         // ## Arrange ##
         // ## Act ##
@@ -217,13 +236,15 @@ public class HandsOn04Test extends UnitContainerTestCase {
     //ここまでやった（by tanaryo 2025/02/03）
     //done tanaryo セクション3のページング忘れてたので次回以降やる
 
-    //    正式会員と退会会員の会員を検索
-    //            会員ステータスの表示順で並べる
-    //    会員が正式会員と退会会員であることをアサート
-    //    両方とも存在していることをアサート
-    //            (検索されたデータに対して)Entity上だけで正式会員を退会会員に変更する
-    //    変更した後、Entityが退会会員に変更されていることをアサート
-    //    変更した後、データベース上は退会会員に変更されて "いない" ことをアサート ※1
+    /**
+     * 正式会員と退会会員の会員を検索
+     *         会員ステータスの表示順で並べる
+     * 会員が正式会員と退会会員であることをアサート
+     * 両方とも存在していることをアサート
+     *         (検索されたデータに対して)Entity上だけで正式会員を退会会員に変更する
+     * 変更した後、Entityが退会会員に変更されていることをアサート
+     * 変更した後、データベース上は退会会員に変更されて "いない" ことをアサート ※1
+     */
     public void test_6() {
         // ## Arrange ##
         // ## Act ##
@@ -289,12 +310,14 @@ public class HandsOn04Test extends UnitContainerTestCase {
         });
     }
 
-    //    銀行振込で購入を支払ったことのある、会員ステータスごとに一番若い会員を検索
-    //    正式会員で一番若い、仮会員で一番若い、という風にそれぞれのステータスで若い会員を検索
-    //    一回の ConditionBean による検索で会員たちを検索すること (PartitionBy...)
-    //    ログのSQLを見て、検索が妥当であることを目視で確認すること
-    //            検索結果が想定されるステータスの件数以上であることをアサート
-    //    ひとまず動作する実装ができたら、ArrangeQueryを活用してみましょう
+    /**
+     * 銀行振込で購入を支払ったことのある、会員ステータスごとに一番若い会員を検索
+     * 正式会員で一番若い、仮会員で一番若い、という風にそれぞれのステータスで若い会員を検索
+     * 一回の ConditionBean による検索で会員たちを検索すること (PartitionBy...)
+     * ログのSQLを見て、検索が妥当であることを目視で確認すること
+     *         検索結果が想定されるステータスの件数以上であることをアサート
+     * ひとまず動作する実装ができたら、ArrangeQueryを活用してみましょう
+     */
     public void test_7() {
         // ## Arrange ##
         // ## Act ##
@@ -320,9 +343,11 @@ public class HandsOn04Test extends UnitContainerTestCase {
         // where句の再利用 (ArrangeQuery) | DBFlute
         // https://dbflute.seasar.org/ja/manual/function/genbafit/implfit/whererecycle/index.html
 
-        // TODO tanaryo [読み物課題] ルーズなDaoパターンなら見たくない by jflute (2025/03/03)
+        // TODO done tanaryo [読み物課題] ルーズなDaoパターンなら見たくない by jflute (2025/03/03)
         // https://jflute.hatenadiary.jp/entry/20160906/loosedao
-        
+        // リポジトリ層にあるDB検索のメソッドを大きい単位で再利用するといずれ肥大化して扱いづらくなる話 by tanaryo (2025/03/06)
+        // また一般的なアーキテクチャのあるべきに加え、今いる現場におけるあるべきを考えて実装しよう by tanaryo (2025/03/06)
+
         // ## Assert ##
         assertHasAnyElement(memberList);
         // done tanaryo この3は導出してみましょう by jflute (2025/02/13)

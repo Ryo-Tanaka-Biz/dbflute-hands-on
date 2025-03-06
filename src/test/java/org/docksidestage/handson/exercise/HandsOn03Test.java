@@ -28,6 +28,9 @@ import org.docksidestage.handson.unit.UnitContainerTestCase;
  * @author tanaryo
  */
 public class HandsOn03Test extends UnitContainerTestCase {
+    // ===================================================================================
+    //                                                                           Attribute
+    //                                                                           =========
     @Resource
     private MemberBhv memberBhv;
     @Resource
@@ -38,10 +41,16 @@ public class HandsOn03Test extends UnitContainerTestCase {
     // ===================================================================================
     //                                                                      Silver Stretch
     //                                                                        ============
-
     // [1on1でのふぉろー] 以前と言われたらどう思うか？どう実装するか？ => 実務では聞き返すがGood by たなりょうさん
     // 日本語の日付表現ってのは曖昧部分が多いので、勝手に解釈して決めるとよくすれ違い。どっちが文法的に正しいかはもはや関係ない。
     // データベースのSTART/END, BEGIN/ENDの期間を表すカラムの終了日時とか、どっち？どっちもよくありえる。
+    /**
+     * [1] 会員名称がSで始まる1968年1月1日以前に生まれた会員を検索
+     * 会員ステータスも取得する
+     * 生年月日の昇順で並べる
+     * 会員が1968/01/01以前であることをアサート
+     * ※"以前" の解釈は、"その日ぴったりも含む" で。
+     */
     public void test_searchMembers_silver_1() {
         // ## Arrange ##
         LocalDate targetDate = LocalDate.of(1968, 1, 1);
@@ -72,6 +81,12 @@ public class HandsOn03Test extends UnitContainerTestCase {
         });
     }
 
+    /**
+     * [2] 会員ステータスと会員セキュリティ情報も取得して会員を検索
+     * 若い順で並べる。生年月日がない人は会員IDの昇順で並ぶようにする
+     * 会員ステータスと会員セキュリティ情報が存在することをアサート
+     * ※カージナリティを意識しましょう
+     */
     public void test_searchMembers_silver_2() {
         // ## Arrange ##
         // ## Act ##
@@ -122,6 +137,15 @@ public class HandsOn03Test extends UnitContainerTestCase {
         });
     }
 
+    /**
+     *[3] 会員セキュリティ情報のリマインダ質問で2という文字が含まれている会員を検索
+     * 会員セキュリティ情報のデータ自体は要らない
+     * (Actでの検索は本番でも実行されることを想定し、テスト都合でパフォーマンス劣化させないこと)
+     * リマインダ質問に2が含まれていることをアサート
+     * アサートするために別途検索処理を入れても誰も文句は言わない
+     * ※修行++: 実装できたら、(もし複数回検索していたら) Assert内の検索が一回になるようにしてみましょう。 その際、Act内で検索しているデータを、Assert内でもう一度検索することなく実現してみましょう。
+     * ※修行#: さらに実装できたら、会員名称とリマインダ質問を会員ごとに一行のログに出力するようにしてみましょう。 その際、ArrangeとActには手を入れず、Assert内だけの修正で実現してみましょう。
+     */
     public void test_searchMembers_silver_3() {
         // ## Arrange ##
         // ## Act ##
@@ -169,6 +193,14 @@ public class HandsOn03Test extends UnitContainerTestCase {
     // ===================================================================================
     //                                                                        Gold Stretch
     //                                                                        ============
+    /**
+     *[4] 会員ステータスの表示順カラムで会員を並べて検索
+     * 会員ステータスの "表示順" カラムの昇順で並べる
+     * 会員ステータスのデータ自体は要らない
+     * その次には、会員の会員IDの降順で並べる
+     * 会員ステータスのデータが取れていないことをアサート
+     * 会員が会員ステータスごとに固まって並んでいることをアサート (順序は問わない)
+     */
     public void test_searchMembers_gold_4() {
         // ## Arrange ##
         // ## Act ##
@@ -234,11 +266,13 @@ public class HandsOn03Test extends UnitContainerTestCase {
         return true;
     }
 
-    //    [5] 生年月日が存在する会員の購入を検索
-    //    会員名称と会員ステータス名称と商品名を取得する(ログ出力)
-    //    購入日時の降順、購入価格の降順、商品IDの昇順、会員IDの昇順で並べる
-    //    OrderBy がたくさん追加されていることをログで目視確認すること
-    //    購入に紐づく会員の生年月日が存在することをアサート
+    /**
+     * [5] 生年月日が存在する会員の購入を検索
+     * 会員名称と会員ステータス名称と商品名を取得する(ログ出力)
+     * 購入日時の降順、購入価格の降順、商品IDの昇順、会員IDの昇順で並べる
+     * OrderBy がたくさん追加されていることをログで目視確認すること
+     * 購入に紐づく会員の生年月日が存在することをアサート
+     */
     public void test_searchMembers_gold_5() {
         // ## Arrange ##
         // done tanaryo [いいね] 完璧ですな by jflute (2025/02/04)
@@ -269,16 +303,18 @@ public class HandsOn03Test extends UnitContainerTestCase {
         });
     }
 
-    //[6] 2005年10月の1日から3日までに正式会員になった会員を検索
-    //    画面からの検索条件で2005年10月1日と2005年10月3日がリクエストされたと想定して...
-    //    Arrange で String の "2005/10/01", "2005/10/03" を一度宣言してから日時クラスに変換し...
-    //    自分で日付移動などはせず、DBFluteの機能を使って、そのままの日付(日時)を使って条件を設定
-    //    会員ステータスも一緒に取得
-    //    ただし、会員ステータス名称だけ取得できればいい (説明や表示順カラムは不要)
-    //    会員名称に "vi" を含む会員を検索
-    //    会員名称と正式会員日時と会員ステータス名称をログに出力
-    //    会員ステータスがコードと名称だけが取得されていることをアサート
-    //    会員の正式会員日時が指定された条件の範囲内であることをアサート
+    /**
+     * [6] 2005年10月の1日から3日までに正式会員になった会員を検索
+     * 画面からの検索条件で2005年10月1日と2005年10月3日がリクエストされたと想定して...
+     * Arrange で String の "2005/10/01", "2005/10/03" を一度宣言してから日時クラスに変換し...
+     * 自分で日付移動などはせず、DBFluteの機能を使って、そのままの日付(日時)を使って条件を設定
+     * 会員ステータスも一緒に取得
+     * ただし、会員ステータス名称だけ取得できればいい (説明や表示順カラムは不要)
+     * 会員名称に "vi" を含む会員を検索
+     * 会員名称と正式会員日時と会員ステータス名称をログに出力
+     * 会員ステータスがコードと名称だけが取得されていることをアサート
+     * 会員の正式会員日時が指定された条件の範囲内であることをアサート
+     */
     public void test_searchMembers_gold_6() {
         // ## Arrange ##
         // done tanaryo これまた完璧。一応、補足に書いてあった adjust... のところもやってみてください by jflute (2025/02/04)
@@ -327,11 +363,13 @@ public class HandsOn03Test extends UnitContainerTestCase {
     // ===================================================================================
     //                                                                    Platinum Stretch
     //                                                                        ============
-    //    [7] 正式会員になってから一週間以内の購入を検索
-    //    会員と会員ステータス、会員セキュリティ情報も一緒に取得
-    //    商品と商品ステータス、商品カテゴリ、さらに上位の商品カテゴリも一緒に取得
-    //    上位の商品カテゴリ名が取得できていることをアサート
-    //    購入日時が正式会員になってから一週間以内であることをアサート
+    /**
+     * [7] 正式会員になってから一週間以内の購入を検索
+     * 会員と会員ステータス、会員セキュリティ情報も一緒に取得
+     * 商品と商品ステータス、商品カテゴリ、さらに上位の商品カテゴリも一緒に取得
+     * 上位の商品カテゴリ名が取得できていることをアサート
+     * 購入日時が正式会員になってから一週間以内であることをアサート
+     */
     public void test_searchMembers_platinum_7() {
         // ## Arrange ##
         // done tanaryo 補足にあった、adjustを使ったエクササイズをやってみてください by jflute (2025/02/06)
@@ -391,16 +429,18 @@ public class HandsOn03Test extends UnitContainerTestCase {
         });
     }
 
-    //    [8] 1974年までに生まれた、もしくは不明の会員を検索
-    //            画面からの検索条件で1974年がリクエストされたと想定
-    //    Arrange で String の "1974/01/01" を一度宣言してから日付クラスに変換
-    //    その日付クラスの値を、(日付移動などせず)そのまま使って検索条件を実現
-    //    会員ステータス名称、リマインダ質問と回答、退会理由入力テキストを取得する(ログ出力) ※1
-    //    若い順だが生年月日が null のデータを最初に並べる
-    //    生年月日が指定された条件に合致することをアサート (1975年1月1日なら落ちるように)
-    //    Arrangeで "きわどいデータ" ※2 を作ってみましょう (Behavior の updateNonstrict() ※3 を使って)
-    //    検索で含まれるはずの "きわどいデータ" が検索されてることをアサート (アサート自体の保証のため)
-    //    生まれが不明の会員が先頭になっていることをアサート
+    /**
+     * [8] 1974年までに生まれた、もしくは不明の会員を検索
+     *         画面からの検索条件で1974年がリクエストされたと想定
+     * Arrange で String の "1974/01/01" を一度宣言してから日付クラスに変換
+     * その日付クラスの値を、(日付移動などせず)そのまま使って検索条件を実現
+     * 会員ステータス名称、リマインダ質問と回答、退会理由入力テキストを取得する(ログ出力) ※1
+     * 若い順だが生年月日が null のデータを最初に並べる
+     * 生年月日が指定された条件に合致することをアサート (1975年1月1日なら落ちるように)
+     * Arrangeで "きわどいデータ" ※2 を作ってみましょう (Behavior の updateNonstrict() ※3 を使って)
+     * 検索で含まれるはずの "きわどいデータ" が検索されてることをアサート (アサート自体の保証のため)
+     * 生まれが不明の会員が先頭になっていることをアサート
+     */
     public void test_searchMembers_platinum_8() {
         // ## Arrange ##
         String targetBirthDateString = "1974/01/01";
@@ -486,13 +526,15 @@ public class HandsOn03Test extends UnitContainerTestCase {
     }
 
     // done jflute 次回1on1でのふぉろーここから (2025/02/06)
-    //    [9] 2005年6月に正式会員になった会員を先に並べて生年月日のない会員を検索
-    //            画面からの検索条件で2005年6月がリクエストされたと想定
-    //    Arrange で String の "2005/06/01" を一度宣言してから日付クラスに変換
-    //    その日付クラスの値を、(日付移動などせず)そのまま使って検索条件を実現
-    //            第二ソートキーは会員IDの降順
-    //    検索された会員の生年月日が存在しないことをアサート
-    //2005年6月に正式会員になった会員が先に並んでいることをアサート (先頭だけじゃなく全体をチェック)
+    /**
+     * [9] 2005年6月に正式会員になった会員を先に並べて生年月日のない会員を検索
+     *     画面からの検索条件で2005年6月がリクエストされたと想定
+     * Arrange で String の "2005/06/01" を一度宣言してから日付クラスに変換
+     * その日付クラスの値を、(日付移動などせず)そのまま使って検索条件を実現
+     *     第二ソートキーは会員IDの降順
+     * 検索された会員の生年月日が存在しないことをアサート
+     * 2005年6月に正式会員になった会員が先に並んでいることをアサート (先頭だけじゃなく全体をチェック)
+     */
     public void test_searchMembers_platinum_9() {
         // ## Arrange ##
         String targetDateString = "2005/06/01";
@@ -710,22 +752,26 @@ public class HandsOn03Test extends UnitContainerTestCase {
     public void test_innerJoinAutoDetect() {
         // ## Act ##
         // inner join member_status dfrel_0 on dfloc.MEMBER_STATUS_CODE = dfrel_0.MEMBER_STATUS_CODE
-    	// TODO tanaryo 使わないなら戻り値を取らなくてもいい by jflute (2025/03/03)
-        ListResultBean<Member> member_1 = memberBhv.selectList(cb -> {
+    	// TODO done tanaryo 使わないなら戻り値を取らなくてもいい by jflute (2025/03/03)
+        memberBhv.selectList(cb -> {
             cb.setupSelect_MemberStatus();
         });
 
         // left outer join member_withdrawal dfrel_3 on dfloc.MEMBER_ID = dfrel_3.MEMBER_ID
-        ListResultBean<Member> member_2 = memberBhv.selectList(cb -> {
+        memberBhv.selectList(cb -> {
             cb.setupSelect_MemberWithdrawalAsOne();
         });
 
         // inner join member_withdrawal dfrel_3 on dfloc.MEMBER_ID = dfrel_3.MEMBER_ID
-        ListResultBean<Member> member_3 = memberBhv.selectList(cb -> {
+        memberBhv.selectList(cb -> {
             cb.setupSelect_MemberWithdrawalAsOne();
             cb.query().queryMemberWithdrawalAsOne().setWithdrawalReasonCode_Equal_Frt();
         });
-        // TODO tanaryo [読み物課題] 結合方式は...外部結合"的"!? by jflute (2025/03/03)
+        // TODO done tanaryo [読み物課題] 結合方式は...外部結合"的"!? by jflute (2025/03/03)
+        // 業務にフィットした検索の仕方を考えると、「XXXXXXであるYYYYYY」のよう外部結合的な概念が多い by tanaryo  (2025/03/06)
+        // そのためDBFluteでは結合処理だけで基点テーブルが絞り込まれてしまうことがないようにしている
+        // とはいえ、inner join でも left outer join でも結果が変わらないケースではinner joinしている
+        // よく考えるとハンズオンでも「XXXXXな会員」、「YYYYYな購入」のような基点テーブルを意識させた問題（見たいものの中心は何か）が多い by tanaryo  (2025/03/06)
         // https://dbflute.seasar.org/ja/manual/function/ormapper/conditionbean/setupselect/index.html#joinway
     }
 }
