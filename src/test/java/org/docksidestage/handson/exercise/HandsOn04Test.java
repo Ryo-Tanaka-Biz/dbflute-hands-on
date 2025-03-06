@@ -359,4 +359,14 @@ public class HandsOn04Test extends UnitContainerTestCase {
         });
     }
     //ここまでやった（by tanaryo 2025/02/08）
+
+    // ===================================================================================
+    //                                                          Add Classification Stretch
+    //                                                                        ============
+    public void test_8() {
+        memberBhv.selectList(cb -> {
+//            cb.query().queryMemberStatus().setMemberStatusCode_Equal_ハンズオン();
+            //区分値の追加と削除のテスト。区分値追加時にはコンパイルが通るが削除後には通らなくなることを確認
+        });
+    }
 }
