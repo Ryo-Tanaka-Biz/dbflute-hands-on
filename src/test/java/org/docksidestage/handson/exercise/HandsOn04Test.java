@@ -15,7 +15,7 @@ import org.docksidestage.handson.dbflute.exbhv.PurchaseBhv;
 import org.docksidestage.handson.dbflute.exentity.*;
 import org.docksidestage.handson.unit.UnitContainerTestCase;
 
-// TODO done tanaryo タグコメント、こちらでもぜひ by jflute (2025/03/03)
+// done tanaryo タグコメント、こちらでもぜひ by jflute (2025/03/03)
 
 /**
  * @author tanaryo
@@ -82,10 +82,12 @@ public class HandsOn04Test extends UnitContainerTestCase {
 
         // ## Assert ##
         // done tanaryo 万が一、setupSelectし忘れたら？ (assertが曖昧に、意味的に素通りしてる) by jflute (2025/02/21)
-        // TODO done tanaryo 万が一、退会会員が一人もいなくてsetupSelectし忘れたら？ by jflute (2025/03/03)
+        // done tanaryo 万が一、退会会員が一人もいなくてsetupSelectし忘れたら？ by jflute (2025/03/03)
         assertHasAnyElement(memberList);
         boolean hasWithdrawnMember = false;
         for (Member member : memberList) {
+        	// TODO tanaryo すべての会員で退会情報があるって言い切っちゃってる by jflute (2025/03/07)
+        	// (元々はelseに入ってて、このアサートが一回以上動いたかどうかを保証したかった)
             assertTrue(member.getMemberWithdrawalAsOne().isPresent());//setupSelectできていることを確認
             if (!member.isMemberStatusCode退会会員()) {
                 // 不意のバグや不意のデータ不備でもテストが(できるだけ)成り立つこと
@@ -343,7 +345,7 @@ public class HandsOn04Test extends UnitContainerTestCase {
         // where句の再利用 (ArrangeQuery) | DBFlute
         // https://dbflute.seasar.org/ja/manual/function/genbafit/implfit/whererecycle/index.html
 
-        // TODO done tanaryo [読み物課題] ルーズなDaoパターンなら見たくない by jflute (2025/03/03)
+        // done tanaryo [読み物課題] ルーズなDaoパターンなら見たくない by jflute (2025/03/03)
         // https://jflute.hatenadiary.jp/entry/20160906/loosedao
         // リポジトリ層にあるDB検索のメソッドを大きい単位で再利用するといずれ肥大化して扱いづらくなる話 by tanaryo (2025/03/06)
         // また一般的なアーキテクチャのあるべきに加え、今いる現場におけるあるべきを考えて実装しよう by tanaryo (2025/03/06)
@@ -351,7 +353,8 @@ public class HandsOn04Test extends UnitContainerTestCase {
         // ## Assert ##
         assertHasAnyElement(memberList);
         // done tanaryo この3は導出してみましょう by jflute (2025/02/13)
-        // TODO done tanaryo すべてのステータスが会員テーブルに存在するわけではない by jflute (2025/02/21)
+        // done tanaryo すべてのステータスが会員テーブルに存在するわけではない by jflute (2025/02/21)
+        // TODO tanaryo 修行++: MEMBERテーブルのMEMBER_STATUS_CODEの種類数を検索してみてください (同じ値になるはず) by jflute (2025/03/07)
         int minimumRecordCount = memberStatusBhv.selectCount(cb -> cb.query().existsMember(mbCB -> {}));//会員テーブルに紐づく会員ステータスの種類数
         assertTrue(memberList.size() >= minimumRecordCount);
         memberList.forEach(member -> {
@@ -363,6 +366,8 @@ public class HandsOn04Test extends UnitContainerTestCase {
     // ===================================================================================
     //                                                          Add Classification Stretch
     //                                                                        ============
+    // [1on1でのふぉろー] 区分値の
+    // よもやま: LibreOffice
     public void test_8() {
         memberBhv.selectList(cb -> {
 //            cb.query().queryMemberStatus().setMemberStatusCode_Equal_ハンズオン();
