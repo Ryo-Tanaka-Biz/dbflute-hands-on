@@ -366,8 +366,9 @@ public class HandsOn04Test extends UnitContainerTestCase {
     // ===================================================================================
     //                                                          Add Classification Stretch
     //                                                                        ============
-    // [1on1でのふぉろー] 区分値の
+    // [1on1でのふぉろー] 区分値の管理のおさらい
     // よもやま: LibreOffice
+    // よもやま: IntelliJで、クリーンコンパイル (原因わかんないけど、targetの下を削除して再ビルドで直った)
     public void test_8() {
         memberBhv.selectList(cb -> {
 //            cb.query().queryMemberStatus().setMemberStatusCode_Equal_ハンズオン();
