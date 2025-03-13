@@ -85,21 +85,27 @@ public class HandsOn04Test extends UnitContainerTestCase {
         // done tanaryo 万が一、退会会員が一人もいなくてsetupSelectし忘れたら？ by jflute (2025/03/03)
         assertHasAnyElement(memberList);
         boolean hasWithdrawnMember = false;
+        boolean validSetupSelectMemberWithdrawal = false;
         for (Member member : memberList) {
-        	// TODO tanaryo すべての会員で退会情報があるって言い切っちゃってる by jflute (2025/03/07)
-        	// (元々はelseに入ってて、このアサートが一回以上動いたかどうかを保証したかった)
-            assertTrue(member.getMemberWithdrawalAsOne().isPresent());//setupSelectできていることを確認
+            // TODO done tanaryo すべての会員で退会情報があるって言い切っちゃってる by jflute (2025/03/07)
+            // (元々はelseに入ってて、このアサートが一回以上動いたかどうかを保証したかった)
             if (!member.isMemberStatusCode退会会員()) {
                 // 不意のバグや不意のデータ不備でもテストが(できるだけ)成り立つこと
                 // done tanaryo 万が一、テストデータに退会会員でない会員がいなかったら？素通りしちゃう by jflute (2025/02/13)
                 hasWithdrawnMember = true;
                 log(member.getMemberName(), member.getMemberStatusCode());
                 assertTrue(member.getMemberWithdrawalAsOne().isEmpty());
+            } else {
+                validSetupSelectMemberWithdrawal = true;
+                assertTrue(member.getMemberWithdrawalAsOne().isPresent());
             }
         }
 
         if (!hasWithdrawnMember) {
             fail("テストデータに退会会員が含まれていないため、退会会員のテストが実施されていません");
+        }
+        if (!validSetupSelectMemberWithdrawal) {
+            fail("会員退会情報テーブルを参照できていません");
         }
     }
 
@@ -354,9 +360,15 @@ public class HandsOn04Test extends UnitContainerTestCase {
         assertHasAnyElement(memberList);
         // done tanaryo この3は導出してみましょう by jflute (2025/02/13)
         // done tanaryo すべてのステータスが会員テーブルに存在するわけではない by jflute (2025/02/21)
-        // TODO tanaryo 修行++: MEMBERテーブルのMEMBER_STATUS_CODEの種類数を検索してみてください (同じ値になるはず) by jflute (2025/03/07)
-        int minimumRecordCount = memberStatusBhv.selectCount(cb -> cb.query().existsMember(mbCB -> {}));//会員テーブルに紐づく会員ステータスの種類数
-        assertTrue(memberList.size() >= minimumRecordCount);
+        // TODO done tanaryo 修行++: MEMBERテーブルのMEMBER_STATUS_CODEの種類数を検索してみてください (同じ値になるはず) by jflute (2025/03/07)
+        int minimumRecordCountByMemberStatus =
+                memberStatusBhv.selectCount(cb -> cb.query().existsMember(mbCB -> {}));//会員テーブルに紐づく会員ステータスの種類数
+        int minimumRecordCountByMember = memberBhv.selectScalar(Integer.class).countDistinct(cb -> {
+            cb.specify().columnMemberStatusCode();
+        });
+        log("minimumRecordCountByMemberStatus:" + minimumRecordCountByMemberStatus);
+        log("minimumRecordCountByMember:" + minimumRecordCountByMember);
+        assertTrue(memberList.size() >= minimumRecordCountByMemberStatus);
         memberList.forEach(member -> {
             log(member.getMemberStatusCode(), member.getBirthdate());
         });
@@ -371,7 +383,7 @@ public class HandsOn04Test extends UnitContainerTestCase {
     // よもやま: IntelliJで、クリーンコンパイル (原因わかんないけど、targetの下を削除して再ビルドで直った)
     public void test_8() {
         memberBhv.selectList(cb -> {
-//            cb.query().queryMemberStatus().setMemberStatusCode_Equal_ハンズオン();
+            //            cb.query().queryMemberStatus().setMemberStatusCode_Equal_ハンズオン();
             //区分値の追加と削除のテスト。区分値追加時にはコンパイルが通るが削除後には通らなくなることを確認
         });
     }
