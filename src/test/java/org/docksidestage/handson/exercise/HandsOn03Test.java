@@ -752,7 +752,7 @@ public class HandsOn03Test extends UnitContainerTestCase {
     public void test_innerJoinAutoDetect() {
         // ## Act ##
         // inner join member_status dfrel_0 on dfloc.MEMBER_STATUS_CODE = dfrel_0.MEMBER_STATUS_CODE
-    	// TODO done tanaryo 使わないなら戻り値を取らなくてもいい by jflute (2025/03/03)
+    	// done tanaryo 使わないなら戻り値を取らなくてもいい by jflute (2025/03/03)
         memberBhv.selectList(cb -> {
             cb.setupSelect_MemberStatus();
         });
@@ -767,7 +767,7 @@ public class HandsOn03Test extends UnitContainerTestCase {
             cb.setupSelect_MemberWithdrawalAsOne();
             cb.query().queryMemberWithdrawalAsOne().setWithdrawalReasonCode_Equal_Frt();
         });
-        // TODO done tanaryo [読み物課題] 結合方式は...外部結合"的"!? by jflute (2025/03/03)
+        // done tanaryo [読み物課題] 結合方式は...外部結合"的"!? by jflute (2025/03/03)
         // 業務にフィットした検索の仕方を考えると、「XXXXXXであるYYYYYY」のよう外部結合的な概念が多い by tanaryo  (2025/03/06)
         // そのためDBFluteでは結合処理だけで基点テーブルが絞り込まれてしまうことがないようにしている
         // とはいえ、inner join でも left outer join でも結果が変わらないケースではinner joinしている
