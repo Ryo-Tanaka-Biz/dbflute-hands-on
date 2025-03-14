@@ -467,6 +467,8 @@ public class HandsOn04Test extends UnitContainerTestCase {
     //[df-replace-schema] - - - - - - - - - -/
     //[df-replace-schema]
 
+    // TODO jflute 1on1にて、グルーピングやsisterCodeやsubItemの現場での活用の例を話題にする (2025/03/15)
+    
     // ===================================================================================
     //                                                                            Grouping
     //                                                                        ============
@@ -479,6 +481,23 @@ public class HandsOn04Test extends UnitContainerTestCase {
     public void test_9() {
         // ## Arrange ##
         // ## Act ##
+    	// TODO tanaryo [お知らせ]【この機能大事】by jflute (2025/03/15)
+    	// _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+    	// if (正式会員 || 仮会員) {
+    	// }
+    	// ってな感じのif文を書こうとしたら...
+    	// ちょっと待った！
+    	// その条件を業務的な一言で表せる？
+    	// 例えば「ログイン可能な会員」というニュアンスでの分岐なのであれば、
+    	// if (ログイン可能な会員) {
+    	// }
+    	// というif文にしたい。それが、groupingMap
+    	// ログイン可能な会員が増えても変更しやすいように。
+    	// http://dbflute.seasar.org/ja/manual/function/genbafit/implfit/whererecycle/#oneword
+    	//
+    	// これ、別に区分値の話だけではなく、"プログラムの再利用" という面で非常に大切な思考。
+    	// いかに抽象化して、具体的な手法に依存しないようにプログラムを書くかがポイント。
+    	// _/_/_/_/_/_/_/_/_/_/
         ListResultBean<Member> members = memberBhv.selectList(cb -> {
             cb.query().setMemberStatusCode_InScope_ServiceAvailable();
             cb.query().queryMemberStatus().addOrderBy_DisplayOrder_Asc();
@@ -490,6 +509,7 @@ public class HandsOn04Test extends UnitContainerTestCase {
             assertTrue(member.isMemberStatusCode_ServiceAvailable());
         });
     }
+    // TODO tanaryo [いいね] 素晴らしい、よく見つけました！ by jflute (2025/03/15)
     // schemaHTMLにて、serviceAvailableの欄を確認
     // PaymentMethodにもrecommendedのgroupingあり
 
@@ -528,6 +548,11 @@ public class HandsOn04Test extends UnitContainerTestCase {
         members.forEach(member -> {
             assertFalse(member.getPurchaseList().isEmpty());
         });
+        // TODO tanaryo [いいね] そこまでしっかりチェックしてくれて嬉しい！ by jflute (2025/03/15)
+        // loadPurchase()することで初めてgetPurchaseList()で値が取れるという感じです。
+        // 一方で、データがなければloadしても空っぽリスト。
+        // 一方で一方で、load自体してなければ問答無用で空っぽリスト。
+        //
         // getPurchaseListのjavadocには(NotNull: even if no loading, returns empty list)の記載。これはloadReferrer用か by tanaryo (2025/3/14)
     }
     //schemaHTMLでsistersを確認
@@ -554,6 +579,7 @@ public class HandsOn04Test extends UnitContainerTestCase {
      */
     public void test_11() {
         // ## Arrange ##
+    	// TODO tanaryo Assertだけで使う変数はAssert配下で宣言でOKです。変数のスコープは短くをコンセプトに by jflute (2025/03/15)
         Set<String> displayOrders = new HashSet<>();
         String lastDisplayOrder = null;
 
@@ -578,4 +604,6 @@ public class HandsOn04Test extends UnitContainerTestCase {
     }
     // schemaHTMLでsubItemを確認
     // 会員ステータスのデータがなくても、displayOrderに関する情報を区分値から取得できるのがメリット？ by tanaryo (2025/3/14)
+    // TODO tanaryo [ふぉろー] yes, テーブル区分値だとキャッシュみたいな感じになりますね by jflute (2025/03/15)
+    // 暗黙の区分値だとそこが大元のデータになるのでキャッシュってわけじゃないけど。
 }
