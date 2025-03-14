@@ -54,14 +54,31 @@ map:{
     #}
     ; Flg = list:{
         ; map:{topComment=フラグを示す; codeType=Number}
-        ; map:{code=1; name=True ; alias=はい  ; comment=有効を示す}
-        ; map:{code=0; name=False; alias=いいえ; comment=無効を示す}
+        ; map:{
+            ; code=1; name=True ; alias=はい  ; comment=有効を示す
+            ; sisterCode=true
+        }
+        ; map:{
+            ; code=0; name=False; alias=いいえ; comment=無効を示す
+            ; sisterCode=false
+        }
     }
     ; MemberStatus = list:{
-        ; map:{topComment=入会から退会までの会員のステータスを示す; codeType=String}
+        ; map:{
+            ; topComment=入会から退会までの会員のステータスを示す; codeType=String
+            ; groupingMap = map:{
+                ; serviceAvailable = map:{
+                    ; groupComment = サービスが利用できる社員
+                    ; elementList = list:{正式会員;仮会員}
+                }
+            }
+        }
         ; map:{
             ; table=MEMBER_STATUS
             ; code=MEMBER_STATUS_CODE; name=MEMBER_STATUS_NAME
+            ; subItemMap=map:{
+                displayOrder=DISPLAY_ORDER
+            }
             ; comment=DESCRIPTION; orderBy=DISPLAY_ORDER
         }
     }

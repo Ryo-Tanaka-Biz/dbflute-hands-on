@@ -1,7 +1,9 @@
 package org.docksidestage.handson.exercise;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
@@ -389,68 +391,179 @@ public class HandsOn04Test extends UnitContainerTestCase {
     }
 
     //暗黙の区分値チェック。ReplaceSchemaで以下のエラーが出た。なお戻すと成功。また新規追加のレコードはチェック対象外。 by tanaryo(2025/03/14)
-//    [df-replace-schema] 2025-03-14 16:43:12,559 INFO  - * * * * * * * * * * *
-//            [df-replace-schema] 2025-03-14 16:43:12,559 INFO  - *                   *
-//            [df-replace-schema] 2025-03-14 16:43:12,559 INFO  - * Load Data         *
-//            [df-replace-schema] 2025-03-14 16:43:12,559 INFO  - *                   *
-//            [df-replace-schema] 2025-03-14 16:43:12,559 INFO  - * * * * * * * * * * *
-//            [df-replace-schema] 2025-03-14 16:43:12,566 INFO  - /= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-//            [df-replace-schema] 2025-03-14 16:43:12,566 INFO  - writeData(playsql/data/common/xls/10-master.xls)
-//[df-replace-schema] 2025-03-14 16:43:12,566 INFO  - = = = = = = =/
-//            [df-replace-schema] 2025-03-14 16:43:12,636 INFO  - ...Getting tables:
-//            [df-replace-schema] 2025-03-14 16:43:12,637 INFO  -   schema = {maihamadb.$$NoNameSchema$$ as main}
-//[df-replace-schema] 2025-03-14 16:43:12,637 INFO  -   types  = [TABLE, VIEW]
-//            [df-replace-schema] 2025-03-14 16:43:12,653 INFO  - MEMBER_STATUS:{PRV, 仮会員, 入会直後のステータスで一部のサイトサービスが利用可能, 3}
-//[df-replace-schema] 2025-03-14 16:43:12,662 INFO  - MEMBER_STATUS:{FML, 正式会員, 正式な会員としてサイトサービスが利用可能, 1}
-//[df-replace-schema] 2025-03-14 16:43:12,662 INFO  - MEMBER_STATUS:{WDLL, 退会会員, 退会が確定した会員でサイトサービスはダメ, 2}
-//[df-replace-schema] 2025-03-14 16:43:12,666 INFO  - ...Retrying by suppressing batch update: MEMBER_STATUS
-//[df-replace-schema] 2025-03-14 16:43:12,671 ERROR - Look! Read the message below.
-//            [df-replace-schema] /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-//[df-replace-schema] Failed to execute DBFlute Task 'ReplaceSchema'.
-//[df-replace-schema]
-//[df-replace-schema] [Advice]
-//[df-replace-schema] Check the exception messages and the stack traces.
-//[df-replace-schema]
-//[df-replace-schema] [Database Product]
-//[df-replace-schema] MySQL 8.0.40
-//[df-replace-schema]
-//[df-replace-schema] [JDBC Driver]
-//[df-replace-schema] MySQL Connector Java mysql-connector-java-5.1.49 ( Revision: ad86f36e100e104cd926c6b81c8cab9565750116 ) for JDBC 4.0
-//[df-replace-schema] * * * * * * * * * */
-//            [df-replace-schema] org.dbflute.exception.DfXlsDataRegistrationFailureException: Look! Read the message below.
-//            [df-replace-schema] /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-//[df-replace-schema] Failed to register the table data.
-//[df-replace-schema]
-//[df-replace-schema] [Advice]
-//[df-replace-schema] Please confirm the SQLException message.
-//[df-replace-schema]
-//[df-replace-schema] [Data Directory]
-//[df-replace-schema] playsql/data/common/xls
-//[df-replace-schema]
-//[df-replace-schema] [Xls File]
-//[df-replace-schema] 10-master.xls
-//[df-replace-schema]
-//[df-replace-schema] [Table]
-//[df-replace-schema] MEMBER_STATUS
-//[df-replace-schema]
-//[df-replace-schema] [SQLException]
-//[df-replace-schema] org.dbflute.exception.DfJDBCException
-//[df-replace-schema] JDBC said...
-//[df-replace-schema] /- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//[df-replace-schema] [SQLException]
-//[df-replace-schema] java.sql.BatchUpdateException
-//[df-replace-schema] Data truncation: Data too long for column 'MEMBER_STATUS_CODE' at row 1
-//[df-replace-schema] - - - - - - - - - -/
-//[df-replace-schema]
-//[df-replace-schema] [Target Row]
-//[df-replace-schema] (derived from non-batch retry)
-//[df-replace-schema] com.mysql.jdbc.MysqlDataTruncation
-//[df-replace-schema] Data truncation: Data too long for column 'MEMBER_STATUS_CODE' at row 1
-//[df-replace-schema] /- - - - - - - - - - - - - - - - - - - -
-//[df-replace-schema] Column Def: [MEMBER_STATUS_CODE, MEMBER_STATUS_NAME, DESCRIPTION, DISPLAY_ORDER]
-//[df-replace-schema] Row Values: {WDLL, 退会会員, 退会が確定した会員でサイトサービスはダメ, 2}
-//[df-replace-schema] Row Number: 3
-//[df-replace-schema] - - - - - - - - - -/
-//[df-replace-schema]
+    //    [df-replace-schema] 2025-03-14 16:43:12,559 INFO  - * * * * * * * * * * *
+    //            [df-replace-schema] 2025-03-14 16:43:12,559 INFO  - *                   *
+    //            [df-replace-schema] 2025-03-14 16:43:12,559 INFO  - * Load Data         *
+    //            [df-replace-schema] 2025-03-14 16:43:12,559 INFO  - *                   *
+    //            [df-replace-schema] 2025-03-14 16:43:12,559 INFO  - * * * * * * * * * * *
+    //            [df-replace-schema] 2025-03-14 16:43:12,566 INFO  - /= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+    //            [df-replace-schema] 2025-03-14 16:43:12,566 INFO  - writeData(playsql/data/common/xls/10-master.xls)
+    //[df-replace-schema] 2025-03-14 16:43:12,566 INFO  - = = = = = = =/
+    //            [df-replace-schema] 2025-03-14 16:43:12,636 INFO  - ...Getting tables:
+    //            [df-replace-schema] 2025-03-14 16:43:12,637 INFO  -   schema = {maihamadb.$$NoNameSchema$$ as main}
+    //[df-replace-schema] 2025-03-14 16:43:12,637 INFO  -   types  = [TABLE, VIEW]
+    //            [df-replace-schema] 2025-03-14 16:43:12,653 INFO  - MEMBER_STATUS:{PRV, 仮会員, 入会直後のステータスで一部のサイトサービスが利用可能, 3}
+    //[df-replace-schema] 2025-03-14 16:43:12,662 INFO  - MEMBER_STATUS:{FML, 正式会員, 正式な会員としてサイトサービスが利用可能, 1}
+    //[df-replace-schema] 2025-03-14 16:43:12,662 INFO  - MEMBER_STATUS:{WDLL, 退会会員, 退会が確定した会員でサイトサービスはダメ, 2}
+    //[df-replace-schema] 2025-03-14 16:43:12,666 INFO  - ...Retrying by suppressing batch update: MEMBER_STATUS
+    //[df-replace-schema] 2025-03-14 16:43:12,671 ERROR - Look! Read the message below.
+    //            [df-replace-schema] /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+    //[df-replace-schema] Failed to execute DBFlute Task 'ReplaceSchema'.
+    //[df-replace-schema]
+    //[df-replace-schema] [Advice]
+    //[df-replace-schema] Check the exception messages and the stack traces.
+    //[df-replace-schema]
+    //[df-replace-schema] [Database Product]
+    //[df-replace-schema] MySQL 8.0.40
+    //[df-replace-schema]
+    //[df-replace-schema] [JDBC Driver]
+    //[df-replace-schema] MySQL Connector Java mysql-connector-java-5.1.49 ( Revision: ad86f36e100e104cd926c6b81c8cab9565750116 ) for JDBC 4.0
+    //[df-replace-schema] * * * * * * * * * */
+    //            [df-replace-schema] org.dbflute.exception.DfXlsDataRegistrationFailureException: Look! Read the message below.
+    //            [df-replace-schema] /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+    //[df-replace-schema] Failed to register the table data.
+    //[df-replace-schema]
+    //[df-replace-schema] [Advice]
+    //[df-replace-schema] Please confirm the SQLException message.
+    //[df-replace-schema]
+    //[df-replace-schema] [Data Directory]
+    //[df-replace-schema] playsql/data/common/xls
+    //[df-replace-schema]
+    //[df-replace-schema] [Xls File]
+    //[df-replace-schema] 10-master.xls
+    //[df-replace-schema]
+    //[df-replace-schema] [Table]
+    //[df-replace-schema] MEMBER_STATUS
+    //[df-replace-schema]
+    //[df-replace-schema] [SQLException]
+    //[df-replace-schema] org.dbflute.exception.DfJDBCException
+    //[df-replace-schema] JDBC said...
+    //[df-replace-schema] /- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    //[df-replace-schema] [SQLException]
+    //[df-replace-schema] java.sql.BatchUpdateException
+    //[df-replace-schema] Data truncation: Data too long for column 'MEMBER_STATUS_CODE' at row 1
+    //[df-replace-schema] - - - - - - - - - -/
+    //[df-replace-schema]
+    //[df-replace-schema] [Target Row]
+    //[df-replace-schema] (derived from non-batch retry)
+    //[df-replace-schema] com.mysql.jdbc.MysqlDataTruncation
+    //[df-replace-schema] Data truncation: Data too long for column 'MEMBER_STATUS_CODE' at row 1
+    //[df-replace-schema] /- - - - - - - - - - - - - - - - - - - -
+    //[df-replace-schema] Column Def: [MEMBER_STATUS_CODE, MEMBER_STATUS_NAME, DESCRIPTION, DISPLAY_ORDER]
+    //[df-replace-schema] Row Values: {WDLL, 退会会員, 退会が確定した会員でサイトサービスはダメ, 2}
+    //[df-replace-schema] Row Number: 3
+    //[df-replace-schema] - - - - - - - - - -/
+    //[df-replace-schema]
 
+    // ===================================================================================
+    //                                                                            Grouping
+    //                                                                        ============
+    /**
+     * サービスが利用できる会員を検索
+     * グルーピングの設定によって生成されたメソッドを利用
+     * 会員ステータスの表示順で並べる -> Asc?Desc?
+     * 会員が "サービスが利用できる会員" であることをアサート
+     */
+    public void test_9() {
+        // ## Arrange ##
+        // ## Act ##
+        ListResultBean<Member> members = memberBhv.selectList(cb -> {
+            cb.query().setMemberStatusCode_InScope_ServiceAvailable();
+            cb.query().queryMemberStatus().addOrderBy_DisplayOrder_Asc();
+        });
+
+        // ## Assert ##
+        assertHasAnyElement(members);
+        members.forEach(member -> {
+            assertTrue(member.isMemberStatusCode_ServiceAvailable());
+        });
+    }
+    // schemaHTMLにて、serviceAvailableの欄を確認
+    // PaymentMethodにもrecommendedのgroupingあり
+
+    // ===================================================================================
+    //                                                                            Grouping
+    //                                                                        ============
+    /**
+     * 未払い購入のある会員を検索
+     * 未払いの購入か支払済みの購入かを簡単に切り替えられるようにする
+     * それを判断するprivateメソッドを作成して、戻り値のtrue/falseで切り替える
+     * とりあえず未払いの購入を求められているので、そのメソッドの戻り値はfalse固定で
+     * 姉妹コードの設定によって生成されたメソッドを利用
+     * 正式会員日時の降順(nullを後に並べる)、会員IDの昇順で並べる
+     * 会員が未払いの購入を持っていることをアサート
+     * Assertでの検索が一回になるようにしてみましょう (LoadReferrer)
+     */
+    public void test_10() {
+        // ## Arrange ##
+        // ## Act ##
+        ListResultBean<Member> members = memberBhv.selectList(cb -> {
+            cb.query().existsPurchase(pcCB -> {
+                pcCB.query().setPaymentCompleteFlg_Equal_AsFlg(getPaymentStatus());
+            });
+            cb.query().addOrderBy_FormalizedDatetime_Desc().withNullsLast();
+            cb.query().addOrderBy_MemberId_Asc();
+        });
+
+        // ## Assert ##
+        assertHasAnyElement(members);
+
+        // memberのpurchaseテーブルを取得
+        memberBhv.loadPurchase(members, purchaseCB -> {
+            purchaseCB.query().setPaymentCompleteFlg_Equal_False();
+        });
+
+        members.forEach(member -> {
+            assertFalse(member.getPurchaseList().isEmpty());
+        });
+        // getPurchaseListのjavadocには(NotNull: even if no loading, returns empty list)の記載。これはloadReferrer用か by tanaryo (2025/3/14)
+    }
+    //schemaHTMLでsistersを確認
+
+    /**
+     * 特定の支払い状況を取得します
+     *
+     * @return 支払い済みの場合はTrue、未払いの場合はFalse
+     */
+    private CDef.Flg getPaymentStatus() {
+        return CDef.Flg.False;
+    }
+
+    // ===================================================================================
+    //                                                                             SubItem
+    //                                                                        ============
+    /**
+     * 会員ステータスの表示順カラムで会員を並べて検索
+     * 会員ステータスの "表示順" カラムの昇順で並べる
+     * 会員ステータスのデータ自体は要らない
+     * その次には、会員の会員IDの降順で並べる
+     * 会員ステータスのデータが取れていないことをアサート
+     * 会員が会員ステータスの表示順ごとに並んでいることをアサート
+     */
+    public void test_11() {
+        // ## Arrange ##
+        Set<String> displayOrders = new HashSet<>();
+        String lastDisplayOrder = null;
+
+        // ## Act ##
+        ListResultBean<Member> members = memberBhv.selectList(cb -> {
+            cb.query().queryMemberStatus().addOrderBy_DisplayOrder_Asc();
+            cb.query().addOrderBy_MemberId_Desc();
+        });
+
+        // ## Assert ##
+        assertHasAnyElement(members);
+        for (Member member : members) {
+            assertTrue(member.getMemberStatus().isEmpty());
+            CDef.MemberStatus status = member.getMemberStatusCodeAsMemberStatus();
+            String displayOrder = status.displayOrder();
+            if (!displayOrder.equals(lastDisplayOrder)) {
+                assertFalse(displayOrders.contains(displayOrder));
+            }
+            displayOrders.add(displayOrder);
+            lastDisplayOrder = displayOrder;
+        }
+    }
+    // schemaHTMLでsubItemを確認
+    // 会員ステータスのデータがなくても、displayOrderに関する情報を区分値から取得できるのがメリット？ by tanaryo (2025/3/14)
 }
