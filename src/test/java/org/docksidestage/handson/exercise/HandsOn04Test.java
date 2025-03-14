@@ -19,6 +19,17 @@ import org.docksidestage.handson.unit.UnitContainerTestCase;
 
 // done tanaryo タグコメント、こちらでもぜひ by jflute (2025/03/03)
 
+// [1on1でのふぉろー] クラスアーキテクチャのジレンマ話をした。
+// o 汎用アーキテクチャは、現場の必要な概念がすべて揃ってるとは限らない
+// o 汎用アーキテクチャは、あくまでサンプルであって当てはめるものではない
+// o 現地化ロジックの話に派生、現場フィットレイヤ
+// o DBFluteの区分値の機能は、かなり現場フィットレイヤだけどDBFluteがおせっかい
+//
+// o ドメイン的な検索条件オブジェクトの作り方の妄想
+
+// TODO tanaryo [読み物課題] フレームワーク選び、現場フィットレイヤを忘れずに by jflute (2025/03/14)
+// https://jflute.hatenadiary.jp/entry/20161214/genbafitlayer
+
 /**
  * @author tanaryo
  */
@@ -89,14 +100,14 @@ public class HandsOn04Test extends UnitContainerTestCase {
         boolean hasWithdrawnMember = false;
         boolean validSetupSelectMemberWithdrawal = false;
         for (Member member : memberList) {
-            // TODO done tanaryo すべての会員で退会情報があるって言い切っちゃってる by jflute (2025/03/07)
+            // done tanaryo すべての会員で退会情報があるって言い切っちゃってる by jflute (2025/03/07)
             // (元々はelseに入ってて、このアサートが一回以上動いたかどうかを保証したかった)
             if (!member.isMemberStatusCode退会会員()) {
                 // 不意のバグや不意のデータ不備でもテストが(できるだけ)成り立つこと
                 // done tanaryo 万が一、テストデータに退会会員でない会員がいなかったら？素通りしちゃう by jflute (2025/02/13)
                 hasWithdrawnMember = true;
                 log(member.getMemberName(), member.getMemberStatusCode());
-                assertTrue(member.getMemberWithdrawalAsOne().isEmpty());
+                assertTrue(member.getMemberWithdrawalAsOne().isEmpty()); // ここがやりたいアサート
             } else {
                 validSetupSelectMemberWithdrawal = true;
                 assertTrue(member.getMemberWithdrawalAsOne().isPresent());
@@ -109,6 +120,7 @@ public class HandsOn04Test extends UnitContainerTestCase {
         if (!validSetupSelectMemberWithdrawal) {
             fail("会員退会情報テーブルを参照できていません");
         }
+        // [1on1でのふぉろー] 保証するって本来すごく大変なこと、を知ること。
     }
 
     // ===================================================================================
@@ -362,7 +374,7 @@ public class HandsOn04Test extends UnitContainerTestCase {
         assertHasAnyElement(memberList);
         // done tanaryo この3は導出してみましょう by jflute (2025/02/13)
         // done tanaryo すべてのステータスが会員テーブルに存在するわけではない by jflute (2025/02/21)
-        // TODO done tanaryo 修行++: MEMBERテーブルのMEMBER_STATUS_CODEの種類数を検索してみてください (同じ値になるはず) by jflute (2025/03/07)
+        // done tanaryo 修行++: MEMBERテーブルのMEMBER_STATUS_CODEの種類数を検索してみてください (同じ値になるはず) by jflute (2025/03/07)
         int minimumRecordCountByMemberStatus =
                 memberStatusBhv.selectCount(cb -> cb.query().existsMember(mbCB -> {}));//会員テーブルに紐づく会員ステータスの種類数
         int minimumRecordCountByMember = memberBhv.selectScalar(Integer.class).countDistinct(cb -> {
