@@ -387,4 +387,70 @@ public class HandsOn04Test extends UnitContainerTestCase {
             //区分値の追加と削除のテスト。区分値追加時にはコンパイルが通るが削除後には通らなくなることを確認
         });
     }
+
+    //暗黙の区分値チェック。ReplaceSchemaで以下のエラーが出た。なお戻すと成功。また新規追加のレコードはチェック対象外。 by tanaryo(2025/03/14)
+//    [df-replace-schema] 2025-03-14 16:43:12,559 INFO  - * * * * * * * * * * *
+//            [df-replace-schema] 2025-03-14 16:43:12,559 INFO  - *                   *
+//            [df-replace-schema] 2025-03-14 16:43:12,559 INFO  - * Load Data         *
+//            [df-replace-schema] 2025-03-14 16:43:12,559 INFO  - *                   *
+//            [df-replace-schema] 2025-03-14 16:43:12,559 INFO  - * * * * * * * * * * *
+//            [df-replace-schema] 2025-03-14 16:43:12,566 INFO  - /= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+//            [df-replace-schema] 2025-03-14 16:43:12,566 INFO  - writeData(playsql/data/common/xls/10-master.xls)
+//[df-replace-schema] 2025-03-14 16:43:12,566 INFO  - = = = = = = =/
+//            [df-replace-schema] 2025-03-14 16:43:12,636 INFO  - ...Getting tables:
+//            [df-replace-schema] 2025-03-14 16:43:12,637 INFO  -   schema = {maihamadb.$$NoNameSchema$$ as main}
+//[df-replace-schema] 2025-03-14 16:43:12,637 INFO  -   types  = [TABLE, VIEW]
+//            [df-replace-schema] 2025-03-14 16:43:12,653 INFO  - MEMBER_STATUS:{PRV, 仮会員, 入会直後のステータスで一部のサイトサービスが利用可能, 3}
+//[df-replace-schema] 2025-03-14 16:43:12,662 INFO  - MEMBER_STATUS:{FML, 正式会員, 正式な会員としてサイトサービスが利用可能, 1}
+//[df-replace-schema] 2025-03-14 16:43:12,662 INFO  - MEMBER_STATUS:{WDLL, 退会会員, 退会が確定した会員でサイトサービスはダメ, 2}
+//[df-replace-schema] 2025-03-14 16:43:12,666 INFO  - ...Retrying by suppressing batch update: MEMBER_STATUS
+//[df-replace-schema] 2025-03-14 16:43:12,671 ERROR - Look! Read the message below.
+//            [df-replace-schema] /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+//[df-replace-schema] Failed to execute DBFlute Task 'ReplaceSchema'.
+//[df-replace-schema]
+//[df-replace-schema] [Advice]
+//[df-replace-schema] Check the exception messages and the stack traces.
+//[df-replace-schema]
+//[df-replace-schema] [Database Product]
+//[df-replace-schema] MySQL 8.0.40
+//[df-replace-schema]
+//[df-replace-schema] [JDBC Driver]
+//[df-replace-schema] MySQL Connector Java mysql-connector-java-5.1.49 ( Revision: ad86f36e100e104cd926c6b81c8cab9565750116 ) for JDBC 4.0
+//[df-replace-schema] * * * * * * * * * */
+//            [df-replace-schema] org.dbflute.exception.DfXlsDataRegistrationFailureException: Look! Read the message below.
+//            [df-replace-schema] /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+//[df-replace-schema] Failed to register the table data.
+//[df-replace-schema]
+//[df-replace-schema] [Advice]
+//[df-replace-schema] Please confirm the SQLException message.
+//[df-replace-schema]
+//[df-replace-schema] [Data Directory]
+//[df-replace-schema] playsql/data/common/xls
+//[df-replace-schema]
+//[df-replace-schema] [Xls File]
+//[df-replace-schema] 10-master.xls
+//[df-replace-schema]
+//[df-replace-schema] [Table]
+//[df-replace-schema] MEMBER_STATUS
+//[df-replace-schema]
+//[df-replace-schema] [SQLException]
+//[df-replace-schema] org.dbflute.exception.DfJDBCException
+//[df-replace-schema] JDBC said...
+//[df-replace-schema] /- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//[df-replace-schema] [SQLException]
+//[df-replace-schema] java.sql.BatchUpdateException
+//[df-replace-schema] Data truncation: Data too long for column 'MEMBER_STATUS_CODE' at row 1
+//[df-replace-schema] - - - - - - - - - -/
+//[df-replace-schema]
+//[df-replace-schema] [Target Row]
+//[df-replace-schema] (derived from non-batch retry)
+//[df-replace-schema] com.mysql.jdbc.MysqlDataTruncation
+//[df-replace-schema] Data truncation: Data too long for column 'MEMBER_STATUS_CODE' at row 1
+//[df-replace-schema] /- - - - - - - - - - - - - - - - - - - -
+//[df-replace-schema] Column Def: [MEMBER_STATUS_CODE, MEMBER_STATUS_NAME, DESCRIPTION, DISPLAY_ORDER]
+//[df-replace-schema] Row Values: {WDLL, 退会会員, 退会が確定した会員でサイトサービスはダメ, 2}
+//[df-replace-schema] Row Number: 3
+//[df-replace-schema] - - - - - - - - - -/
+//[df-replace-schema]
+
 }
