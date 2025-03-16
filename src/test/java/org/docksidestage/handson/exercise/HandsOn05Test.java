@@ -17,6 +17,7 @@ import org.docksidestage.handson.dbflute.exentity.MemberLogin;
 import org.docksidestage.handson.dbflute.exentity.Purchase;
 import org.docksidestage.handson.unit.UnitContainerTestCase;
 
+// TODO tanaryo javadocお願いします〜 by jflute (2025/03/16)
 public class HandsOn05Test extends UnitContainerTestCase {
     // ===================================================================================
     //                                                                           Attribute
@@ -102,6 +103,7 @@ public class HandsOn05Test extends UnitContainerTestCase {
             }
         }
 
+        // TODO tanaryo [いいね] パーフェクト by jflute (2025/03/16)
         if (!existsValidAddressMember) {
             fail("有効な会員住所を持つ会員が存在しない、もしくはsetupSelectし忘れています");
         }
@@ -121,6 +123,7 @@ public class HandsOn05Test extends UnitContainerTestCase {
             cb.setupSelect_Member().withMemberAddressAsValid(targetDate);
             cb.setupSelect_Member().withMemberStatus();
             cb.query().setPaymentCompleteFlg_Equal_True();
+            // TODO tanaryo 業務的one-to-oneとして定義しているので、one-to-many的な絞り込みをしなくても良いぞぅ by jflute (2025/03/16)
             cb.query().queryMember().existsMemberAddress(subMemberAddressCB -> {
                 subMemberAddressCB.query().setRegionId_Equal_千葉();
                 subMemberAddressCB.query().setValidBeginDate_LessEqual(targetDate);
@@ -131,6 +134,8 @@ public class HandsOn05Test extends UnitContainerTestCase {
         // ## Assert ##
         assertHasAnyElement(purchases);
         for (Purchase purchase : purchases) {
+        	// TODO tanaryo Lambda引数名、Optional(op)自体ではなく、Optionalの中身が来ているので中身に合わせた名前にしましょう by jflute (2025/03/16)
+        	// map(op -> op.getMemberStatusName()) → map(status -> status.getMemberStatusName())
             String statusName = purchase.getMember().flatMap(op -> op.getMemberStatus()).map(op -> op.getMemberStatusName()).orElse(null);
             OptionalThing<MemberAddress> memberAddressOpt = purchase.getMember().flatMap(op -> op.getMemberAddressAsValid());
             String address = memberAddressOpt.map(op -> op.getAddress()).orElse(null);
@@ -143,7 +148,7 @@ public class HandsOn05Test extends UnitContainerTestCase {
     //                                                         導出的one-to-oneを利用した実装
     //                                                                        ============
     // schemaHTMLにて、member_login(AsLatest) を確認
-
+    // TODO jflute 1on1にて、現場での利用のケースを一緒におさらい予定 (2025/03/16)
     /**
      * 最終ログイン時の会員ステータスを取得して会員を検索
      * SetupSelectのJavaDocに自分で設定したcommentが表示されることを目視確認
@@ -285,5 +290,8 @@ public class HandsOn05Test extends UnitContainerTestCase {
     //[df-replace-schema] {MEMBER_ADDRESS_ID=2, MEMBER_ID=1, VALID_BEGIN_DATE=1949-01-01, VALID_END_DATE=1997-04-01, ADDRESS=New York}
 
     //エイリアス名は少なくとも１文字はあかん！！
+    // TODO tanaryo [いいね] コラムを読んでくれてありがとう。名前は識別が一番の目的。 by jflute (2025/03/16)
+    
+    // TODO jflute 1on1にて、SQLのフォーマット談義 (2025/03/16)
 }
 

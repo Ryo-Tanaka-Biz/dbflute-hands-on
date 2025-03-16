@@ -27,7 +27,7 @@ import org.docksidestage.handson.unit.UnitContainerTestCase;
 //
 // o ドメイン的な検索条件オブジェクトの作り方の妄想
 
-// TODO done tanaryo [読み物課題] フレームワーク選び、現場フィットレイヤを忘れずに by jflute (2025/03/14)
+// done tanaryo [読み物課題] フレームワーク選び、現場フィットレイヤを忘れずに by jflute (2025/03/14)
 // https://jflute.hatenadiary.jp/entry/20161214/genbafitlayer
 // 現場フィットレイヤを作りこみすぎると、汎用フレームワークの良さが消えてしまう。 by tanaryo (2025/3/15)
 // とはいえ、汎用フレームワークで現場の業務要件を全て扱えるわけではない。どこかに必ず現場フィットレイヤが存在する
@@ -484,7 +484,7 @@ public class HandsOn04Test extends UnitContainerTestCase {
     public void test_9() {
         // ## Arrange ##
         // ## Act ##
-    	// TODO done  tanaryo [お知らせ]【この機能大事】by jflute (2025/03/15)
+    	// done  tanaryo [お知らせ]【この機能大事】by jflute (2025/03/15)
         // ArrangeQueryはテーブルのカラムの条件を組みわせた話。今回は区分値を組み合わせた話。　by tanaryo (2025/3/15)
         // どちらも、「その条件を業務的な一言で表せる？」が共通している？
         // あとできるだけ再利用しようという点も似ている
@@ -515,7 +515,7 @@ public class HandsOn04Test extends UnitContainerTestCase {
             assertTrue(member.isMemberStatusCode_ServiceAvailable());
         });
     }
-    // TODO done tanaryo [いいね] 素晴らしい、よく見つけました！ by jflute (2025/03/15)
+    // done tanaryo [いいね] 素晴らしい、よく見つけました！ by jflute (2025/03/15)
     // schemaHTMLにて、serviceAvailableの欄を確認
     // PaymentMethodにもrecommendedのgroupingあり
 
@@ -554,7 +554,7 @@ public class HandsOn04Test extends UnitContainerTestCase {
         members.forEach(member -> {
             assertFalse(member.getPurchaseList().isEmpty());
         });
-        // TODO done tanaryo [いいね] そこまでしっかりチェックしてくれて嬉しい！ by jflute (2025/03/15)
+        // done tanaryo [いいね] そこまでしっかりチェックしてくれて嬉しい！ by jflute (2025/03/15)
         // loadPurchase()することで初めてgetPurchaseList()で値が取れるという感じです。
         // 一方で、データがなければloadしても空っぽリスト。
         // 一方で一方で、load自体してなければ問答無用で空っぽリスト。
@@ -563,6 +563,12 @@ public class HandsOn04Test extends UnitContainerTestCase {
         // 空っぽとロード自体していなくて空っぽは区別できたほうが良さそう
         // load使用して、「ロードして空っぽであること」を確認する場面はあるのか？
         //　もしくは「空っぽかもしれないし、空っぽじゃないかもしれない」という場面とか？
+        // TODO tanaryo [ふぉろー] 実は、大昔のDBFluteというかDBFluteという名前の付く前のものは... by jflute (2025/03/16)
+        // ロードしてなかったら null が戻る挙動になっていました。区別ができるようにと。
+        // でも、世の中 List は null を戻さないという世界的な慣習もあり、
+        // 実際ロードしてないことを確認する必要な場面がまずまずないということで、
+        // 利用者からのフィードバックでロードしてなくても空っぽのリストを戻すようにしています。
+        // 以降、19年くらい経ちますが、区別したいという声は一度も聞いたこと無いということで(^^。
     }
     //schemaHTMLでsistersを確認
 
@@ -588,7 +594,7 @@ public class HandsOn04Test extends UnitContainerTestCase {
      */
     public void test_11() {
         // ## Arrange ##
-    	// TODO done tanaryo Assertだけで使う変数はAssert配下で宣言でOKです。変数のスコープは短くをコンセプトに by jflute (2025/03/15)
+    	// done tanaryo Assertだけで使う変数はAssert配下で宣言でOKです。変数のスコープは短くをコンセプトに by jflute (2025/03/15)
         // ## Act ##
         ListResultBean<Member> members = memberBhv.selectList(cb -> {
             cb.query().queryMemberStatus().addOrderBy_DisplayOrder_Asc();
@@ -612,7 +618,7 @@ public class HandsOn04Test extends UnitContainerTestCase {
     }
     // schemaHTMLでsubItemを確認
     // 会員ステータスのデータがなくても、displayOrderに関する情報を区分値から取得できるのがメリット？ by tanaryo (2025/3/14)
-    // TODO done tanaryo [ふぉろー] yes, テーブル区分値だとキャッシュみたいな感じになりますね by jflute (2025/03/15)
+    // done tanaryo [ふぉろー] yes, テーブル区分値だとキャッシュみたいな感じになりますね by jflute (2025/03/15)
     // 暗黙の区分値だとそこが大元のデータになるのでキャッシュってわけじゃないけど。
     // なるほどです。キャッシュみたいな感じでイメージ湧きました。　by tanaryo (2025/3/15)
 }
