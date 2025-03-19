@@ -17,7 +17,10 @@ import org.docksidestage.handson.dbflute.exentity.MemberLogin;
 import org.docksidestage.handson.dbflute.exentity.Purchase;
 import org.docksidestage.handson.unit.UnitContainerTestCase;
 
-// TODO tanaryo javadocお願いします〜 by jflute (2025/03/16)
+// TODO done tanaryo javadocお願いします〜 by jflute (2025/03/16)
+/**
+ * @author tanaryo
+ */
 public class HandsOn05Test extends UnitContainerTestCase {
     // ===================================================================================
     //                                                                           Attribute
@@ -103,7 +106,7 @@ public class HandsOn05Test extends UnitContainerTestCase {
             }
         }
 
-        // TODO tanaryo [いいね] パーフェクト by jflute (2025/03/16)
+        // TODO done tanaryo [いいね] パーフェクト by jflute (2025/03/16)
         if (!existsValidAddressMember) {
             fail("有効な会員住所を持つ会員が存在しない、もしくはsetupSelectし忘れています");
         }
@@ -134,13 +137,13 @@ public class HandsOn05Test extends UnitContainerTestCase {
         // ## Assert ##
         assertHasAnyElement(purchases);
         for (Purchase purchase : purchases) {
-        	// TODO tanaryo Lambda引数名、Optional(op)自体ではなく、Optionalの中身が来ているので中身に合わせた名前にしましょう by jflute (2025/03/16)
+        	// TODO done tanaryo Lambda引数名、Optional(op)自体ではなく、Optionalの中身が来ているので中身に合わせた名前にしましょう by jflute (2025/03/16)
         	// map(op -> op.getMemberStatusName()) → map(status -> status.getMemberStatusName())
             String statusName = purchase.getMember().flatMap(op -> op.getMemberStatus()).map(op -> op.getMemberStatusName()).orElse(null);
-            OptionalThing<MemberAddress> memberAddressOpt = purchase.getMember().flatMap(op -> op.getMemberAddressAsValid());
-            String address = memberAddressOpt.map(op -> op.getAddress()).orElse(null);
+            OptionalThing<MemberAddress> optMemberAddresses = purchase.getMember().flatMap(op -> op.getMemberAddressAsValid());
+            String address = optMemberAddresses.map(op -> op.getAddress()).orElse(null);
             log("会員名称={}, 住所={}", statusName, address);
-            assertTrue(memberAddressOpt.map(op -> op.isRegionId千葉()).orElse(false));
+            assertTrue(optMemberAddresses.map(op -> op.isRegionId千葉()).orElse(false));
         }
     }
 
