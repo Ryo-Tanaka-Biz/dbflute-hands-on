@@ -17,7 +17,7 @@ import org.docksidestage.handson.dbflute.exentity.MemberLogin;
 import org.docksidestage.handson.dbflute.exentity.Purchase;
 import org.docksidestage.handson.unit.UnitContainerTestCase;
 
-// TODO done tanaryo javadocお願いします〜 by jflute (2025/03/16)
+// done tanaryo javadocお願いします〜 by jflute (2025/03/16)
 /**
  * @author tanaryo
  */
@@ -106,7 +106,7 @@ public class HandsOn05Test extends UnitContainerTestCase {
             }
         }
 
-        // TODO done tanaryo [いいね] パーフェクト by jflute (2025/03/16)
+        // done tanaryo [いいね] パーフェクト by jflute (2025/03/16)
         if (!existsValidAddressMember) {
             fail("有効な会員住所を持つ会員が存在しない、もしくはsetupSelectし忘れています");
         }
@@ -137,7 +137,7 @@ public class HandsOn05Test extends UnitContainerTestCase {
         // ## Assert ##
         assertHasAnyElement(purchases);
         for (Purchase purchase : purchases) {
-        	// TODO done tanaryo Lambda引数名、Optional(op)自体ではなく、Optionalの中身が来ているので中身に合わせた名前にしましょう by jflute (2025/03/16)
+        	// TODO tanaryo Lambda引数名、Optional(op)自体ではなく、Optionalの中身が来ているので中身に合わせた名前にしましょう by jflute (2025/03/16)
         	// map(op -> op.getMemberStatusName()) → map(status -> status.getMemberStatusName())
             String statusName = purchase.getMember().flatMap(op -> op.getMemberStatus()).map(op -> op.getMemberStatusName()).orElse(null);
             OptionalThing<MemberAddress> optMemberAddresses = purchase.getMember().flatMap(op -> op.getMemberAddressAsValid());
@@ -152,6 +152,7 @@ public class HandsOn05Test extends UnitContainerTestCase {
     //                                                                        ============
     // schemaHTMLにて、member_login(AsLatest) を確認
     // TODO jflute 1on1にて、現場での利用のケースを一緒におさらい予定 (2025/03/16)
+    // ちょっと次回も見ましょう。
     /**
      * 最終ログイン時の会員ステータスを取得して会員を検索
      * SetupSelectのJavaDocに自分で設定したcommentが表示されることを目視確認

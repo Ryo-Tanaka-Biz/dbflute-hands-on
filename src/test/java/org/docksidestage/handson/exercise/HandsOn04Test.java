@@ -470,7 +470,7 @@ public class HandsOn04Test extends UnitContainerTestCase {
     //[df-replace-schema] - - - - - - - - - -/
     //[df-replace-schema]
 
-    // TODO jflute 1on1にて、グルーピングやsisterCodeやsubItemの現場での活用の例を話題にする (2025/03/15)
+    // done jflute 1on1にて、グルーピングやsisterCodeやsubItemの現場での活用の例を話題にする (2025/03/15)
     
     // ===================================================================================
     //                                                                            Grouping
@@ -504,12 +504,15 @@ public class HandsOn04Test extends UnitContainerTestCase {
     	// これ、別に区分値の話だけではなく、"プログラムの再利用" という面で非常に大切な思考。
     	// いかに抽象化して、具体的な手法に依存しないようにプログラムを書くかがポイント。
     	// _/_/_/_/_/_/_/_/_/_/
+    	// [1on1でのふぉろー] 現場でのgroupingMapも見てみた。
+    	// DBFluteかどうか関係なく、こういう再利用を意識してみてほしい。
         ListResultBean<Member> members = memberBhv.selectList(cb -> {
             cb.query().setMemberStatusCode_InScope_ServiceAvailable();
             cb.query().queryMemberStatus().addOrderBy_DisplayOrder_Asc();
         });
 
         // ## Assert ##
+        // TODO tanaryo グルーピングで、会員が社員になっておる by jflute (2025/03/19)
         assertHasAnyElement(members);
         members.forEach(member -> {
             assertTrue(member.isMemberStatusCode_ServiceAvailable());
@@ -519,6 +522,7 @@ public class HandsOn04Test extends UnitContainerTestCase {
     // schemaHTMLにて、serviceAvailableの欄を確認
     // PaymentMethodにもrecommendedのgroupingあり
 
+    // TODO tanaryo タグコメントのラベル間違ってる by jflute (2025/03/19)
     // ===================================================================================
     //                                                                            Grouping
     //                                                                        ============
@@ -537,6 +541,7 @@ public class HandsOn04Test extends UnitContainerTestCase {
         // ## Act ##
         ListResultBean<Member> members = memberBhv.selectList(cb -> {
             cb.query().existsPurchase(pcCB -> {
+            	// TODO tanaryo AsBoolean(true); が使えます by jflute (2025/03/19)
                 pcCB.query().setPaymentCompleteFlg_Equal_AsFlg(getPaymentStatus());
             });
             cb.query().addOrderBy_FormalizedDatetime_Desc().withNullsLast();
@@ -563,7 +568,7 @@ public class HandsOn04Test extends UnitContainerTestCase {
         // 空っぽとロード自体していなくて空っぽは区別できたほうが良さそう
         // load使用して、「ロードして空っぽであること」を確認する場面はあるのか？
         //　もしくは「空っぽかもしれないし、空っぽじゃないかもしれない」という場面とか？
-        // TODO tanaryo [ふぉろー] 実は、大昔のDBFluteというかDBFluteという名前の付く前のものは... by jflute (2025/03/16)
+        // done tanaryo [ふぉろー] 実は、大昔のDBFluteというかDBFluteという名前の付く前のものは... by jflute (2025/03/16)
         // ロードしてなかったら null が戻る挙動になっていました。区別ができるようにと。
         // でも、世の中 List は null を戻さないという世界的な慣習もあり、
         // 実際ロードしてないことを確認する必要な場面がまずまずないということで、
