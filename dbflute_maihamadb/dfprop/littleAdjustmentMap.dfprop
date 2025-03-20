@@ -76,7 +76,7 @@ map:{
     #   [true]
     #     Convert empty-string data to null in entity.
     #
-    #; isEntityConvertEmptyStringToNull = false
+    ; isEntityConvertEmptyStringToNull = true
     # - - - - - - - - - -/
 
     # /- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

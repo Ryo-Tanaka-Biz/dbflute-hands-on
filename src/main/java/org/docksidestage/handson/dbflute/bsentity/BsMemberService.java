@@ -375,7 +375,7 @@ public abstract class BsMemberService extends AbstractEntity implements DomainEn
      */
     public String getServiceRankCode() {
         checkSpecifiedProperty("serviceRankCode");
-        return _serviceRankCode;
+        return convertEmptyToNull(_serviceRankCode);
     }
 
     /**
@@ -414,7 +414,7 @@ public abstract class BsMemberService extends AbstractEntity implements DomainEn
      */
     public String getRegisterUser() {
         checkSpecifiedProperty("registerUser");
-        return _registerUser;
+        return convertEmptyToNull(_registerUser);
     }
 
     /**
@@ -450,7 +450,7 @@ public abstract class BsMemberService extends AbstractEntity implements DomainEn
      */
     public String getUpdateUser() {
         checkSpecifiedProperty("updateUser");
-        return _updateUser;
+        return convertEmptyToNull(_updateUser);
     }
 
     /**

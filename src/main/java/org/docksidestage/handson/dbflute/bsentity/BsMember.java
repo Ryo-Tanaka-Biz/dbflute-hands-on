@@ -526,7 +526,7 @@ public abstract class BsMember extends AbstractEntity implements DomainEntity {
      */
     public String getMemberName() {
         checkSpecifiedProperty("memberName");
-        return _memberName;
+        return convertEmptyToNull(_memberName);
     }
 
     /**
@@ -546,7 +546,7 @@ public abstract class BsMember extends AbstractEntity implements DomainEntity {
      */
     public String getMemberAccount() {
         checkSpecifiedProperty("memberAccount");
-        return _memberAccount;
+        return convertEmptyToNull(_memberAccount);
     }
 
     /**
@@ -565,7 +565,7 @@ public abstract class BsMember extends AbstractEntity implements DomainEntity {
      */
     public String getMemberStatusCode() {
         checkSpecifiedProperty("memberStatusCode");
-        return _memberStatusCode;
+        return convertEmptyToNull(_memberStatusCode);
     }
 
     /**
@@ -647,7 +647,7 @@ public abstract class BsMember extends AbstractEntity implements DomainEntity {
      */
     public String getRegisterUser() {
         checkSpecifiedProperty("registerUser");
-        return _registerUser;
+        return convertEmptyToNull(_registerUser);
     }
 
     /**
@@ -687,7 +687,7 @@ public abstract class BsMember extends AbstractEntity implements DomainEntity {
      */
     public String getUpdateUser() {
         checkSpecifiedProperty("updateUser");
-        return _updateUser;
+        return convertEmptyToNull(_updateUser);
     }
 
     /**

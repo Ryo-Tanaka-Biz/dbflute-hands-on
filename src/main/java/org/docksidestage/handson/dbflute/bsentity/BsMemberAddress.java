@@ -429,7 +429,7 @@ public abstract class BsMemberAddress extends AbstractEntity implements DomainEn
      */
     public String getAddress() {
         checkSpecifiedProperty("address");
-        return _address;
+        return convertEmptyToNull(_address);
     }
 
     /**
@@ -489,7 +489,7 @@ public abstract class BsMemberAddress extends AbstractEntity implements DomainEn
      */
     public String getRegisterUser() {
         checkSpecifiedProperty("registerUser");
-        return _registerUser;
+        return convertEmptyToNull(_registerUser);
     }
 
     /**
@@ -525,7 +525,7 @@ public abstract class BsMemberAddress extends AbstractEntity implements DomainEn
      */
     public String getUpdateUser() {
         checkSpecifiedProperty("updateUser");
-        return _updateUser;
+        return convertEmptyToNull(_updateUser);
     }
 
     /**

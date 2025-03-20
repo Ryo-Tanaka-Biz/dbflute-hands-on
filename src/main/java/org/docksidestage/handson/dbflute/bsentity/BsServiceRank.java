@@ -395,7 +395,7 @@ public abstract class BsServiceRank extends AbstractEntity implements DomainEnti
      */
     public String getServiceRankCode() {
         checkSpecifiedProperty("serviceRankCode");
-        return _serviceRankCode;
+        return convertEmptyToNull(_serviceRankCode);
     }
 
     /**
@@ -417,7 +417,7 @@ public abstract class BsServiceRank extends AbstractEntity implements DomainEnti
      */
     public String getServiceRankName() {
         checkSpecifiedProperty("serviceRankName");
-        return _serviceRankName;
+        return convertEmptyToNull(_serviceRankName);
     }
 
     /**
@@ -480,7 +480,7 @@ public abstract class BsServiceRank extends AbstractEntity implements DomainEnti
      */
     public String getDescription() {
         checkSpecifiedProperty("description");
-        return _description;
+        return convertEmptyToNull(_description);
     }
 
     /**

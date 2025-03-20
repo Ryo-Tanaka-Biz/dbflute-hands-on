@@ -526,7 +526,7 @@ public abstract class BsPurchase extends AbstractEntity implements DomainEntity 
      */
     public String getRegisterUser() {
         checkSpecifiedProperty("registerUser");
-        return _registerUser;
+        return convertEmptyToNull(_registerUser);
     }
 
     /**
@@ -562,7 +562,7 @@ public abstract class BsPurchase extends AbstractEntity implements DomainEntity 
      */
     public String getUpdateUser() {
         checkSpecifiedProperty("updateUser");
-        return _updateUser;
+        return convertEmptyToNull(_updateUser);
     }
 
     /**

@@ -357,7 +357,7 @@ public abstract class BsProduct extends AbstractEntity implements DomainEntity {
      */
     public String getProductName() {
         checkSpecifiedProperty("productName");
-        return _productName;
+        return convertEmptyToNull(_productName);
     }
 
     /**
@@ -376,7 +376,7 @@ public abstract class BsProduct extends AbstractEntity implements DomainEntity {
      */
     public String getProductHandleCode() {
         checkSpecifiedProperty("productHandleCode");
-        return _productHandleCode;
+        return convertEmptyToNull(_productHandleCode);
     }
 
     /**
@@ -395,7 +395,7 @@ public abstract class BsProduct extends AbstractEntity implements DomainEntity {
      */
     public String getProductCategoryCode() {
         checkSpecifiedProperty("productCategoryCode");
-        return _productCategoryCode;
+        return convertEmptyToNull(_productCategoryCode);
     }
 
     /**
@@ -413,7 +413,7 @@ public abstract class BsProduct extends AbstractEntity implements DomainEntity {
      */
     public String getProductStatusCode() {
         checkSpecifiedProperty("productStatusCode");
-        return _productStatusCode;
+        return convertEmptyToNull(_productStatusCode);
     }
 
     /**
@@ -468,7 +468,7 @@ public abstract class BsProduct extends AbstractEntity implements DomainEntity {
      */
     public String getRegisterUser() {
         checkSpecifiedProperty("registerUser");
-        return _registerUser;
+        return convertEmptyToNull(_registerUser);
     }
 
     /**
@@ -504,7 +504,7 @@ public abstract class BsProduct extends AbstractEntity implements DomainEntity {
      */
     public String getUpdateUser() {
         checkSpecifiedProperty("updateUser");
-        return _updateUser;
+        return convertEmptyToNull(_updateUser);
     }
 
     /**

@@ -333,7 +333,7 @@ public abstract class BsMemberWithdrawal extends AbstractEntity implements Domai
      */
     public String getWithdrawalReasonCode() {
         checkSpecifiedProperty("withdrawalReasonCode");
-        return _withdrawalReasonCode;
+        return convertEmptyToNull(_withdrawalReasonCode);
     }
 
     /**
@@ -356,7 +356,7 @@ public abstract class BsMemberWithdrawal extends AbstractEntity implements Domai
      */
     public String getWithdrawalReasonInputText() {
         checkSpecifiedProperty("withdrawalReasonInputText");
-        return _withdrawalReasonInputText;
+        return convertEmptyToNull(_withdrawalReasonInputText);
     }
 
     /**
@@ -416,7 +416,7 @@ public abstract class BsMemberWithdrawal extends AbstractEntity implements Domai
      */
     public String getRegisterUser() {
         checkSpecifiedProperty("registerUser");
-        return _registerUser;
+        return convertEmptyToNull(_registerUser);
     }
 
     /**
@@ -452,7 +452,7 @@ public abstract class BsMemberWithdrawal extends AbstractEntity implements Domai
      */
     public String getUpdateUser() {
         checkSpecifiedProperty("updateUser");
-        return _updateUser;
+        return convertEmptyToNull(_updateUser);
     }
 
     /**

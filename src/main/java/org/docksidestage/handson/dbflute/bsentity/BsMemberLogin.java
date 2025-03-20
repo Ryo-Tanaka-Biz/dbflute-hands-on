@@ -472,7 +472,7 @@ public abstract class BsMemberLogin extends AbstractEntity implements DomainEnti
      */
     public String getLoginMemberStatusCode() {
         checkSpecifiedProperty("loginMemberStatusCode");
-        return _loginMemberStatusCode;
+        return convertEmptyToNull(_loginMemberStatusCode);
     }
 
     /**

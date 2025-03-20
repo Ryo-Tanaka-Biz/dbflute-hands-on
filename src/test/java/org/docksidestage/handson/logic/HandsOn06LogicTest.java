@@ -43,7 +43,7 @@ public class HandsOn06LogicTest extends UnitContainerTestCase {
 //        where dfloc.MEMBER_NAME like '%vic' escape '|'
 //        order by dfloc.MEMBER_NAME asc
 
-
+        //空文字対応でconvertEmptyToNullが追加
 
         // ## Assert ##
         assertHasAnyElement(suffixMemberList);

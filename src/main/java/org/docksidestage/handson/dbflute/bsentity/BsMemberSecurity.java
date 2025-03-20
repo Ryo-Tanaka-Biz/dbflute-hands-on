@@ -206,7 +206,7 @@ public abstract class BsMemberSecurity extends AbstractEntity implements DomainE
      */
     public String getLoginPassword() {
         checkSpecifiedProperty("loginPassword");
-        return _loginPassword;
+        return convertEmptyToNull(_loginPassword);
     }
 
     /**
@@ -227,7 +227,7 @@ public abstract class BsMemberSecurity extends AbstractEntity implements DomainE
      */
     public String getReminderQuestion() {
         checkSpecifiedProperty("reminderQuestion");
-        return _reminderQuestion;
+        return convertEmptyToNull(_reminderQuestion);
     }
 
     /**
@@ -247,7 +247,7 @@ public abstract class BsMemberSecurity extends AbstractEntity implements DomainE
      */
     public String getReminderAnswer() {
         checkSpecifiedProperty("reminderAnswer");
-        return _reminderAnswer;
+        return convertEmptyToNull(_reminderAnswer);
     }
 
     /**
@@ -284,7 +284,7 @@ public abstract class BsMemberSecurity extends AbstractEntity implements DomainE
      */
     public String getRegisterUser() {
         checkSpecifiedProperty("registerUser");
-        return _registerUser;
+        return convertEmptyToNull(_registerUser);
     }
 
     /**
@@ -320,7 +320,7 @@ public abstract class BsMemberSecurity extends AbstractEntity implements DomainE
      */
     public String getUpdateUser() {
         checkSpecifiedProperty("updateUser");
-        return _updateUser;
+        return convertEmptyToNull(_updateUser);
     }
 
     /**

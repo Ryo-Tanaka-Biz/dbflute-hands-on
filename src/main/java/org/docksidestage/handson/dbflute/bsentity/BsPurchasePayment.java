@@ -385,7 +385,7 @@ public abstract class BsPurchasePayment extends AbstractEntity implements Domain
      */
     public String getPaymentMethodCode() {
         checkSpecifiedProperty("paymentMethodCode");
-        return _paymentMethodCode;
+        return convertEmptyToNull(_paymentMethodCode);
     }
 
     /**
@@ -423,7 +423,7 @@ public abstract class BsPurchasePayment extends AbstractEntity implements Domain
      */
     public String getRegisterUser() {
         checkSpecifiedProperty("registerUser");
-        return _registerUser;
+        return convertEmptyToNull(_registerUser);
     }
 
     /**
@@ -459,7 +459,7 @@ public abstract class BsPurchasePayment extends AbstractEntity implements Domain
      */
     public String getUpdateUser() {
         checkSpecifiedProperty("updateUser");
-        return _updateUser;
+        return convertEmptyToNull(_updateUser);
     }
 
     /**
