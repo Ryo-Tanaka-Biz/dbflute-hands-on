@@ -68,7 +68,7 @@ map:{
             ; topComment=入会から退会までの会員のステータスを示す; codeType=String
             ; groupingMap = map:{
                 ; serviceAvailable = map:{
-                    ; groupComment = サービスが利用できる社員
+                    ; groupComment = サービスが利用できる会員
                     ; elementList = list:{正式会員;仮会員}
                 }
             }

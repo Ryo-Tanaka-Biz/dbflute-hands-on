@@ -20,7 +20,7 @@ import org.docksidestage.handson.dbflute.bsentity.dbmeta.*;
 import org.docksidestage.handson.dbflute.cbean.*;
 
 /**
- * The behavior of member_withdrawal as TABLE.
+ * The behavior of (会員退会情報)MEMBER_WITHDRAWAL as TABLE.
  * @author DBFlute(AutoGenerator)
  */
 public abstract class BsMemberWithdrawalBhv extends AbstractBehaviorWritable<MemberWithdrawal, MemberWithdrawalCB> {

@@ -20,7 +20,7 @@ import org.docksidestage.handson.dbflute.bsentity.dbmeta.*;
 import org.docksidestage.handson.dbflute.cbean.*;
 
 /**
- * The behavior of member_security as TABLE.
+ * The behavior of (会員セキュリティ情報)MEMBER_SECURITY as TABLE.
  * @author DBFlute(AutoGenerator)
  */
 public abstract class BsMemberSecurityBhv extends AbstractBehaviorWritable<MemberSecurity, MemberSecurityCB> {
@@ -129,7 +129,7 @@ public abstract class BsMemberSecurityBhv extends AbstractBehaviorWritable<Membe
 
     /**
      * Select the entity by the primary-key value.
-     * @param memberId : PK, NotNull, INT(10), FK to member. (NotNull)
+     * @param memberId (会員ID): PK, NotNull, INT(10), FK to member. (NotNull)
      * @return The optional entity selected by the PK. (NotNull: if no data, empty entity)
      * @throws EntityAlreadyDeletedException When get(), required() of return value is called and the value is null, which means entity has already been deleted (not found).
      * @throws EntityDuplicatedException When the entity has been duplicated.

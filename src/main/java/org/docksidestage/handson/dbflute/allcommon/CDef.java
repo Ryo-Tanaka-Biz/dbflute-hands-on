@@ -134,7 +134,7 @@ public interface CDef extends Classification {
         }
         /**
          * Is the classification in the group? <br>
-         * サービスが利用できる社員 <br>
+         * サービスが利用できる会員 <br>
          * The group elements:[正式会員, 仮会員]
          * @return The determination, true or false.
          */
@@ -195,7 +195,7 @@ public interface CDef extends Classification {
         public static List<MemberStatus> listOf(Collection<String> codeList) { return _slimmer.listOf(codeList); }
         /**
          * Get the list of group classification elements. (returns new copied list) <br>
-         * サービスが利用できる社員 <br>
+         * サービスが利用できる会員 <br>
          * The group elements:[正式会員, 仮会員]
          * @return The snapshot list of classification elements in the group. (NotNull)
          */

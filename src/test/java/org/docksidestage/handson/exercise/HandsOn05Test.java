@@ -126,20 +126,23 @@ public class HandsOn05Test extends UnitContainerTestCase {
             cb.setupSelect_Member().withMemberAddressAsValid(targetDate);
             cb.setupSelect_Member().withMemberStatus();
             cb.query().setPaymentCompleteFlg_Equal_True();
-            // TODO tanaryo 業務的one-to-oneとして定義しているので、one-to-many的な絞り込みをしなくても良いぞぅ by jflute (2025/03/16)
-            cb.query().queryMember().existsMemberAddress(subMemberAddressCB -> {
-                subMemberAddressCB.query().setRegionId_Equal_千葉();
-                subMemberAddressCB.query().setValidBeginDate_LessEqual(targetDate);
-                subMemberAddressCB.query().setValidEndDate_GreaterEqual(targetDate);
-            });
+            // TODO done tanaryo 業務的one-to-oneとして定義しているので、one-to-many的な絞り込みをしなくても良いぞぅ by jflute (2025/03/16)
+//            cb.query().queryMember().existsMemberAddress(subMemberAddressCB -> {
+//                subMemberAddressCB.query().setRegionId_Equal_千葉();
+//                subMemberAddressCB.query().setValidBeginDate_LessEqual(targetDate);
+//                subMemberAddressCB.query().setValidEndDate_GreaterEqual(targetDate);
+//            });
+            // targetDateで指定することでone to oneになる
+            cb.query().queryMember().queryMemberAddressAsValid(targetDate).setRegionId_Equal_千葉();
+
         });
 
         // ## Assert ##
         assertHasAnyElement(purchases);
         for (Purchase purchase : purchases) {
-        	// TODO tanaryo Lambda引数名、Optional(op)自体ではなく、Optionalの中身が来ているので中身に合わせた名前にしましょう by jflute (2025/03/16)
+        	// TODO done tanaryo Lambda引数名、Optional(op)自体ではなく、Optionalの中身が来ているので中身に合わせた名前にしましょう by jflute (2025/03/16)
         	// map(op -> op.getMemberStatusName()) → map(status -> status.getMemberStatusName())
-            String statusName = purchase.getMember().flatMap(op -> op.getMemberStatus()).map(op -> op.getMemberStatusName()).orElse(null);
+            String statusName = purchase.getMember().flatMap(member -> member.getMemberStatus()).map(status -> status.getMemberStatusName()).orElse(null);
             OptionalThing<MemberAddress> optMemberAddresses = purchase.getMember().flatMap(op -> op.getMemberAddressAsValid());
             String address = optMemberAddresses.map(op -> op.getAddress()).orElse(null);
             log("会員名称={}, 住所={}", statusName, address);

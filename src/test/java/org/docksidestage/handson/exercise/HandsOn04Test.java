@@ -512,7 +512,8 @@ public class HandsOn04Test extends UnitContainerTestCase {
         });
 
         // ## Assert ##
-        // TODO tanaryo グルーピングで、会員が社員になっておる by jflute (2025/03/19)
+        //
+        // TODO done tanaryo グルーピングで、会員が社員になっておる by jflute (2025/03/19)
         assertHasAnyElement(members);
         members.forEach(member -> {
             assertTrue(member.isMemberStatusCode_ServiceAvailable());
@@ -522,9 +523,9 @@ public class HandsOn04Test extends UnitContainerTestCase {
     // schemaHTMLにて、serviceAvailableの欄を確認
     // PaymentMethodにもrecommendedのgroupingあり
 
-    // TODO tanaryo タグコメントのラベル間違ってる by jflute (2025/03/19)
+    // TODO done tanaryo タグコメントのラベル間違ってる by jflute (2025/03/19)
     // ===================================================================================
-    //                                                                            Grouping
+    //                                                                              Sister
     //                                                                        ============
     /**
      * 未払い購入のある会員を検索
@@ -541,8 +542,8 @@ public class HandsOn04Test extends UnitContainerTestCase {
         // ## Act ##
         ListResultBean<Member> members = memberBhv.selectList(cb -> {
             cb.query().existsPurchase(pcCB -> {
-            	// TODO tanaryo AsBoolean(true); が使えます by jflute (2025/03/19)
-                pcCB.query().setPaymentCompleteFlg_Equal_AsFlg(getPaymentStatus());
+            	// TODO done tanaryo AsBoolean(true); が使えます by jflute (2025/03/19)
+                pcCB.query().setPaymentCompleteFlg_Equal_AsBoolean(false);
             });
             cb.query().addOrderBy_FormalizedDatetime_Desc().withNullsLast();
             cb.query().addOrderBy_MemberId_Asc();
@@ -576,15 +577,6 @@ public class HandsOn04Test extends UnitContainerTestCase {
         // 以降、19年くらい経ちますが、区別したいという声は一度も聞いたこと無いということで(^^。
     }
     //schemaHTMLでsistersを確認
-
-    /**
-     * 特定の支払い状況を取得します
-     *
-     * @return 支払い済みの場合はTrue、未払いの場合はFalse
-     */
-    private CDef.Flg getPaymentStatus() {
-        return CDef.Flg.False;
-    }
 
     // ===================================================================================
     //                                                                             SubItem

@@ -20,7 +20,7 @@ import org.docksidestage.handson.dbflute.bsentity.dbmeta.*;
 import org.docksidestage.handson.dbflute.cbean.*;
 
 /**
- * The behavior of purchase_payment as TABLE.
+ * The behavior of (購入支払)PURCHASE_PAYMENT as TABLE.
  * @author DBFlute(AutoGenerator)
  */
 public abstract class BsPurchasePaymentBhv extends AbstractBehaviorWritable<PurchasePayment, PurchasePaymentCB> {
@@ -129,7 +129,7 @@ public abstract class BsPurchasePaymentBhv extends AbstractBehaviorWritable<Purc
 
     /**
      * Select the entity by the primary-key value.
-     * @param purchasePaymentId : PK, ID, NotNull, BIGINT(19). (NotNull)
+     * @param purchasePaymentId (購入支払ID): PK, ID, NotNull, BIGINT(19). (NotNull)
      * @return The optional entity selected by the PK. (NotNull: if no data, empty entity)
      * @throws EntityAlreadyDeletedException When get(), required() of return value is called and the value is null, which means entity has already been deleted (not found).
      * @throws EntityDuplicatedException When the entity has been duplicated.
