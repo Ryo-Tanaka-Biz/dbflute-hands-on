@@ -513,7 +513,7 @@ public class HandsOn04Test extends UnitContainerTestCase {
 
         // ## Assert ##
         //
-        // TODO done tanaryo グルーピングで、会員が社員になっておる by jflute (2025/03/19)
+        // done tanaryo グルーピングで、会員が社員になっておる by jflute (2025/03/19)
         assertHasAnyElement(members);
         members.forEach(member -> {
             assertTrue(member.isMemberStatusCode_ServiceAvailable());
@@ -523,7 +523,7 @@ public class HandsOn04Test extends UnitContainerTestCase {
     // schemaHTMLにて、serviceAvailableの欄を確認
     // PaymentMethodにもrecommendedのgroupingあり
 
-    // TODO done tanaryo タグコメントのラベル間違ってる by jflute (2025/03/19)
+    // done tanaryo タグコメントのラベル間違ってる by jflute (2025/03/19)
     // ===================================================================================
     //                                                                              Sister
     //                                                                        ============
@@ -542,7 +542,7 @@ public class HandsOn04Test extends UnitContainerTestCase {
         // ## Act ##
         ListResultBean<Member> members = memberBhv.selectList(cb -> {
             cb.query().existsPurchase(pcCB -> {
-            	// TODO done tanaryo AsBoolean(true); が使えます by jflute (2025/03/19)
+            	// done tanaryo AsBoolean(true); が使えます by jflute (2025/03/19)
                 pcCB.query().setPaymentCompleteFlg_Equal_AsBoolean(false);
             });
             cb.query().addOrderBy_FormalizedDatetime_Desc().withNullsLast();
