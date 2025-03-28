@@ -5,6 +5,9 @@ import javax.annotation.Resource;
 import org.docksidestage.handson.dbflute.exbhv.MemberBhv;
 import org.docksidestage.handson.unit.UnitContainerTestCase;
 
+// TODO tanaryo [読み物課題] MySQLでお手軽デッドロック by jflute (2025/03/28)
+// https://jflute.hatenadiary.jp/entry/20120831/1346393321
+// トランザクション分離レベルを学んでみましょう。
 /**
  * @author tanaryo
  */
