@@ -154,8 +154,10 @@ public class HandsOn05Test extends UnitContainerTestCase {
     //                                                         導出的one-to-oneを利用した実装
     //                                                                        ============
     // schemaHTMLにて、member_login(AsLatest) を確認
-    // TODO jflute 1on1にて、現場での利用のケースを一緒におさらい予定 (2025/03/16)
+    // done jflute 1on1にて、現場での利用のケースを一緒におさらい予定 (2025/03/16)
     // ちょっと次回も見ましょう。
+    // [1on1でのふぉろー] 導出的one-to-oneも一緒に見た。かなりいっぱい活用されている。
+    // TODO jflute 業務的many-to-oneの説明をする (歴史の話も) (2025/04/04)
     /**
      * 最終ログイン時の会員ステータスを取得して会員を検索
      * SetupSelectのJavaDocに自分で設定したcommentが表示されることを目視確認
@@ -299,6 +301,16 @@ public class HandsOn05Test extends UnitContainerTestCase {
     //エイリアス名は少なくとも１文字はあかん！！
     // done tanaryo [いいね] コラムを読んでくれてありがとう。名前は識別が一番の目的。 by jflute (2025/03/16)
     
-    // TODO jflute 1on1にて、SQLのフォーマット談義 (2025/03/16)
+    // TODO tanaryo take-finally.sql, ConditionBeanスタイル、あともうちょい調整をお願いします by jflute (2025/04/04)
+    
+    // done jflute 1on1にて、SQLのフォーマット談義 (2025/03/16)
+    // めっちゃ似てるSQLスタイルガイドもある
+    // https://www.sqlstyle.guide/ja/
+    //
+    // 一方で、SQLのフォーマットは世界でバラバラ。現場でバラバラ。個人でもバラバラ。
+    // DBFluteはCBがあるからまだある程度バラバラでもそこまで問題ないけど、
+    // SQLベタっと全部書く現場だったら、SQLのコーディング規約はあった方が良いとは思っている。 by jflute
+    //
+    // とにかく、SQLをきれいにフォーマットして書くって意識が大事。
 }
 
