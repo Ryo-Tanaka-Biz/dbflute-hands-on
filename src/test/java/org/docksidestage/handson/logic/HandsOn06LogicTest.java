@@ -8,7 +8,10 @@ import org.docksidestage.handson.dbflute.exbhv.MemberBhv;
 import org.docksidestage.handson.dbflute.exentity.Member;
 import org.docksidestage.handson.unit.UnitContainerTestCase;
 
-// TODO tanaryo javadocをよろしくです by jflute (2025/03/28)
+// TODO done tanaryo javadocをよろしくです by jflute (2025/03/28)
+/**
+ * @author tanaryo
+ */
 public class HandsOn06LogicTest extends UnitContainerTestCase {
     // ===================================================================================
     //                                                                           Attribute
