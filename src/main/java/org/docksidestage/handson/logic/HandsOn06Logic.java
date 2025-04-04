@@ -30,13 +30,13 @@ public class HandsOn06Logic {
     // ===================================================================================
     //                                                                              suffix
     //                                                                        ============
-    // TODO done tanaryo 引数と戻り値のJavaDoc、nullを明示お願いします。(呼び出す人がとっても知りたい情報なので) by jflute (2025/03/28)
+    // done tanaryo 引数と戻り値のJavaDoc、nullを明示お願いします。(呼び出す人がとっても知りたい情報なので) by jflute (2025/03/28)
     // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
     // e.g.
     //  @param suffix 会員名称の後方一致キーワード (NotNull)
     //  @return 検索された会員リスト (NotNull)
     // _/_/_/_/_/_/_/_/_/_/
-    // TODO done tanaryo @throws, IllegalStateExceptionじゃなくてIllegalArgumentの間違いでは？ by jflute (2025/03/28)
+    // done tanaryo @throws, IllegalStateExceptionじゃなくてIllegalArgumentの間違いでは？ by jflute (2025/03/28)
     /**
      * 指定された suffix で会員名称を後方一致検索
      * 会員名称の昇順で並べる
@@ -63,18 +63,21 @@ public class HandsOn06Logic {
             logMemberInfo(member);
         });
 
-        // TODO done tanaryo ListResultBean自体がListなので、内部Listを取り出す必要はないです by jflute (2025/03/28)
+        // done tanaryo ListResultBean自体がListなので、内部Listを取り出す必要はないです by jflute (2025/03/28)
         return memberList;
     }
 
     private void assertValidString(String suffix) {
         if (suffix == null || suffix.trim().isEmpty()) {
-        	// TODO done tanaryo [いいね] 素晴らしい、ちゃんとsuffixがnullだったのか空だったのかわかる by jflute (2025/03/28)
+        	// done tanaryo [いいね] 素晴らしい、ちゃんとsuffixがnullだったのか空だったのかわかる by jflute (2025/03/28)
             throw new IllegalArgumentException("The specified suffix is null or empty. suffix:" + suffix);
         }
     }
 
-    // TODO done tanaryo 毎度の検索結果を本番でログに残すことはあまりないので、DEBUGにしてみましょう by jflute (2025/03/28)
+    // done tanaryo 毎度の検索結果を本番でログに残すことはあまりないので、DEBUGにしてみましょう by jflute (2025/03/28)
+    // [1on1でのふぉろー] 本番のログの容量との兼ね合いの話 (トラブルが起きたときだけ見るものだし)
+    // TODO tanaryo メソッド名もINFOじゃなくDEBUGで by jflute (2025/04/04)
+    // logってメソッド名はわりとよくある。一方で、debugMember() みたいなのもアリ。
     private void logMemberInfo(Member member) {
         String name = member.getMemberName();
         LocalDate birthDate = member.getBirthdate();

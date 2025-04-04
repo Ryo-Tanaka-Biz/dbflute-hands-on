@@ -8,7 +8,7 @@ import org.docksidestage.handson.dbflute.exbhv.MemberBhv;
 import org.docksidestage.handson.dbflute.exentity.Member;
 import org.docksidestage.handson.unit.UnitContainerTestCase;
 
-// TODO done tanaryo javadocをよろしくです by jflute (2025/03/28)
+// done tanaryo javadocをよろしくです by jflute (2025/03/28)
 /**
  * @author tanaryo
  */

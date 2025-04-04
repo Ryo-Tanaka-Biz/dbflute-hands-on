@@ -297,7 +297,7 @@ public class HandsOn05Test extends UnitContainerTestCase {
     //[df-replace-schema] {MEMBER_ADDRESS_ID=2, MEMBER_ID=1, VALID_BEGIN_DATE=1949-01-01, VALID_END_DATE=1997-04-01, ADDRESS=New York}
 
     //エイリアス名は少なくとも１文字はあかん！！
-    // TODO done tanaryo [いいね] コラムを読んでくれてありがとう。名前は識別が一番の目的。 by jflute (2025/03/16)
+    // done tanaryo [いいね] コラムを読んでくれてありがとう。名前は識別が一番の目的。 by jflute (2025/03/16)
     
     // TODO jflute 1on1にて、SQLのフォーマット談義 (2025/03/16)
 }
