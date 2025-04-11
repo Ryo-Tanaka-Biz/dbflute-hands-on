@@ -2,52 +2,52 @@
 -- /- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -- Member addresses should be only one at any time.
 -- - - - - - - - - - -/
-select adr.MEMBER_ADDRESS_ID
-     , adr.MEMBER_ID
-     , adr.VALID_BEGIN_DATE
-     , adr.VALID_END_DATE
-     , adr.ADDRESS
-from MEMBER_ADDRESS adr
-where exists (select subadr.MEMBER_ADDRESS_ID
-              from MEMBER_ADDRESS subadr
-              where subadr.MEMBER_ID = adr.MEMBER_ID
-                and subadr.VALID_BEGIN_DATE > adr.VALID_BEGIN_DATE
-                and subadr.VALID_BEGIN_DATE <= adr.VALID_END_DATE)
-;
+SELECT adr.member_address_id,
+       adr.member_id,
+       adr.valid_begin_date,
+       adr.valid_end_date,
+       adr.address
+  FROM member_address adr
+ WHERE EXISTS (
+           SELECT subadr.member_address_id
+             FROM member_address subadr
+            WHERE subadr.member_id = adr.member_id
+              AND subadr.valid_begin_date > adr.valid_begin_date
+              AND subadr.valid_begin_date <= adr.valid_end_date
+       );
 
 -- #df:assertListZero#
 -- /- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -- 正式会員日時を持ってる仮会員がいないことをアサート
 -- - - - - - - - - - -/
-select MEMBER_ID
-     , MEMBER_STATUS_CODE
-     , FORMALIZED_DATETIME
-from MEMBER
-where MEMBER_STATUS_CODE = 'PRV'
-  and FORMALIZED_DATETIME IS NOT NULL
-;
+SELECT member_id,
+       member_status_code,
+       formalized_datetime
+  FROM member
+ WHERE member_status_code = 'PRV'
+   AND formalized_datetime IS NOT NULL;
 
 -- #df:assertListZero#
 -- /- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -- まだ生まれていない会員がいないことをアサート
 -- - - - - - - - - - -/
-select MEMBER_ID
-     , BIRTHDATE
-     , CURRENT_DATE()
-from MEMBER
-where BIRTHDATE IS NOT NULL
-  and BIRTHDATE > CURRENT_DATE()
-;
+SELECT member_id,
+       birthdate,
+       CURRENT_DATE()
+  FROM member
+ WHERE birthdate IS NOT NULL
+   AND birthdate > CURRENT_DATE();
 
 -- #df:assertListZero#
 -- /- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -- 退会会員が退会情報を持っていることをアサート
 -- - - - - - - - - - -/
-select member.MEMBER_ID
-     , member.MEMBER_STATUS_CODE
-from MEMBER member
-where member.MEMBER_STATUS_CODE = 'WDL'
-  and not exists(select wdl.MEMBER_ID
-                 from MEMBER_WITHDRAWAL wdl
-                 WHERE wdl.MEMBER_ID = member.MEMBER_ID)
-;
+SELECT member.member_id,
+       member.member_status_code
+  FROM member
+ WHERE member.member_status_code = 'WDL'
+   AND NOT EXISTS (
+           SELECT wdl.member_id
+             FROM member_withdrawal wdl
+            WHERE wdl.member_id = member.member_id
+       );

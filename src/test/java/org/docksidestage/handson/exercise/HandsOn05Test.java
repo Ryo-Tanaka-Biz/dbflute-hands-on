@@ -301,7 +301,7 @@ public class HandsOn05Test extends UnitContainerTestCase {
     //エイリアス名は少なくとも１文字はあかん！！
     // done tanaryo [いいね] コラムを読んでくれてありがとう。名前は識別が一番の目的。 by jflute (2025/03/16)
     
-    // TODO tanaryo take-finally.sql, ConditionBeanスタイル、あともうちょい調整をお願いします by jflute (2025/04/04)
+    // TODO done tanaryo take-finally.sql, ConditionBeanスタイル、あともうちょい調整をお願いします by jflute (2025/04/04)
     
     // done jflute 1on1にて、SQLのフォーマット談義 (2025/03/16)
     // めっちゃ似てるSQLスタイルガイドもある

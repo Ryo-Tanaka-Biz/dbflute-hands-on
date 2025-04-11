@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author tanaryo
+ * author tanaryo
  */
 public class HandsOn06Logic {
     // ===================================================================================
@@ -60,10 +60,9 @@ public class HandsOn06Logic {
         });
 
         memberList.forEach(member -> {
-            logMemberInfo(member);
+            debugMember(member); // メソッド名を変更
         });
 
-        // done tanaryo ListResultBean自体がListなので、内部Listを取り出す必要はないです by jflute (2025/03/28)
         return memberList;
     }
 
@@ -76,9 +75,9 @@ public class HandsOn06Logic {
 
     // done tanaryo 毎度の検索結果を本番でログに残すことはあまりないので、DEBUGにしてみましょう by jflute (2025/03/28)
     // [1on1でのふぉろー] 本番のログの容量との兼ね合いの話 (トラブルが起きたときだけ見るものだし)
-    // TODO tanaryo メソッド名もINFOじゃなくDEBUGで by jflute (2025/04/04)
+    // TODO done tanaryo メソッド名もINFOじゃなくDEBUGで by jflute (2025/04/04)
     // logってメソッド名はわりとよくある。一方で、debugMember() みたいなのもアリ。
-    private void logMemberInfo(Member member) {
+    private void debugMember(Member member) { // メソッド名を変更
         String name = member.getMemberName();
         LocalDate birthDate = member.getBirthdate();
         LocalDateTime formalizedDatetime = member.getFormalizedDatetime();
