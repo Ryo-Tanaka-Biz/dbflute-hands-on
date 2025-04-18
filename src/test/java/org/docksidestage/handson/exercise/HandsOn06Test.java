@@ -5,7 +5,7 @@ import javax.annotation.Resource;
 import org.docksidestage.handson.dbflute.exbhv.MemberBhv;
 import org.docksidestage.handson.unit.UnitContainerTestCase;
 
-// TODO tanaryo [読み物課題] MySQLでお手軽デッドロック by jflute (2025/03/28)
+// done tanaryo [読み物課題] MySQLでお手軽デッドロック by jflute (2025/03/28)
 // https://jflute.hatenadiary.jp/entry/20120831/1346393321
 // トランザクション分離レベルを学んでみましょう。
 // REPEATABLE READでは、トランザクションAで削除/更新対象が0の場合にネクストキーロックがかかる。
@@ -15,6 +15,14 @@ import org.docksidestage.handson.unit.UnitContainerTestCase;
 // その結果、デッドロックが発生する。
 // READ COMMITTEDでは、トランザクションAで削除/更新対象が0の場合にネクストキーロックがかからない。
 // そのため、トランザクションBでレコードをインサートしてもトランザクションAのネクストキーロックのために待機しない。
+// [1on1でのふぉろー] MySQLのREPEATABLE READのお話をたっぷり
+// 使ってるツールの特徴をちゃんと知ろう。
+
+// [1on1でのふぉろー] 目の前のツールの勉強に費用対効果
+// o どのツールでもしっかり追求して学べば、他のツール使うときにも通じるスキルになる
+// o 優秀な人は、好きじゃないツールでも仕事としてやるからには追求してくる
+//
+//  → 追求していれば無駄はない
 /**
  * @author tanaryo
  */

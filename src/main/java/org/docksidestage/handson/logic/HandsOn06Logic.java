@@ -12,6 +12,7 @@ import org.docksidestage.handson.dbflute.exentity.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO jflute 1on1, 次回DBFluteを最新版にしようくらいから (2025/04/11)
 /**
  * author tanaryo
  */
@@ -59,6 +60,49 @@ public class HandsOn06Logic {
             cb.query().addOrderBy_MemberName_Asc();
         });
 
+		 // TODO tanaryo ログについての学習 by jflute (2025/04/11)
+		 // http://www.slideshare.net/miyakawataku/concepts-and-tools-of-logging-in-java
+		 //
+		 // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+		 // 前提: デバッグログは本番では出力しない。あくまで開発時のデバッグ用のため。本番では出力する処理がパフォーマンスコストになるため。
+		 // 現場によって違うが、ERROR や INFO は本番で出力されて DEBUG は本番では出力されない、というパターンが多いような気がする。
+		 //
+		 //   logger.debug("member: " + member.getMemberName() + ", " + member.getBirthdate());
+		 //
+		 // と、書いても。本番では出力されない。debug()メソッドの中で "(極端な話)本番だったら何もしない" という処理が入っている。
+		 // なので、"ログを出力する" という処理自体は何も気にしなくてもスキップできるが、
+		 //
+		 //   "member: " + member.getMemberName() + ", " + member.getBirthdate()
+		 //
+		 // という文字列を連結する処理 (引数の文字列を生成する処理) は本番でも走ってしまう。
+		 // どうせその文字列はどこにも出力されないのに生成されてしまう。これは無駄な処理である。
+		 // なので...
+		 //
+		 //   # if (logger.isDebugEnabled()) {
+		 //   #     logger.debug("member: " + member.getMemberName() + ", " + member.getBirthdate());
+		 //   #}
+		 //
+		 // というように、判定を入れると文字列生成処理も本番でスキップすることができる。
+		 // だが、うざい。
+		 //
+		 // Slf4j ではこのように書けるようになったので、isDebugEnabled()しなくてもOK。文字列連結処理が発生しない。
+		 // 
+		 //   # logger.debug("member: {}, {}", member.getMemberName(), member.getBirthdate());
+		 //
+		 // とはいえ、
+		 //
+		 //   # for (Member member : memberList) {
+		 //   #     logger.debug("member: {}, {}", member.getMemberName(), member.getBirthdate());
+		 //   # }
+		 //
+		 // という場合は、デバッグ処理のためだけのループが本番で回ってしまうので、isDebugEnabled()を全く使わないわけではない。
+		 //
+		 //   # if (logger.isDebugEnabled()) {
+		 //   #     for (Member member : memberList) {
+		 //   #         logger.debug("member: {}, {}", member.getMemberName(), member.getBirthdate());
+		 //   #     }
+		 //   # }
+		 // _/_/_/_/_/_/_/_/_/_/
         memberList.forEach(member -> {
             debugMember(member); // メソッド名を変更
         });
@@ -75,7 +119,7 @@ public class HandsOn06Logic {
 
     // done tanaryo 毎度の検索結果を本番でログに残すことはあまりないので、DEBUGにしてみましょう by jflute (2025/03/28)
     // [1on1でのふぉろー] 本番のログの容量との兼ね合いの話 (トラブルが起きたときだけ見るものだし)
-    // TODO done tanaryo メソッド名もINFOじゃなくDEBUGで by jflute (2025/04/04)
+    // done tanaryo メソッド名もINFOじゃなくDEBUGで by jflute (2025/04/04)
     // logってメソッド名はわりとよくある。一方で、debugMember() みたいなのもアリ。
     private void debugMember(Member member) { // メソッド名を変更
         String name = member.getMemberName();

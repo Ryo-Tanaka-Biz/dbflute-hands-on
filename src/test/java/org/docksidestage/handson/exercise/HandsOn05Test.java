@@ -301,7 +301,7 @@ public class HandsOn05Test extends UnitContainerTestCase {
     //エイリアス名は少なくとも１文字はあかん！！
     // done tanaryo [いいね] コラムを読んでくれてありがとう。名前は識別が一番の目的。 by jflute (2025/03/16)
     
-    // TODO done tanaryo take-finally.sql, ConditionBeanスタイル、あともうちょい調整をお願いします by jflute (2025/04/04)
+    // done tanaryo take-finally.sql, ConditionBeanスタイル、あともうちょい調整をお願いします by jflute (2025/04/04)
     
     // done jflute 1on1にて、SQLのフォーマット談義 (2025/03/16)
     // めっちゃ似てるSQLスタイルガイドもある
@@ -312,5 +312,10 @@ public class HandsOn05Test extends UnitContainerTestCase {
     // SQLベタっと全部書く現場だったら、SQLのコーディング規約はあった方が良いとは思っている。 by jflute
     //
     // とにかく、SQLをきれいにフォーマットして書くって意識が大事。
+    
+    // [1on1でのふぉろー] DBMSの大文字小文字文化の話をした。
+    // 現場では大文字文化、なのでSQLキーワードは小文字が合うかも？
+    // ドキュメント上のケースに合わせてSQLを書くほうがみなさん読みやすい
+    // jfluteの個人的な好みのよもやま話も
 }
 
