@@ -23,6 +23,15 @@ import org.docksidestage.handson.unit.UnitContainerTestCase;
 // o 優秀な人は、好きじゃないツールでも仕事としてやるからには追求してくる
 //
 //  → 追求していれば無駄はない
+
+// [1on1でのふぉろー] DBFluteのアップグレードと自動生成の仕組み
+// DBFluteは本体ごとgitにコミットしてもらうスタイルを推奨してる話。
+// 本気でやるならGradle Wrapper的なことになるけど、そこまでやることはないという現状。
+
+// [1on1でのふぉろー] 仕組み回りを知っておくメリット
+// o ある程度詳しくないと詳しい人に聞くための質問の言語化もできず躊躇する
+
+// TODO tanaryo mydbfluteの古いDBFlute Engine-1.2.7は削除コミットしちゃってOK by jflute (2025/04/18)
 /**
  * @author tanaryo
  */
