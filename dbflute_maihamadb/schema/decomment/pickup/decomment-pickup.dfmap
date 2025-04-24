@@ -1,0 +1,70 @@
+map:{
+    ; formatVersion = 1.1
+    ; pickupDatetime = 2025-04-24T13:02:05.167
+    ; decoMap = map:{
+        ; tableList = list:{
+            ; map:{
+                ; tableName = member
+                ; mappingList = list:{}
+                ; propertyList = list:{
+                    ; map:{
+                        ; decomment = 会員登録時にデータが登録される。
+基本的に物理削除はなく、退会したらステータスが退会会員になる。
+これはテストで打ってます
+                        ; databaseComment = 会員登録時にデータが登録される。
+基本的に物理削除はなく、退会したらステータスが退会会員になる。
+                        ; commentVersion = 0
+                        ; authorList = list:{
+                            ; ryo.tanaka
+                        }
+                        ; pieceCode = 92932453
+                        ; pieceOwner = ryo.tanaka
+                        ; pieceGitBranch = master
+                        ; pieceDatetime = 2025-04-11T13:54:34.606
+                        ; previousPieceList = list:{}
+                    }
+                }
+                ; columnList = list:{}
+            }
+            ; map:{
+                ; tableName = member_address
+                ; mappingList = list:{}
+                ; propertyList = list:{
+                    ; map:{
+                        ; decomment = 会員の住所に関する情報。
+同時に有効期間ごとに履歴管理されている。
+コンフリクト２
+                        ; databaseComment = 会員の住所に関する情報。
+同時に有効期間ごとに履歴管理されている。
+                        ; commentVersion = 0
+                        ; authorList = list:{
+                            ; ryo.tanaka
+                        }
+                        ; pieceCode = 6acf5b93
+                        ; pieceOwner = ryo.tanaka
+                        ; pieceGitBranch = master
+                        ; pieceDatetime = 2025-04-24T13:01:18.153
+                        ; previousPieceList = list:{}
+                    }
+                    ; map:{
+                        ; decomment = 会員の住所に関する情報。
+同時に有効期間ごとに履歴管理されている。
+コンフリクト１
+                        ; databaseComment = 会員の住所に関する情報。
+同時に有効期間ごとに履歴管理されている。
+                        ; commentVersion = 0
+                        ; authorList = list:{
+                            ; ryo.tanaka
+                        }
+                        ; pieceCode = 7c555714
+                        ; pieceOwner = ryo.tanaka
+                        ; pieceGitBranch = master
+                        ; pieceDatetime = 2025-04-24T13:01:20.513
+                        ; previousPieceList = list:{}
+                    }
+                }
+                ; columnList = list:{}
+            }
+        }
+    }
+}
