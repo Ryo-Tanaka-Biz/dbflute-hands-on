@@ -1,6 +1,6 @@
 map:{
     ; formatVersion = 1.1
-    ; pickupDatetime = 2025-04-24T13:02:05.167
+    ; pickupDatetime = 2025-04-24T13:11:22.360
     ; decoMap = map:{
         ; tableList = list:{
             ; map:{
@@ -40,27 +40,13 @@ map:{
                         ; authorList = list:{
                             ; ryo.tanaka
                         }
-                        ; pieceCode = 6acf5b93
+                        ; pieceCode = 3f5025b0
                         ; pieceOwner = ryo.tanaka
                         ; pieceGitBranch = master
-                        ; pieceDatetime = 2025-04-24T13:01:18.153
-                        ; previousPieceList = list:{}
-                    }
-                    ; map:{
-                        ; decomment = 会員の住所に関する情報。
-同時に有効期間ごとに履歴管理されている。
-コンフリクト１
-                        ; databaseComment = 会員の住所に関する情報。
-同時に有効期間ごとに履歴管理されている。
-                        ; commentVersion = 0
-                        ; authorList = list:{
-                            ; ryo.tanaka
+                        ; pieceDatetime = 2025-04-24T13:10:32.129
+                        ; previousPieceList = list:{
+                            ; f6480a67
                         }
-                        ; pieceCode = 7c555714
-                        ; pieceOwner = ryo.tanaka
-                        ; pieceGitBranch = master
-                        ; pieceDatetime = 2025-04-24T13:01:20.513
-                        ; previousPieceList = list:{}
                     }
                 }
                 ; columnList = list:{}
