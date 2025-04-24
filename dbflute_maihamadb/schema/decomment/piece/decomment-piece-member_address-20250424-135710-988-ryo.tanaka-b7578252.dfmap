@@ -1,0 +1,22 @@
+map:{
+    ; formatVersion = 1.1
+    ; tableName = member_address
+    ; columnName = null
+    ; targetType = TABLE
+    ; decomment = 会員の住所に関する情報。
+同時に有効期間ごとに履歴管理されている。
+会員と業務的one to one
+    ; databaseComment = 会員の住所に関する情報。
+同時に有効期間ごとに履歴管理されている。
+    ; commentVersion = 0
+    ; authorList = list:{
+        ; ryo.tanaka
+    }
+    ; pieceCode = b7578252
+    ; pieceDatetime = 2025-04-24T13:57:10.988
+    ; pieceOwner = ryo.tanaka
+    ; pieceGitBranch = master
+    ; previousPieceList = list:{
+        ; 6acf5b93
+    }
+}
