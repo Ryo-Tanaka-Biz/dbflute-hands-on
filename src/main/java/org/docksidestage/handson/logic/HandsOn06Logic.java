@@ -60,7 +60,7 @@ public class HandsOn06Logic {
             cb.query().addOrderBy_MemberName_Asc();
         });
 
-		 // TODO tanaryo ログについての学習 by jflute (2025/04/11)
+		 // TODO  done tanaryo ログについての学習 by jflute (2025/04/11)
 		 // http://www.slideshare.net/miyakawataku/concepts-and-tools-of-logging-in-java
 		 //
 		 // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
