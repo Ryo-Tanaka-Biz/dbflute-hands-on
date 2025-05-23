@@ -60,7 +60,7 @@ public class HandsOn06Logic {
             cb.query().addOrderBy_MemberName_Asc();
         });
 
-		 // TODO  done tanaryo ログについての学習 by jflute (2025/04/11)
+		 // done tanaryo ログについての学習 by jflute (2025/04/11)
 		 // http://www.slideshare.net/miyakawataku/concepts-and-tools-of-logging-in-java
 		 //
 		 // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
@@ -103,6 +103,7 @@ public class HandsOn06Logic {
 		 //   #     }
 		 //   # }
 		 // _/_/_/_/_/_/_/_/_/_/
+        // TODO tanaryo なので、本番はループさせたくない by jflute (2025/05/09)
         memberList.forEach(member -> {
             debugMember(member); // メソッド名を変更
         });

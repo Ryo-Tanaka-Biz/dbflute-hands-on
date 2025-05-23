@@ -31,7 +31,7 @@ import org.docksidestage.handson.unit.UnitContainerTestCase;
 // [1on1でのふぉろー] 仕組み回りを知っておくメリット
 // o ある程度詳しくないと詳しい人に聞くための質問の言語化もできず躊躇する
 
-// TODO done tanaryo mydbfluteの古いDBFlute Engine-1.2.7は削除コミットしちゃってOK by jflute (2025/04/18)
+// done tanaryo mydbfluteの古いDBFlute Engine-1.2.7は削除コミットしちゃってOK by jflute (2025/04/18)
 /**
  * @author tanaryo
  */
