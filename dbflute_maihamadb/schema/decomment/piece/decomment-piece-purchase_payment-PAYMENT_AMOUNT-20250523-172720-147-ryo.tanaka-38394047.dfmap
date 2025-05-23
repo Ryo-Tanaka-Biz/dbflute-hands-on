@@ -1,0 +1,20 @@
+map:{
+    ; formatVersion = 1.1
+    ; tableName = purchase_payment
+    ; columnName = PAYMENT_AMOUNT
+    ; targetType = COLUMN
+    ; decomment = 支払った金額。
+ポイントを利用した際に、支払い金額に小数点以下の端数が発生しうるため、小数点にしている
+    ; databaseComment = 支払った金額。さて、小数点なのはなぜでしょう？
+    ; commentVersion = 0
+    ; authorList = list:{
+        ; ryo.tanaka
+    }
+    ; pieceCode = 38394047
+    ; pieceDatetime = 2025-05-23T17:27:20.147
+    ; pieceOwner = ryo.tanaka
+    ; pieceGitBranch = master
+    ; previousPieceList = list:{
+        ; cfda4ba7
+    }
+}

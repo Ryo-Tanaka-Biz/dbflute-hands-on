@@ -1,0 +1,20 @@
+map:{
+    ; formatVersion = 1.1
+    ; tableName = purchase
+    ; columnName = null
+    ; targetType = TABLE
+    ; decomment = 一つの商品に対する一回の購入を表現する。
+一回の購入で一つの商品を複数個買うこともある。
+会員が一回も購入しなければ、このテーブルを持たない
+    ; databaseComment = 一つの商品に対する一回の購入を表現する。
+一回の購入で一つの商品を複数個買うこともある。
+    ; commentVersion = 0
+    ; authorList = list:{
+        ; ryo.tanaka
+    }
+    ; pieceCode = f8135505
+    ; pieceDatetime = 2025-05-23T17:19:53.108
+    ; pieceOwner = ryo.tanaka
+    ; pieceGitBranch = master
+    ; previousPieceList = list:{}
+}
