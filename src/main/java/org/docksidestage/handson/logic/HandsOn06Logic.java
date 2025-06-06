@@ -104,7 +104,7 @@ public class HandsOn06Logic {
         //   #     }
         //   # }
         // _/_/_/_/_/_/_/_/_/_/
-        // TODO tanaryo なので、本番はループさせたくない by jflute (2025/05/09)
+        // TODO done tanaryo なので、本番はループさせたくない by jflute (2025/05/09)
         memberList.forEach(member -> {
             if (logger.isDebugEnabled()) { // 本番ではデバッグログを出力しない
                 debugMember(member);
