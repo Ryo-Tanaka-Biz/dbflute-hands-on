@@ -58,5 +58,37 @@ map:{
     #        ; if columnName is suffix:_FLG then classification
     #    }
     #}
+    ; tableExceptList = list:{}
+    ; tableTargetList = list:{}
+    ; columnExceptMap = map:{}
+    ; isMainSchemaOnly = false
+
+    ; wholeMap = map:{
+        ; themeList = list:{}
+    }
+    ; tableMap = map:{
+        ; themeList = list:{}
+        ; statementList = list:{
+        }
+    }
+    ; tableMap = map:{
+        # AUTO_INCREMENTされるPKは_IDであることを書きたい
+        ; themeList = list:{ hasPK ; upperCaseBasis ; identityIfPureIDPK }
+        ; statementList = list:{
+            # AUTO_INCREMENTされるPKは_IDであることを書きたい
+            ; if tableName is $$ALL$$ then pkName is prefix:$$table$$_ID
+            #
+        }
+    }
+    ; columnMap = map:{
+        ; themeList = list:{}
+        ; statementList = list:{
+            ; if columnName is suffix:_FLG then notNull
+            # _DATETIMEの時はDATETIME型
+            ; if columnName is suffix:_DATETIME then dbType is DATETIME
+            # _CODEの時は区分値
+            ; if columnName is suffix:_CODE then classification
+        }
+    }
 }
 # ----------------/

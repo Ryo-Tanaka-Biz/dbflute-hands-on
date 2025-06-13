@@ -213,6 +213,46 @@ dl.column-content dd span {
 <p class="sisterlink"><a href="./schema-maihamadb.html">to SchemaHTML</a></p>
 </div>
 
+<div class="section diffCode_20250613170037">
+	<h2>
+		<span class="titlediffno">diffNo. 3:</span> <span class="titlediffdatepart">2025/06/13</span> <span class="titledifftimepart">17:00:37</span>
+		<span class="titlediffauthor">by ryo.tanaka</span>
+		<span class="titlediffgitbranch">on master</span>
+	</h2>
+	<pre class="diffcomment"></pre>
+
+	<h3>Change Table</h3>
+	<div class="table-content">
+		<h4><a href="./schema-maihamadb.html#purchase">PURCHASE</a></h4>
+		<div class="change-table-content">
+			<h5>Change Column</h5>
+			<dl class="column-content">
+				<dt>PAYMENT_COMPLETE_FLG</dt>
+				<dd><span>Not Null</span>false&nbsp;-&gt;&nbsp;true</dd>
+			</dl>
+		</div>
+	</div>
+</div>
+<div class="section diffCode_20250613165724">
+	<h2>
+		<span class="titlediffno">diffNo. 2:</span> <span class="titlediffdatepart">2025/06/13</span> <span class="titledifftimepart">16:57:24</span>
+		<span class="titlediffauthor">by ryo.tanaka</span>
+		<span class="titlediffgitbranch">on master</span>
+	</h2>
+	<pre class="diffcomment"></pre>
+
+	<h3>Change Table</h3>
+	<div class="table-content">
+		<h4>PURCHASE</h4>
+		<div class="change-table-content">
+			<h5>Change Column</h5>
+			<dl class="column-content">
+				<dt>PAYMENT_COMPLETE_FLG</dt>
+				<dd><span>Not Null</span>true&nbsp;-&gt;&nbsp;false</dd>
+			</dl>
+		</div>
+	</div>
+</div>
 <div class="section diffCode_20250104123720">
 	<h2>
 		<span class="titlediffno">diffNo. 1:</span> <span class="titlediffdatepart">2025/01/04</span> <span class="titledifftimepart">12:37:20</span>
@@ -224,21 +264,21 @@ dl.column-content dd span {
 
 	<h3>Add Table</h3>
 	<ul class="table-content">
-		<li><a href="./schema-maihamadb.html#member">MEMBER</a></li>
-		<li><a href="./schema-maihamadb.html#member_address">MEMBER_ADDRESS</a></li>
-		<li><a href="./schema-maihamadb.html#member_login">MEMBER_LOGIN</a></li>
-		<li><a href="./schema-maihamadb.html#member_security">MEMBER_SECURITY</a></li>
-		<li><a href="./schema-maihamadb.html#member_service">MEMBER_SERVICE</a></li>
-		<li><a href="./schema-maihamadb.html#member_status">MEMBER_STATUS</a></li>
-		<li><a href="./schema-maihamadb.html#member_withdrawal">MEMBER_WITHDRAWAL</a></li>
-		<li><a href="./schema-maihamadb.html#product">PRODUCT</a></li>
-		<li><a href="./schema-maihamadb.html#product_category">PRODUCT_CATEGORY</a></li>
-		<li><a href="./schema-maihamadb.html#product_status">PRODUCT_STATUS</a></li>
-		<li><a href="./schema-maihamadb.html#purchase">PURCHASE</a></li>
-		<li><a href="./schema-maihamadb.html#purchase_payment">PURCHASE_PAYMENT</a></li>
-		<li><a href="./schema-maihamadb.html#region">REGION</a></li>
-		<li><a href="./schema-maihamadb.html#service_rank">SERVICE_RANK</a></li>
-		<li><a href="./schema-maihamadb.html#withdrawal_reason">WITHDRAWAL_REASON</a></li>
+		<li>MEMBER</li>
+		<li>MEMBER_ADDRESS</li>
+		<li>MEMBER_LOGIN</li>
+		<li>MEMBER_SECURITY</li>
+		<li>MEMBER_SERVICE</li>
+		<li>MEMBER_STATUS</li>
+		<li>MEMBER_WITHDRAWAL</li>
+		<li>PRODUCT</li>
+		<li>PRODUCT_CATEGORY</li>
+		<li>PRODUCT_STATUS</li>
+		<li>PURCHASE</li>
+		<li>PURCHASE_PAYMENT</li>
+		<li>REGION</li>
+		<li>SERVICE_RANK</li>
+		<li>WITHDRAWAL_REASON</li>
 	</ul>
 </div>
 
@@ -396,7 +436,15 @@ dl.column-content dd span {
             ]
         };
         this.pickupStore = {
-            '20250104123720' : {
+            '20250613170037' : {
+                'diffDate' : '2025/06/13 17:00:37',
+                'diffComment' : ''
+            }
+            , '20250613165724' : {
+                'diffDate' : '2025/06/13 16:57:24',
+                'diffComment' : ''
+            }
+            , '20250104123720' : {
                 'diffDate' : '2025/01/04 12:37:20',
                 'diffComment' : ''
             }

@@ -468,6 +468,7 @@ pre.spolicyviodisp {
 <p class="sublink">
  <a href="#cdef">Classification Definition</a>
 | <a href="#arrangequery">ArrangeQuery List</a>
+| <a href="#schemapolicy">Schema Policy</a>
 </p>
 <p class="sisterlink"><a href="./history-maihamadb.html">to HistoryHTML</a></p>
 </div>
@@ -3511,6 +3512,26 @@ pre.spolicyviodisp {
 	<dd>&nbsp;</dd>
 </dl>
 
+<h2 id="schemapolicy">Schema Policy</h2>
+<pre class="spolicydisp">
+
+[Schema Policy]
+ tableExceptList: []
+ tableTargetList: []
+ columnExceptMap: {}
+ isMainSchemaOnly: false
+ wholeMap:
+   themeList: []
+   statementList:
+ tableMap:
+   themeList: []
+   statementList:
+ columnMap:
+   themeList: []
+   statementList:
+    {if:{columnName is suffix:_FLG}} {then notNull}
+</pre>
+
 <h2 id="thanks">Thanks</h2>
 <p>
 	Created by <a href="http://dbflute.org/">DBFlute(AutoGenerator)</a>
@@ -4042,13 +4063,13 @@ function StoreClient() {
 				]
 				, 'properties': [
 						{
-						'decomment': '会員登録時にデータが登録される。<br>基本的に物理削除はなく、退会したらステータスが退会会員になる。<br>これはテストで打ってます'
+						'decomment': '会員登録時にデータが登録される。<br>基本的に物理削除はなく、退会したらステータスが退会会員になる。'
 						, 'databaseComment': '会員登録時にデータが登録される。<br>基本的に物理削除はなく、退会したらステータスが退会会員になる。'
 						, 'commentVersion': 0
 						, 'authors': ['ryo.tanaka']
-						, 'pieceCode': '92932453'
-						, 'pieceDatatime': '2025-04-11T13:54:34.606'
-						, 'previousPieces': []
+						, 'pieceCode': 'b397d0de'
+						, 'pieceDatatime': '2025-04-24T13:16:15.226'
+						, 'previousPieces': ['92932453']
 					}
 				]
 				, 'columns': [
@@ -4060,13 +4081,83 @@ function StoreClient() {
 				]
 				, 'properties': [
 						{
-						'decomment': '会員の住所に関する情報。<br>同時に有効期間ごとに履歴管理されている。<br>コンフリクト２'
+						'decomment': '会員の住所に関する情報。<br>同時に有効期間ごとに履歴管理されている。<br>会員と業務的one to one'
 						, 'databaseComment': '会員の住所に関する情報。<br>同時に有効期間ごとに履歴管理されている。'
 						, 'commentVersion': 0
 						, 'authors': ['ryo.tanaka']
-						, 'pieceCode': '3f5025b0'
-						, 'pieceDatatime': '2025-04-24T13:10:32.129'
-						, 'previousPieces': ['f6480a67']
+						, 'pieceCode': '83960eb0'
+						, 'pieceDatatime': '2025-05-09T17:24:29.247'
+						, 'previousPieces': ['f49186ab','b7578252']
+					}
+				]
+				, 'columns': [
+				]
+			}
+			, {
+				'tableName': 'service_rank'
+				, 'mappings' : [
+				]
+				, 'properties': [
+						{
+						'decomment': '会員のサービスレベルを表現するランク。<br>（ゴールドとかプラチナとか）<br>会員登録時はPLS'
+						, 'databaseComment': '会員のサービスレベルを表現するランク。<br>（ゴールドとかプラチナとか）'
+						, 'commentVersion': 0
+						, 'authors': ['ryo.tanaka']
+						, 'pieceCode': 'bed348dc'
+						, 'pieceDatatime': '2025-05-23T17:28:52.622'
+						, 'previousPieces': []
+					}
+				]
+				, 'columns': [
+				]
+			}
+			, {
+				'tableName': 'purchase_payment'
+				, 'mappings' : [
+				]
+				, 'properties': [
+						{
+						'decomment': '購入に対する支払。<br>分割払いもできるのでmanyとなり、会員からの孫テーブルのテストができてうれしい。<br>支払いが完了していなければ、このテーブルのレコードは作成されない'
+						, 'databaseComment': '購入に対する支払。<br>分割払いもできるのでmanyとなり、会員からの孫テーブルのテストができてうれしい。'
+						, 'commentVersion': 0
+						, 'authors': ['ryo.tanaka']
+						, 'pieceCode': '619fad5c'
+						, 'pieceDatatime': '2025-05-23T17:22:25.958'
+						, 'previousPieces': []
+					}
+				]
+				, 'columns': [
+					 {
+						'columnName': 'PAYMENT_AMOUNT'
+						, 'mappings' : [
+						]
+						, 'properties': [
+								 {
+								'decomment': '支払った金額。<br>ポイントを利用した際に、支払い金額に小数点以下の端数が発生しうるため、小数点にしている'
+								, 'databaseComment': '支払った金額。さて、小数点なのはなぜでしょう？'
+								, 'commentVersion': 0
+								, 'authors': ['ryo.tanaka']
+								, 'pieceCode': '38394047'
+								, 'pieceDatatime': '2025-05-23T17:27:20.147'
+								, 'previousPieces': ['cfda4ba7']
+							}
+						]
+					}
+				]
+			}
+			, {
+				'tableName': 'purchase'
+				, 'mappings' : [
+				]
+				, 'properties': [
+						{
+						'decomment': '一つの商品に対する一回の購入を表現する。<br>一回の購入で一つの商品を複数個買うこともある。<br>会員が一回も購入しなければ、このテーブルを持たない'
+						, 'databaseComment': '一つの商品に対する一回の購入を表現する。<br>一回の購入で一つの商品を複数個買うこともある。'
+						, 'commentVersion': 0
+						, 'authors': ['ryo.tanaka']
+						, 'pieceCode': 'f8135505'
+						, 'pieceDatatime': '2025-05-23T17:19:53.108'
+						, 'previousPieces': []
 					}
 				]
 				, 'columns': [

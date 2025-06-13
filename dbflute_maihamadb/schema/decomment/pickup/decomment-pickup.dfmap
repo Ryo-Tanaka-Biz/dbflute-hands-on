@@ -1,6 +1,6 @@
 map:{
     ; formatVersion = 1.1
-    ; pickupDatetime = 2025-04-24T13:11:22.360
+    ; pickupDatetime = 2025-06-13T16:53:46.522
     ; decoMap = map:{
         ; tableList = list:{
             ; map:{
@@ -10,18 +10,19 @@ map:{
                     ; map:{
                         ; decomment = 会員登録時にデータが登録される。
 基本的に物理削除はなく、退会したらステータスが退会会員になる。
-これはテストで打ってます
                         ; databaseComment = 会員登録時にデータが登録される。
 基本的に物理削除はなく、退会したらステータスが退会会員になる。
                         ; commentVersion = 0
                         ; authorList = list:{
                             ; ryo.tanaka
                         }
-                        ; pieceCode = 92932453
+                        ; pieceCode = b397d0de
                         ; pieceOwner = ryo.tanaka
                         ; pieceGitBranch = master
-                        ; pieceDatetime = 2025-04-11T13:54:34.606
-                        ; previousPieceList = list:{}
+                        ; pieceDatetime = 2025-04-24T13:16:15.226
+                        ; previousPieceList = list:{
+                            ; 92932453
+                        }
                     }
                 }
                 ; columnList = list:{}
@@ -33,20 +34,113 @@ map:{
                     ; map:{
                         ; decomment = 会員の住所に関する情報。
 同時に有効期間ごとに履歴管理されている。
-コンフリクト２
+会員と業務的one to one
                         ; databaseComment = 会員の住所に関する情報。
 同時に有効期間ごとに履歴管理されている。
                         ; commentVersion = 0
                         ; authorList = list:{
                             ; ryo.tanaka
                         }
-                        ; pieceCode = 3f5025b0
+                        ; pieceCode = 83960eb0
                         ; pieceOwner = ryo.tanaka
                         ; pieceGitBranch = master
-                        ; pieceDatetime = 2025-04-24T13:10:32.129
+                        ; pieceDatetime = 2025-05-09T17:24:29.247
                         ; previousPieceList = list:{
-                            ; f6480a67
+                            ; f49186ab
+                            ; b7578252
                         }
+                    }
+                }
+                ; columnList = list:{}
+            }
+            ; map:{
+                ; tableName = service_rank
+                ; mappingList = list:{}
+                ; propertyList = list:{
+                    ; map:{
+                        ; decomment = 会員のサービスレベルを表現するランク。
+（ゴールドとかプラチナとか）
+会員登録時はPLS
+                        ; databaseComment = 会員のサービスレベルを表現するランク。
+（ゴールドとかプラチナとか）
+                        ; commentVersion = 0
+                        ; authorList = list:{
+                            ; ryo.tanaka
+                        }
+                        ; pieceCode = bed348dc
+                        ; pieceOwner = ryo.tanaka
+                        ; pieceGitBranch = master
+                        ; pieceDatetime = 2025-05-23T17:28:52.622
+                        ; previousPieceList = list:{}
+                    }
+                }
+                ; columnList = list:{}
+            }
+            ; map:{
+                ; tableName = purchase_payment
+                ; mappingList = list:{}
+                ; propertyList = list:{
+                    ; map:{
+                        ; decomment = 購入に対する支払。
+分割払いもできるのでmanyとなり、会員からの孫テーブルのテストができてうれしい。
+支払いが完了していなければ、このテーブルのレコードは作成されない
+                        ; databaseComment = 購入に対する支払。
+分割払いもできるのでmanyとなり、会員からの孫テーブルのテストができてうれしい。
+                        ; commentVersion = 0
+                        ; authorList = list:{
+                            ; ryo.tanaka
+                        }
+                        ; pieceCode = 619fad5c
+                        ; pieceOwner = ryo.tanaka
+                        ; pieceGitBranch = master
+                        ; pieceDatetime = 2025-05-23T17:22:25.958
+                        ; previousPieceList = list:{}
+                    }
+                }
+                ; columnList = list:{
+                    ; map:{
+                        ; columnName = PAYMENT_AMOUNT
+                        ; mappingList = list:{}
+                        ; propertyList = list:{
+                            ; map:{
+                                ; decomment = 支払った金額。
+ポイントを利用した際に、支払い金額に小数点以下の端数が発生しうるため、小数点にしている
+                                ; databaseComment = 支払った金額。さて、小数点なのはなぜでしょう？
+                                ; commentVersion = 0
+                                ; authorList = list:{
+                                    ; ryo.tanaka
+                                }
+                                ; pieceCode = 38394047
+                                ; pieceOwner = ryo.tanaka
+                                ; pieceGitBranch = master
+                                ; pieceDatetime = 2025-05-23T17:27:20.147
+                                ; previousPieceList = list:{
+                                    ; cfda4ba7
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            ; map:{
+                ; tableName = purchase
+                ; mappingList = list:{}
+                ; propertyList = list:{
+                    ; map:{
+                        ; decomment = 一つの商品に対する一回の購入を表現する。
+一回の購入で一つの商品を複数個買うこともある。
+会員が一回も購入しなければ、このテーブルを持たない
+                        ; databaseComment = 一つの商品に対する一回の購入を表現する。
+一回の購入で一つの商品を複数個買うこともある。
+                        ; commentVersion = 0
+                        ; authorList = list:{
+                            ; ryo.tanaka
+                        }
+                        ; pieceCode = f8135505
+                        ; pieceOwner = ryo.tanaka
+                        ; pieceGitBranch = master
+                        ; pieceDatetime = 2025-05-23T17:19:53.108
+                        ; previousPieceList = list:{}
                     }
                 }
                 ; columnList = list:{}

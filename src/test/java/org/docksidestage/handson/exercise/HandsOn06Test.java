@@ -61,13 +61,29 @@ public class HandsOn06Test extends UnitContainerTestCase {
     }
 
     // ===================================================================================
-    //                                                                             XXXXXXX
+    //                                                                        レビュー自動化
     //                                                                        ============
-    public void test_2() {
-        // ## Arrange ##
-        // ## Act ##
-        // ## Assert ##
-    }
+
+    //わざと引っ掛かるようにして、以下のエラーが発生することを確認
+//   [df-doc] /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+//   [df-doc] Failed to execute DBFlute Task 'Doc'.
+//   [df-doc]
+//   [df-doc] [Advice]
+//   [df-doc] Check the exception messages and the stack traces.
+//   [df-doc] * * * * * * * * * */
+//            [df-doc] org.dbflute.exception.DfSchemaPolicyCheckViolationException: Look! Read the message below.
+//            [df-doc] /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+//   [df-doc] The schema policy has been violated.
+//   [df-doc]
+//   [df-doc] [Advice]
+//   [df-doc] Make sure your violating schema (ERD and DDL).
+//   [df-doc] You can see violations on this message or SchemaHTML.
+//   [df-doc] And after that, execute renewal (or regenerate) again.
+//   [df-doc] (tips: The schema policy is on schemaPolicyMap.dfprop)
+//   [df-doc]
+//   [df-doc] [Violation]
+//   [df-doc] column.statement: if columnName is suffix:_FLG then notNull
+//   [df-doc]  +-The column should be not-null: (購入.支払完了フラグ)PURCHASE.PAYMENT_COMPLETE_FLG INT(10) (NullAllowed)
 
     // ===================================================================================
     //                                                                             XXXXXXX
