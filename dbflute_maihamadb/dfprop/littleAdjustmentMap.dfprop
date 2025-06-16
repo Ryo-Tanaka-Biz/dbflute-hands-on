@@ -93,7 +93,7 @@ map:{
     #     Table names on SQL executed by condition-bean or behavior
     #     are forcedly treated as upper case. (except outside-SQL)
     #
-    ; isTableSqlNameUpperCase = ture
+    ; isTableSqlNameUpperCase = true
     # - - - - - - - - - -/
 
     # /- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

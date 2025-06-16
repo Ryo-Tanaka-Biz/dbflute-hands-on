@@ -3524,12 +3524,12 @@ pre.spolicyviodisp {
    themeList: []
    statementList:
  tableMap:
-   themeList: []
+   themeList: [hasPK, upperCaseBasis]
    statementList:
+    {if:{pk_columnName is suffix:_ID and is not REGION_ID}} {then identityIfPureIDPK}
  columnMap:
    themeList: []
    statementList:
-    {if:{columnName is suffix:_FLG}} {then notNull}
 </pre>
 
 <h2 id="thanks">Thanks</h2>
