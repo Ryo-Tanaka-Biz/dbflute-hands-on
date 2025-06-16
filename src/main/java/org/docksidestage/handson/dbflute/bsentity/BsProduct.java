@@ -8,6 +8,7 @@ import org.dbflute.dbmeta.DBMeta;
 import org.dbflute.dbmeta.AbstractEntity;
 import org.dbflute.dbmeta.accessory.DomainEntity;
 import org.dbflute.optional.OptionalEntity;
+import org.docksidestage.handson.dbflute.allcommon.EntityDefinedCommonColumn;
 import org.docksidestage.handson.dbflute.allcommon.DBMetaInstanceHandler;
 import org.docksidestage.handson.dbflute.allcommon.CDef;
 import org.docksidestage.handson.dbflute.exentity.*;
@@ -16,7 +17,7 @@ import org.docksidestage.handson.dbflute.exentity.*;
  * The entity of (商品)PRODUCT as TABLE.
  * @author DBFlute(AutoGenerator)
  */
-public abstract class BsProduct extends AbstractEntity implements DomainEntity {
+public abstract class BsProduct extends AbstractEntity implements DomainEntity, EntityDefinedCommonColumn {
 
     // ===================================================================================
     //                                                                          Definition

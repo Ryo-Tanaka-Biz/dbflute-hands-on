@@ -63,7 +63,7 @@ public class MemberStatusDbm extends AbstractDBMeta {
     protected final String _tableDbName = "member_status";
     protected final String _tableDispName = "MEMBER_STATUS";
     protected final String _tablePropertyName = "memberStatus";
-    protected final TableSqlName _tableSqlName = new TableSqlName("member_status", _tableDbName);
+    protected final TableSqlName _tableSqlName = new TableSqlName("MEMBER_STATUS", _tableDbName);
     { _tableSqlName.xacceptFilter(DBFluteConfig.getInstance().getTableSqlNameFilter()); }
     public String getTableDbName() { return _tableDbName; }
     public String getTableDispName() { return _tableDispName; }

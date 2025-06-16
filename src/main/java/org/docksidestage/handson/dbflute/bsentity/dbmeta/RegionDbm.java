@@ -61,7 +61,7 @@ public class RegionDbm extends AbstractDBMeta {
     protected final String _tableDbName = "region";
     protected final String _tableDispName = "REGION";
     protected final String _tablePropertyName = "region";
-    protected final TableSqlName _tableSqlName = new TableSqlName("region", _tableDbName);
+    protected final TableSqlName _tableSqlName = new TableSqlName("REGION", _tableDbName);
     { _tableSqlName.xacceptFilter(DBFluteConfig.getInstance().getTableSqlNameFilter()); }
     public String getTableDbName() { return _tableDbName; }
     public String getTableDispName() { return _tableDispName; }

@@ -72,7 +72,7 @@ public class ServiceRankDbm extends AbstractDBMeta {
     protected final String _tableDbName = "service_rank";
     protected final String _tableDispName = "SERVICE_RANK";
     protected final String _tablePropertyName = "serviceRank";
-    protected final TableSqlName _tableSqlName = new TableSqlName("service_rank", _tableDbName);
+    protected final TableSqlName _tableSqlName = new TableSqlName("SERVICE_RANK", _tableDbName);
     { _tableSqlName.xacceptFilter(DBFluteConfig.getInstance().getTableSqlNameFilter()); }
     public String getTableDbName() { return _tableDbName; }
     public String getTableDispName() { return _tableDispName; }

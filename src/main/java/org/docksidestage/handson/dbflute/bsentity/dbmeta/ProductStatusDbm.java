@@ -61,7 +61,7 @@ public class ProductStatusDbm extends AbstractDBMeta {
     protected final String _tableDbName = "product_status";
     protected final String _tableDispName = "PRODUCT_STATUS";
     protected final String _tablePropertyName = "productStatus";
-    protected final TableSqlName _tableSqlName = new TableSqlName("product_status", _tableDbName);
+    protected final TableSqlName _tableSqlName = new TableSqlName("PRODUCT_STATUS", _tableDbName);
     { _tableSqlName.xacceptFilter(DBFluteConfig.getInstance().getTableSqlNameFilter()); }
     public String getTableDbName() { return _tableDbName; }
     public String getTableDispName() { return _tableDispName; }

@@ -62,7 +62,7 @@ public class WithdrawalReasonDbm extends AbstractDBMeta {
     protected final String _tableDbName = "withdrawal_reason";
     protected final String _tableDispName = "WITHDRAWAL_REASON";
     protected final String _tablePropertyName = "withdrawalReason";
-    protected final TableSqlName _tableSqlName = new TableSqlName("withdrawal_reason", _tableDbName);
+    protected final TableSqlName _tableSqlName = new TableSqlName("WITHDRAWAL_REASON", _tableDbName);
     { _tableSqlName.xacceptFilter(DBFluteConfig.getInstance().getTableSqlNameFilter()); }
     public String getTableDbName() { return _tableDbName; }
     public String getTableDispName() { return _tableDispName; }

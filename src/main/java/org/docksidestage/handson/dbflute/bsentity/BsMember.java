@@ -8,6 +8,7 @@ import org.dbflute.dbmeta.DBMeta;
 import org.dbflute.dbmeta.AbstractEntity;
 import org.dbflute.dbmeta.accessory.DomainEntity;
 import org.dbflute.optional.OptionalEntity;
+import org.docksidestage.handson.dbflute.allcommon.EntityDefinedCommonColumn;
 import org.docksidestage.handson.dbflute.allcommon.DBMetaInstanceHandler;
 import org.docksidestage.handson.dbflute.allcommon.CDef;
 import org.docksidestage.handson.dbflute.exentity.*;
@@ -18,7 +19,7 @@ import org.docksidestage.handson.dbflute.exentity.*;
  * 基本的に物理削除はなく、退会したらステータスが退会会員になる。
  * @author DBFlute(AutoGenerator)
  */
-public abstract class BsMember extends AbstractEntity implements DomainEntity {
+public abstract class BsMember extends AbstractEntity implements DomainEntity, EntityDefinedCommonColumn {
 
     // ===================================================================================
     //                                                                          Definition

@@ -8,6 +8,7 @@ import org.dbflute.dbmeta.DBMeta;
 import org.dbflute.dbmeta.AbstractEntity;
 import org.dbflute.dbmeta.accessory.DomainEntity;
 import org.dbflute.optional.OptionalEntity;
+import org.docksidestage.handson.dbflute.allcommon.EntityDefinedCommonColumn;
 import org.docksidestage.handson.dbflute.allcommon.DBMetaInstanceHandler;
 import org.docksidestage.handson.dbflute.allcommon.CDef;
 import org.docksidestage.handson.dbflute.exentity.*;
@@ -18,7 +19,7 @@ import org.docksidestage.handson.dbflute.exentity.*;
  * 一回の購入で一つの商品を複数個買うこともある。
  * @author DBFlute(AutoGenerator)
  */
-public abstract class BsPurchase extends AbstractEntity implements DomainEntity {
+public abstract class BsPurchase extends AbstractEntity implements DomainEntity, EntityDefinedCommonColumn {
 
     // ===================================================================================
     //                                                                          Definition

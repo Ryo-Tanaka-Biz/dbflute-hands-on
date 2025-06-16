@@ -8,6 +8,7 @@ import org.dbflute.dbmeta.DBMeta;
 import org.dbflute.dbmeta.AbstractEntity;
 import org.dbflute.dbmeta.accessory.DomainEntity;
 import org.dbflute.optional.OptionalEntity;
+import org.docksidestage.handson.dbflute.allcommon.EntityDefinedCommonColumn;
 import org.docksidestage.handson.dbflute.allcommon.DBMetaInstanceHandler;
 import org.docksidestage.handson.dbflute.exentity.*;
 
@@ -16,7 +17,7 @@ import org.docksidestage.handson.dbflute.exentity.*;
  * 会員とは one-to-one で、会員一人につき必ず一つのセキュリティ情報がある
  * @author DBFlute(AutoGenerator)
  */
-public abstract class BsMemberSecurity extends AbstractEntity implements DomainEntity {
+public abstract class BsMemberSecurity extends AbstractEntity implements DomainEntity, EntityDefinedCommonColumn {
 
     // ===================================================================================
     //                                                                          Definition
