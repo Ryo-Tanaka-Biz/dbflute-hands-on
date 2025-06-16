@@ -1,0 +1,23 @@
+map:{
+    ; 2025/06/13 17:00:37.164 = map:{
+        ; diffDate = 2025/06/13 17:00:37.164
+        ; diffAuthor = ryo.tanaka
+        ; diffGitBranch = master
+        ; tableDiff = map:{
+            ; purchase = map:{
+                ; tableName = purchase
+                ; diffType = CHANGE
+                ; columnDiff = map:{
+                    ; PAYMENT_COMPLETE_FLG = map:{
+                        ; columnName = PAYMENT_COMPLETE_FLG
+                        ; diffType = CHANGE
+                        ; notNullDiff = map:{
+                            ; next = true
+                            ; previous = false
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
