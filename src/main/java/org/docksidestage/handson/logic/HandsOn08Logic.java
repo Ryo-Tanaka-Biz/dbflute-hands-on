@@ -71,6 +71,7 @@ public class HandsOn08Logic {
         memberBhv.updateNonstrict(member);
     }
 
+    // TODO tanaryo 引数名 args じゃなくて arg by jflute (2025/06/19)
     /**
      * nullチェック
      *

@@ -21,13 +21,14 @@ public class CurrentTimeLogic {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
+    // TODO tanaryo message by jflute (2025/06/19)
     @Resource
     private MemberBhv memberBhv;
 
     // ===================================================================================
     //
     //                                                                        ============
-
+    // TODO tanaryo javadoc, せっかくなので @return 書きましょう by jflute (2025/06/19)
     /**
      * LocalDate で現在日時を戻す
      */

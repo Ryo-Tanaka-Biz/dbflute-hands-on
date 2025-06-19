@@ -16,6 +16,7 @@ import org.docksidestage.handson.dbflute.exentity.MemberService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO tanaryo ↑unusedの警告を見ましょう by jflute (2025/06/19)
 /**
  * author tanaryo
  */
@@ -23,6 +24,7 @@ public class HandsOn07Logic {
     // ===================================================================================
     //                                                                          Definition
     //                                                                          ==========
+	// TODO tanaryo unusedの警告を見ましょう by jflute (2025/06/19)
     private static final Logger logger = LoggerFactory.getLogger(HandsOn07Logic.class);
 
     // ===================================================================================
@@ -40,7 +42,7 @@ public class HandsOn07Logic {
     // ===================================================================================
     //                                                                              suffix
     //                                                                        ============
-
+    // TODO tanaryo javadoc, (NotNull) をお願いします by jflute (2025/06/19)
     /**
      * 自分自身の会員を登録
      *
@@ -50,6 +52,8 @@ public class HandsOn07Logic {
         doInsertMyselfMember(member);
     }
 
+    // TODO tanaryo javadoc, 会員セキュリティのところ、"登録時の動的項目のみsetしてください" みたいな一言 by jflute (2025/06/19)
+    // TODO tanaryo javadoc, 会員のところ、"新規登録会員" みたいなニュアンスが入ると良い by jflute (2025/06/19)
     /**
      * 誰かを正式会員として登録
      * 業務的に必須の関連テーブルも登録
@@ -61,10 +65,18 @@ public class HandsOn07Logic {
      */
     public void insertYourselfMember(Member member, MemberSecurity memberSecurity) {
         doInsertMyselfMember(member);
+        // [1on1でのふぉろー] SecurityをEntityで受け取るか？個別引数で受け取るか？のジレンマ
+        // スーパー厳密性を求めるなら、個別引数 or 専用引数入れ物クラス、だけど...
+        // 個別引数も数が多かったら問題あるし...専用引数入れ物クラスは大げさ？
+        // ここはもうアクセルの踏み具合次第なので完全にケースバイケース。
+        // 現状なら今のままでもそこまで悪くない。このジレンマを意識しておくことが大事。
+        // 業務の重要性にも寄る。超重要業務だったら、ガチガチにやってもいいしと。
         insertMemberSecurity(member.getMemberId(), memberSecurity);
         insertMemberService(member.getMemberId());
     }
 
+    // TODO tanaryo タグコメント Assist Logic 入れてみましょう by jflute (2025/06/19)
+    // TODO tanaryo 御自身で気づいたら点、ここはもうMyselfではない by jflute (2025/06/19)
     /**
      * 会員を登録
      * 正式会員で登録
@@ -96,6 +108,7 @@ public class HandsOn07Logic {
      * @param memberId 会員id
      */
     private void insertMemberService(Integer memberId) {
+    	// [いいね] Serviceは会員登録時に動的な値がないので内部で閉じてるのGood
         MemberService memberService = new MemberService();
         memberService.setMemberId(memberId);
         memberService.setAkirakaniOkashiiKaramuMei(0);
