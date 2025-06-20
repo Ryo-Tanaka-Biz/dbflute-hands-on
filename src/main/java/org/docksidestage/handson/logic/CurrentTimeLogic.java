@@ -4,20 +4,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
- * author tanaryo
+ * @author tanaryo
  */
 public class CurrentTimeLogic {
-    // ===================================================================================
-    //                                                                          Definition
-    //                                                                          ==========
-
-    // ===================================================================================
-    //                                                                           Attribute
-    //                                                                           =========
     // done tanaryo message by jflute (2025/06/19)
-
     // ===================================================================================
-    //
+    //                                                                               Logic
     //                                                                        ============
     // done tanaryo javadoc, せっかくなので @return 書きましょう by jflute (2025/06/19)
     /**

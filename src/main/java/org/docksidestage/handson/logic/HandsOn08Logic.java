@@ -6,7 +6,7 @@ import org.docksidestage.handson.dbflute.exbhv.*;
 import org.docksidestage.handson.dbflute.exentity.Member;
 
 /**
- * author tanaryo
+ * @author tanaryo
  */
 public class HandsOn08Logic {
     // ===================================================================================
@@ -57,14 +57,14 @@ public class HandsOn08Logic {
         memberBhv.updateNonstrict(member);
     }
 
-    // TODO tanaryo javadoc, memberId は NotNull じゃなく、nullOKなので (NullAllowed) で by jflute (2025/06/21)
+    // TODO done tanaryo javadoc, memberId は NotNull じゃなく、nullOKなので (NullAllowed) で by jflute (2025/06/21)
     // e.g. @param memberId 会員Id (NullAllowed: nullなら何もしない)
     /**
      * 指定された会員の購入を排他制御なしで削除する ※queryDelete(...)
      * 検索処理は入れずに削除してみましょう
      * 苦難があっても頑張って削除してみましょう
      * 引数の値は null も許される (null なら何もしない)
-     * @param memberId 会員Id(NotNull)
+     * @param memberId 会員Id(NullAllowed: nullなら何もしない)
      */
     public void deletePurchaseSimply(Integer memberId){
         if (memberId == null) {
@@ -73,8 +73,7 @@ public class HandsOn08Logic {
 
         // FK制約あるので、先に購入支払いを削除
         purchasePaymentBhv.queryDelete(cb ->{
-        	// TODO tanaryo 惜しい。このsetupSelectは不要です。検索してデータ取るわけじゃないので。 by jflute (2025/06/21)
-           cb.setupSelect_Purchase();
+        	// TODO done tanaryo 惜しい。このsetupSelectは不要です。検索してデータ取るわけじゃないので。 by jflute (2025/06/21)
            cb.query().queryPurchase().setMemberId_Equal(memberId);
         });
 

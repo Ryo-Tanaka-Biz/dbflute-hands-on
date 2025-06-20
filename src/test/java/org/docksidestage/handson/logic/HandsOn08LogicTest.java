@@ -1,7 +1,5 @@
 package org.docksidestage.handson.logic;
 
-import java.util.NoSuchElementException;
-
 import javax.annotation.Resource;
 
 import org.dbflute.exception.EntityAlreadyUpdatedException;
@@ -13,7 +11,11 @@ import org.docksidestage.handson.dbflute.exentity.Member;
 import org.docksidestage.handson.dbflute.exentity.Purchase;
 import org.docksidestage.handson.unit.UnitContainerTestCase;
 
-// TODO tanaryo javadocお願い by jflute (2025/06/21)
+// TODO done tanaryo javadocお願い by jflute (2025/06/21)
+
+/**
+ * @author tanaryo
+ */
 public class HandsOn08LogicTest extends UnitContainerTestCase {
     // ===================================================================================
     //                                                                           Attribute
@@ -23,15 +25,11 @@ public class HandsOn08LogicTest extends UnitContainerTestCase {
     @Resource
     private PurchaseBhv purchaseBhv;
     @Resource
-    private ProductBhv productBhv;
-
-    @Resource
     private HandsOn08Logic logic;
 
     // ===================================================================================
     //                                                                                Test
     //                                                                        ============
-
     /**
      * 任意の仮会員の会員IDとバージョンNOを渡して更新すること
      * テストデータ上で任意の仮会員のIDが何番なのかに依存しないように
@@ -197,42 +195,47 @@ public class HandsOn08LogicTest extends UnitContainerTestCase {
         //ロックを保持したまま、別のロックの取得を待つのが前提？
     }
 
-    // TODO tanaryo Assist Logic な感じのタグコメントが欲しいところ by jflute (2025/06/21)
-    // TODO tanaryo javadoc, Nullの可否をお願いします by jflute (2025/06/21)
+    // ===================================================================================
+    //                                                                   Assist Test Logic
+    //                                                                        ============
+    // TODO done tanaryo Assist Logic な感じのタグコメントが欲しいところ by jflute (2025/06/21)
+    // TODO done tanaryo javadoc, Nullの可否をお願いします by jflute (2025/06/21)
     /**
      * 仮会員を任意で検索
      *
-     * @return 会員
+     * @return Member(NotNull)
      */
     private Member findProvisionalMember() {
-    	// TODO tanaryo ConditionBeanのfetchFirst(1)でselectEntity()の方が無駄メモリがない by jflute (2025/06/21)
-        return memberBhv.selectList(cb -> {
+        // TODO done tanaryo ConditionBeanのfetchFirst(1)でselectEntity()の方が無駄メモリがない by jflute (2025/06/21)
+        return memberBhv.selectEntity(cb -> {
             cb.query().setMemberStatusCode_Equal_仮会員();
-        }).stream().findAny().orElseThrow(NoSuchElementException::new);//java10だと()でいける
+            cb.fetchFirst(1);
+        }).orElseThrow();
     }
 
     /**
      * 購入を持つ会員を任意で検索
      *
-     * @return 会員
+     * @return Member(NotNull)
      */
     private Member findExistsPurchaseMember() {
-        return memberBhv.selectList(cb -> {
+        return memberBhv.selectEntity(cb -> {
             cb.query().existsPurchase(subCB -> {
             });
-        }).stream().findAny().orElseThrow(NoSuchElementException::new);
-        //java10だと()でいける
+            cb.fetchFirst(1);
+        }).orElseThrow();
     }
 
     /**
      * 特定の会員に紐づく購入を任意で検索
      *
-     * @param memberId 会員Id
-     * @return 購入
+     * @param memberId 会員Id(NotNull)
+     * @return Purchase(NotNull)
      */
     private Purchase findPurchase(Integer memberId) {
-        return purchaseBhv.selectList(cb -> {
+        return purchaseBhv.selectEntity(cb -> {
             cb.query().setMemberId_Equal(memberId);
-        }).stream().findAny().orElseThrow(NoSuchElementException::new);
+            cb.fetchFirst(1);
+        }).orElseThrow();
     }
 }

@@ -4,7 +4,6 @@ import java.time.LocalDate;
 
 import javax.annotation.Resource;
 
-import org.dbflute.optional.OptionalEntity;
 import org.docksidestage.handson.dbflute.exbhv.MemberBhv;
 import org.docksidestage.handson.dbflute.exbhv.MemberSecurityBhv;
 import org.docksidestage.handson.dbflute.exbhv.MemberServiceBhv;
@@ -13,7 +12,7 @@ import org.docksidestage.handson.dbflute.exentity.Member;
 import org.docksidestage.handson.dbflute.exentity.MemberSecurity;
 import org.docksidestage.handson.unit.UnitContainerTestCase;
 
-// TODO tanaryo どうしてもimport文のunusedは出てしまいますね↑ by jflute (2025/06/21)
+// TODO done tanaryo どうしてもimport文のunusedは出てしまいますね↑ by jflute (2025/06/21)
 // done tanaryo テストクラス、Logicのテストクラスの名前と配置にしましょう by jflute (2025/06/19)
 
 /**
