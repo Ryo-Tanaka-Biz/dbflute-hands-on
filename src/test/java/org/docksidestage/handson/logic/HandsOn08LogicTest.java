@@ -1,28 +1,34 @@
 package org.docksidestage.handson.logic;
 
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 import javax.annotation.Resource;
 
+import org.dbflute.exception.EntityAlreadyUpdatedException;
+import org.dbflute.utflute.core.cannonball.CannonballOption;
 import org.docksidestage.handson.dbflute.exbhv.MemberBhv;
+import org.docksidestage.handson.dbflute.exbhv.ProductBhv;
+import org.docksidestage.handson.dbflute.exbhv.PurchaseBhv;
 import org.docksidestage.handson.dbflute.exentity.Member;
+import org.docksidestage.handson.dbflute.exentity.Purchase;
 import org.docksidestage.handson.unit.UnitContainerTestCase;
 
-/**
- * @author tanaryo
- */
 public class HandsOn08LogicTest extends UnitContainerTestCase {
     // ===================================================================================
     //                                                                           Attribute
-    //                                                                    =========
+    //                                                                           =========
     @Resource
     private MemberBhv memberBhv;
+    @Resource
+    private PurchaseBhv purchaseBhv;
+    @Resource
+    private ProductBhv productBhv;
 
     @Resource
     private HandsOn08Logic logic;
 
     // ===================================================================================
-    //                                                     updateMemberChangedToFormalized
+    //                                                                                Test
     //                                                                        ============
 
     /**
@@ -32,25 +38,22 @@ public class HandsOn08LogicTest extends UnitContainerTestCase {
      */
     public void test_updateMemberChangedToFormalized_会員が更新されていること() {
         // ## Arrange ##
-    	// TODO tanaryo Optionalの解決をもっと丁寧に by jflute (2025/06/19)
-        Optional<Member> member = findProvisionalMember();
-        Integer memberId = member.map(Member::getMemberId).orElse(null);
-        Long versionNo = member.map(Member::getVersionNo).orElse(null);
+        // TODO done tanaryo Optionalの解決をもっと丁寧に by jflute (2025/06/19)
+        Member member = findProvisionalMember();
+        Integer memberId = member.getMemberId();
+        Long versionNo = member.getVersionNo();
+        // TODO done tanaryo 全体のアサートは、Arrangeの中にあってもいい by jflute (2025/06/19)
+        assertTrue(member.isMemberStatusCode仮会員());
 
         // ## Act ##
         logic.updateMemberChangedToFormalized(memberId, versionNo);
 
         // ## Assert ##
-        // TODO tanaryo 全体のアサートは、Arrangeの中にあってもいい by jflute (2025/06/19)
-        member.ifPresent(mb -> {
-            assertTrue(mb.isMemberStatusCode仮会員());
-        });
-
-        memberBhv.selectByPK(memberId).ifPresent(updatedMember -> {
-            assertTrue(updatedMember.isMemberStatusCode正式会員());
-            // TODO tanaryo assertEquals()というメソッドがあるので、そっちを使いましょう by jflute (2025/06/19)
-            assertTrue(updatedMember.getVersionNo().equals(versionNo + 1));
-        });
+        Member updatedMember = memberBhv.selectByPK(memberId).orElseThrow();
+        assertTrue(updatedMember.isMemberStatusCode正式会員());
+        // TODO done tanaryo assertEquals()というメソッドがあるので、そっちを使いましょう by jflute (2025/06/19)
+        long updatedVersionNo = updatedMember.getVersionNo();
+        assertEquals(versionNo + 1, updatedVersionNo);
     }
 
     /**
@@ -60,26 +63,21 @@ public class HandsOn08LogicTest extends UnitContainerTestCase {
      */
     public void test_updateMemberChangedToFormalized_排他制御例外が発生すること() {
         // ## Arrange ##
-        Optional<Member> member = findProvisionalMember();
-        Integer memberId = member.map(Member::getMemberId).orElse(null);
-        Long versionNo = member.map(Member::getVersionNo).orElse(null);
-
-        // ## Act ##
-        // TODO tanaryo 一個目のupdateは、Arrangeと捉えていいかなと by jflute (2025/06/19)
+        Member member = findProvisionalMember();
+        Integer memberId = member.getMemberId();
+        Long versionNo = member.getVersionNo();
+        // TODO done tanaryo 一個目のupdateは、Arrangeと捉えていいかなと by jflute (2025/06/19)
         logic.updateMemberChangedToFormalized(memberId, versionNo);
 
+        // ## Act ##
         // ## Assert ##
-        // TODO tanaryo 例外クラス名、FQCNである必要はないかと by jflute (2025/06/19)
-        assertException(org.dbflute.exception.EntityAlreadyUpdatedException.class, () -> {
+        // TODO done tanaryo 例外クラス名、FQCNである必要はないかと by jflute (2025/06/19)
+        assertException(EntityAlreadyUpdatedException.class, () -> {
             logic.updateMemberChangedToFormalized(memberId, versionNo);
         });
         // ログ出力も確認した
         // versionNoを+1すると例外発生しない
     }
-
-    // ===================================================================================
-    //                                                                             XXXXXXX
-    //                                                                        ============
 
     /**
      * 任意の仮会員の会員IDを渡して更新すること
@@ -87,16 +85,14 @@ public class HandsOn08LogicTest extends UnitContainerTestCase {
      */
     public void test_updateMemberChangedToFormalizedNonstrict_会員が更新されていること() {
         // ## Arrange ##
-        Optional<Member> member = findProvisionalMember();
-        Integer memberId = member.map(Member::getMemberId).orElse(null);
+        Member member = findProvisionalMember();
+        Integer memberId = member.getMemberId();
+        assertTrue(member.isMemberStatusCode仮会員());
 
         // ## Act ##
         logic.updateMemberChangedToFormalizedNonstrict(memberId);
 
         // ## Assert ##
-        member.ifPresent(mb -> {
-            assertTrue(mb.isMemberStatusCode仮会員());
-        });
 
         memberBhv.selectByPK(memberId).ifPresent(updatedMember -> {
             assertTrue(updatedMember.isMemberStatusCode正式会員());
@@ -108,16 +104,16 @@ public class HandsOn08LogicTest extends UnitContainerTestCase {
      */
     public void test_updateMemberChangedToFormalizedNonstrict_排他制御例外が発生しないこと() {
         // ## Arrange ##
-        Optional<Member> member = findProvisionalMember();
-        Integer memberId = member.map(Member::getMemberId).orElse(null);
+        Member member = findProvisionalMember();
+        Integer memberId = member.getMemberId();
         boolean isThrowException = false;
 
         // ## Act ##
         logic.updateMemberChangedToFormalizedNonstrict(memberId);
         try {
             logic.updateMemberChangedToFormalizedNonstrict(memberId);
-        } catch (org.dbflute.exception.EntityAlreadyUpdatedException e) {
-        	// TODO jflute できてるんだけど、書き方のフォロー (2025/06/19)
+        } catch (EntityAlreadyUpdatedException e) {
+            // TODO jflute できてるんだけど、書き方のフォロー (2025/06/19)
             isThrowException = true;
         }
 
@@ -125,9 +121,98 @@ public class HandsOn08LogicTest extends UnitContainerTestCase {
         assertFalse(isThrowException);
     }
 
-    private Optional<Member> findProvisionalMember() {
+    /**
+     * 任意の正式会員の会員IDを渡して削除すること
+     * 削除処理後、DB上のデータが削除されていることをアサート
+     *
+     */
+    public void test_deletePurchaseSimply_購入が削除されていること() {
+        // ## Arrange ##
+        Member member = findExistsPurchaseMember();
+        Integer memberId = member.getMemberId();
+        int purchaseCount = purchaseBhv.selectCount(cb -> cb.query().setMemberId_Equal(memberId));
+        assertTrue(purchaseCount >= 1);//2件以上のテストもしたい
+
+        // ## Act ##
+        logic.deletePurchaseSimply(memberId);
+        int deletedPurchaseCount = purchaseBhv.selectCount(cb -> cb.query().setMemberId_Equal(memberId));
+
+        // ## Assert ##
+        assertEquals(deletedPurchaseCount, 0);
+    }
+
+    /**
+     * cannonball()メソッドを使ってデッドロックを発生させてみること
+     * 例外メッセージに "Deadlock" という文字が含まれていることをアサート
+     */
+    public void test_IfYouLike_DeadLock() {
+        // ## Arrange ##
+        Integer memberId = findExistsPurchaseMember().getMemberId();
+        Purchase purchase = findPurchase(memberId);
+        Long purchaseId = purchase.getPurchaseId();
+        Long purchaseVersionNo = purchase.getVersionNo();
+
+        // ## Act ##
+        // ## Assert ##
+        cannonball(car -> {
+            //処理A
+            car.projectA(dragon -> {
+                Member member = new Member();
+                member.setMemberId(memberId);
+                member.setMemberName("田中");
+                memberBhv.updateNonstrict(member);
+            }, 1);//スレッド1はmemberの行をロック
+
+            //処理B
+            car.projectA(dragon -> {
+                Purchase purchaseEntity = new Purchase();
+                purchaseEntity.setPurchaseId(purchaseId);
+                purchaseEntity.setPurchaseCount(5);
+                purchaseEntity.setVersionNo(purchaseVersionNo);
+                purchaseBhv.update(purchaseEntity);
+
+            }, 2);//スレッド2はpurchaseの行をロック
+
+            //処理C
+            car.projectA(dragon -> {
+                Purchase purchaseEntity = new Purchase();
+                purchaseEntity.setPurchaseId(purchaseId);
+                purchaseEntity.setPurchaseCount(5);
+                purchaseEntity.setVersionNo(purchaseVersionNo);
+                purchaseBhv.update(purchaseEntity);
+
+            }, 1);//スレッド1はpurchaseの行ロックしようとするが、スレッド2がロックしているので待機状態
+
+            //処理D
+            car.projectA(dragon -> {
+                Member member = new Member();
+                member.setMemberId(memberId);
+                member.setMemberName("田中");
+                memberBhv.updateNonstrict(member);
+            }, 2);//スレッド2はmemberの行ロックしようとするが、スレッド1がロックしているので待機状態
+        }, new CannonballOption().threadCount(2).expectExceptionAny("Deadlock"));
+        //A->B->C->Dの順の場合、お互いが相手のロックを待つ状態になる
+        //A->D->B->Cの場合、スレッド2がロックを待つ状態で、スレッド1はロック待ちしない
+        //ロックを保持したまま、別のロックの取得を待つのが前提？
+    }
+
+    private Member findProvisionalMember() {
         return memberBhv.selectList(cb -> {
             cb.query().setMemberStatusCode_Equal_仮会員();
-        }).stream().findFirst();
+        }).stream().findAny().orElseThrow(NoSuchElementException::new);//java10だと()でいける
+    }
+
+    private Member findExistsPurchaseMember() {
+        return memberBhv.selectList(cb -> {
+            cb.query().existsPurchase(subCB -> {
+            });
+        }).stream().findAny().orElseThrow(NoSuchElementException::new);
+        //java10だと()でいける
+    }
+
+    private Purchase findPurchase(Integer memberId) {
+        return purchaseBhv.selectList(cb -> {
+            cb.query().setMemberId_Equal(memberId);
+        }).stream().findAny().orElseThrow(NoSuchElementException::new);
     }
 }

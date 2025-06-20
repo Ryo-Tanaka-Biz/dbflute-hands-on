@@ -19,16 +19,16 @@ public class CurrentTimeLogic {
     // ===================================================================================
     //
     //                                                                        ============
-    // TODO tanaryo javadoc, せっかくなので @return 書きましょう by jflute (2025/06/19)
+    // TODO done tanaryo javadoc, せっかくなので @return 書きましょう by jflute (2025/06/19)
     /**
-     * LocalDate で現在日時を戻す
+     * @return 現在日付(NotNull)
      */
     public LocalDate currentDate(){
         return LocalDate.now();
     }
 
     /**
-     * LocalDateTime で現在日時を戻す
+     * @return 現在日時(NotNull)
      */
     public LocalDateTime currentDateTime(){
         return  LocalDateTime.now();

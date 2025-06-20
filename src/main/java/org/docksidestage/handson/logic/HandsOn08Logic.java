@@ -2,20 +2,13 @@ package org.docksidestage.handson.logic;
 
 import javax.annotation.Resource;
 
-import org.docksidestage.handson.dbflute.exbhv.MemberBhv;
-import org.docksidestage.handson.dbflute.exbhv.MemberSecurityBhv;
-import org.docksidestage.handson.dbflute.exbhv.MemberServiceBhv;
-import org.docksidestage.handson.dbflute.exbhv.PurchaseBhv;
+import org.docksidestage.handson.dbflute.exbhv.*;
 import org.docksidestage.handson.dbflute.exentity.Member;
 
 /**
  * author tanaryo
  */
 public class HandsOn08Logic {
-    // ===================================================================================
-    //                                                                          Definition
-    //                                                                          ==========
-
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
@@ -24,16 +17,11 @@ public class HandsOn08Logic {
     @Resource
     private PurchaseBhv purchaseBhv;
     @Resource
-    private MemberSecurityBhv memberSecurityBhv;
-    @Resource
-    private MemberServiceBhv memberServiceBhv;
-    @Resource
-    private CurrentTimeLogic currentTimeLogic;
+    private PurchasePaymentBhv purchasePaymentBhv;
 
     // ===================================================================================
-    //                                                                              XXXXXX
+    //                                                                               Logic
     //                                                                        ============
-
     /**
      * 指定された会員を正式会員に更新する
      * 排他制御ありで更新する
@@ -69,7 +57,6 @@ public class HandsOn08Logic {
         memberBhv.updateNonstrict(member);
     }
 
-    // TODO tanaryo 引数名 args じゃなくて arg by jflute (2025/06/19)
     /**
      * 指定された会員の購入を排他制御なしで削除する ※queryDelete(...)
      * 検索処理は入れずに削除してみましょう
@@ -82,16 +69,26 @@ public class HandsOn08Logic {
             return; // nullなら何もしない
         }
 
+        // FK制約あるので、先に購入支払いを削除
+        purchasePaymentBhv.queryDelete(cb ->{
+           cb.setupSelect_Purchase();
+           cb.query().queryPurchase().setMemberId_Equal(memberId);
+        });
 
+        // そのあと購入を削除
+        purchaseBhv.queryDelete(cb -> {
+            cb.query().setMemberId_Equal(memberId);
+        });
     }
 
+    // TODO done tanaryo 引数名 args じゃなくて arg by jflute (2025/06/19)
     /**
      * nullチェック
      *
-     * @param args 引数
+     * @param arg 引数
      */
-    private void assertNotNull(Object args) {
-        if (args == null) {
+    private void assertNotNull(Object arg) {
+        if (arg == null) {
             throw new IllegalArgumentException("args is null");
         }
     }
