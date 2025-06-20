@@ -9,13 +9,14 @@ import org.docksidestage.handson.dbflute.exentity.Member;
 import org.docksidestage.handson.dbflute.exentity.MemberSecurity;
 import org.docksidestage.handson.dbflute.exentity.MemberService;
 
-// TODO done tanaryo ↑unusedの警告を見ましょう by jflute (2025/06/19)
+// done tanaryo ↑unusedの警告を見ましょう by jflute (2025/06/19)
 
+// TODO tanaryo 細かいけど、authorは @author というようにアットマークを付けないと認識されないです by jflute (2025/06/21)
 /**
  * author tanaryo
  */
 public class HandsOn07Logic {
-    // TODO done tanaryo unusedの警告を見ましょう by jflute (2025/06/19)
+    // done tanaryo unusedの警告を見ましょう by jflute (2025/06/19)
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
@@ -31,7 +32,7 @@ public class HandsOn07Logic {
     // ===================================================================================
     //                                                                               Logic
     //                                                                        ============
-    // TODO done tanaryo javadoc, (NotNull) をお願いします by jflute (2025/06/19)
+    // done tanaryo javadoc, (NotNull) をお願いします by jflute (2025/06/19)
     /**
      * 自分自身の会員を登録
      *
@@ -41,8 +42,8 @@ public class HandsOn07Logic {
         doInsertMember(member);
     }
 
-    // TODO done tanaryo javadoc, 会員セキュリティのところ、"登録時の動的項目のみsetしてください" みたいな一言 by jflute (2025/06/19)
-    // TODO done tanaryo javadoc, 会員のところ、"新規登録会員" みたいなニュアンスが入ると良い by jflute (2025/06/19)
+    // done tanaryo javadoc, 会員セキュリティのところ、"登録時の動的項目のみsetしてください" みたいな一言 by jflute (2025/06/19)
+    // done tanaryo javadoc, 会員のところ、"新規登録会員" みたいなニュアンスが入ると良い by jflute (2025/06/19)
     /**
      * 誰かを正式会員として登録
      * 業務的に必須の関連テーブルも登録
@@ -92,8 +93,8 @@ public class HandsOn07Logic {
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
-    // TODO done tanaryo タグコメント Assist Logic 入れてみましょう by jflute (2025/06/19)
-    // TODO done tanaryo 御自身で気づいたら点、ここはもうMyselfではない by jflute (2025/06/19)
+    // done tanaryo タグコメント Assist Logic 入れてみましょう by jflute (2025/06/19)
+    // done tanaryo 御自身で気づいたら点、ここはもうMyselfではない by jflute (2025/06/19)
     /**
      * 会員を登録
      * 正式会員で登録

@@ -14,12 +14,12 @@ public class CurrentTimeLogic {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    // TODO done tanaryo message by jflute (2025/06/19)
+    // done tanaryo message by jflute (2025/06/19)
 
     // ===================================================================================
     //
     //                                                                        ============
-    // TODO done tanaryo javadoc, せっかくなので @return 書きましょう by jflute (2025/06/19)
+    // done tanaryo javadoc, せっかくなので @return 書きましょう by jflute (2025/06/19)
     /**
      * @return 現在日付(NotNull)
      */

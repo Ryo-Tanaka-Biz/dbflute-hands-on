@@ -13,6 +13,7 @@ import org.docksidestage.handson.dbflute.exentity.Member;
 import org.docksidestage.handson.dbflute.exentity.Purchase;
 import org.docksidestage.handson.unit.UnitContainerTestCase;
 
+// TODO tanaryo javadocお願い by jflute (2025/06/21)
 public class HandsOn08LogicTest extends UnitContainerTestCase {
     // ===================================================================================
     //                                                                           Attribute
@@ -38,11 +39,11 @@ public class HandsOn08LogicTest extends UnitContainerTestCase {
      */
     public void test_updateMemberChangedToFormalized_会員が更新されていること() {
         // ## Arrange ##
-        // TODO done tanaryo Optionalの解決をもっと丁寧に by jflute (2025/06/19)
+        // done tanaryo Optionalの解決をもっと丁寧に by jflute (2025/06/19)
         Member member = findProvisionalMember();
         Integer memberId = member.getMemberId();
         Long versionNo = member.getVersionNo();
-        // TODO done tanaryo 全体のアサートは、Arrangeの中にあってもいい by jflute (2025/06/19)
+        // done tanaryo 前提のアサートは、Arrangeの中にあってもいい by jflute (2025/06/19)
         assertTrue(member.isMemberStatusCode仮会員());
 
         // ## Act ##
@@ -51,7 +52,7 @@ public class HandsOn08LogicTest extends UnitContainerTestCase {
         // ## Assert ##
         Member updatedMember = memberBhv.selectByPK(memberId).orElseThrow();
         assertTrue(updatedMember.isMemberStatusCode正式会員());
-        // TODO done tanaryo assertEquals()というメソッドがあるので、そっちを使いましょう by jflute (2025/06/19)
+        // done tanaryo assertEquals()というメソッドがあるので、そっちを使いましょう by jflute (2025/06/19)
         long updatedVersionNo = updatedMember.getVersionNo();
         assertEquals(versionNo + 1, updatedVersionNo);
     }
@@ -66,12 +67,12 @@ public class HandsOn08LogicTest extends UnitContainerTestCase {
         Member member = findProvisionalMember();
         Integer memberId = member.getMemberId();
         Long versionNo = member.getVersionNo();
-        // TODO done tanaryo 一個目のupdateは、Arrangeと捉えていいかなと by jflute (2025/06/19)
+        // done tanaryo 一個目のupdateは、Arrangeと捉えていいかなと by jflute (2025/06/19)
         logic.updateMemberChangedToFormalized(memberId, versionNo);
 
         // ## Act ##
         // ## Assert ##
-        // TODO done tanaryo 例外クラス名、FQCNである必要はないかと by jflute (2025/06/19)
+        // done tanaryo 例外クラス名、FQCNである必要はないかと by jflute (2025/06/19)
         assertException(EntityAlreadyUpdatedException.class, () -> {
             logic.updateMemberChangedToFormalized(memberId, versionNo);
         });
@@ -196,7 +197,9 @@ public class HandsOn08LogicTest extends UnitContainerTestCase {
         //ロックを保持したまま、別のロックの取得を待つのが前提？
     }
 
+    // TODO tanaryo Assist Logic な感じのタグコメントが欲しいところ by jflute (2025/06/21)
     private Member findProvisionalMember() {
+    	// TODO tanaryo ConditionBeanのfetchFirst(1)でselectEntity()の方が無駄メモリがない by jflute (2025/06/21)
         return memberBhv.selectList(cb -> {
             cb.query().setMemberStatusCode_Equal_仮会員();
         }).stream().findAny().orElseThrow(NoSuchElementException::new);//java10だと()でいける

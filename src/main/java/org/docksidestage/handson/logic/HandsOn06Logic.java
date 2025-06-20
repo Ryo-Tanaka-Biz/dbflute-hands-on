@@ -12,7 +12,7 @@ import org.docksidestage.handson.dbflute.exentity.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO jflute 1on1, 次回DBFluteを最新版にしようくらいから (2025/04/11)
+// done jflute 1on1, 次回DBFluteを最新版にしようくらいから (2025/04/11)
 
 /**
  * author tanaryo

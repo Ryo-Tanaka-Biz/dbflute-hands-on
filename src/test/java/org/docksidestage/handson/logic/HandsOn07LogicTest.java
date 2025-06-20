@@ -13,7 +13,8 @@ import org.docksidestage.handson.dbflute.exentity.Member;
 import org.docksidestage.handson.dbflute.exentity.MemberSecurity;
 import org.docksidestage.handson.unit.UnitContainerTestCase;
 
-// TODO done tanaryo テストクラス、Logicのテストクラスの名前と配置にしましょう by jflute (2025/06/19)
+// TODO tanaryo どうしてもimport文のunusedは出てしまいますね↑ by jflute (2025/06/21)
+// done tanaryo テストクラス、Logicのテストクラスの名前と配置にしましょう by jflute (2025/06/19)
 
 /**
  * @author tanaryo
@@ -43,7 +44,7 @@ public class HandsOn07LogicTest extends UnitContainerTestCase {
      */
     public void test_insertMyselfMember_会員が登録されていること() {
         // ## Arrange ##
-    	// TODO done tanaryo 定数でも、ローカル変数の場合は、普通のキャメルケースでも良い (というかそっちが多い) by jflute (2025/06/19)
+    	// done tanaryo 定数でも、ローカル変数の場合は、普通のキャメルケースでも良い (というかそっちが多い) by jflute (2025/06/19)
         String memberAccount = "AAAAA";
         String memberName = "田中太郎";
         LocalDate memberBirthdate = LocalDate.of(2000, 12, 31);
@@ -54,7 +55,7 @@ public class HandsOn07LogicTest extends UnitContainerTestCase {
         entity.setBirthdate(memberBirthdate);
 
         // [1on1でのふぉろー] UnitTestでのAccessContextのセットしているところついて。(あと、現場での話)
-        // TODO done tanaryo コメントアウトにはコメントを by jflute (2025/06/19)
+        // done tanaryo コメントアウトにはコメントを by jflute (2025/06/19)
         //　共通カラムを自動でセットするようにしたので、手動でセットしない
         //        member.setRegisterDatetime(LocalDateTime.of(2000, 12, 31, 12, 0));
         //        member.setRegisterUser("あああああ");
@@ -64,7 +65,7 @@ public class HandsOn07LogicTest extends UnitContainerTestCase {
 
         // ## Act ##
         logic.insertMyselfMember(entity);//このタイミングでPKをentityにセットしているんだっけ確か
-        // TODO done tanaryo この時点で、Optionalは解決してしまった方が万が一のときのエラーメッセージがわかりやすくなる by jflute (2025/06/19)
+        // done tanaryo この時点で、Optionalは解決してしまった方が万が一のときのエラーメッセージがわかりやすくなる by jflute (2025/06/19)
         Member member = memberBhv.selectByPK(entity.getMemberId()).orElseThrow();
 
         // ## Assert ##
@@ -97,7 +98,7 @@ public class HandsOn07LogicTest extends UnitContainerTestCase {
         // ## Act ##
         logic.insertYourselfMember(memberEntity, memberSecurityEntity);
         Member member = memberBhv.selectByPK(memberEntity.getMemberId()).orElseThrow();
-        // TODO done tanaryo そもそも、orElse(null)ってピンポイント以外は使わないって感覚で良い by jflute (2025/06/19)
+        // done tanaryo そもそも、orElse(null)ってピンポイント以外は使わないって感覚で良い by jflute (2025/06/19)
         // そのピンポイントとは？ => 本当に相手が null を求めているとき (引数とか、JSONの項目とか)
         // それ以外では、ちゃんと「ないかもしれない」という状態で管理して、解決すべきに解決する。
         // 業務的にあった当然でなければ例外でも良いような場合は、orElseThrow()系。
