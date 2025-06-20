@@ -75,6 +75,11 @@ public class HandsOn07LogicTest extends UnitContainerTestCase {
     // 共通カラムの設定したらschemaHTMLの共通カラムがグレーアウトした
     // 共通カラムのセットをコメントアウトしてテスト通ることを確認
 
+    /**
+     * 登録されていることを代表的なカラムを利用してアサート
+     * 関連テーブルの登録もアサート
+     * 登録していない関連テーブルが登録されていないこともアサート
+     */
     public void test_insertYourselfMember_会員が登録されていること() {
         // ## Arrange ##
         String memberAccount = "BBBBB";

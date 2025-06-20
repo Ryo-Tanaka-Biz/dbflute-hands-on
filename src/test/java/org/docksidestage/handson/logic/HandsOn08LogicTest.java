@@ -198,6 +198,12 @@ public class HandsOn08LogicTest extends UnitContainerTestCase {
     }
 
     // TODO tanaryo Assist Logic な感じのタグコメントが欲しいところ by jflute (2025/06/21)
+    // TODO tanaryo javadoc, Nullの可否をお願いします by jflute (2025/06/21)
+    /**
+     * 仮会員を任意で検索
+     *
+     * @return 会員
+     */
     private Member findProvisionalMember() {
     	// TODO tanaryo ConditionBeanのfetchFirst(1)でselectEntity()の方が無駄メモリがない by jflute (2025/06/21)
         return memberBhv.selectList(cb -> {
@@ -205,6 +211,11 @@ public class HandsOn08LogicTest extends UnitContainerTestCase {
         }).stream().findAny().orElseThrow(NoSuchElementException::new);//java10だと()でいける
     }
 
+    /**
+     * 購入を持つ会員を任意で検索
+     *
+     * @return 会員
+     */
     private Member findExistsPurchaseMember() {
         return memberBhv.selectList(cb -> {
             cb.query().existsPurchase(subCB -> {
@@ -213,6 +224,12 @@ public class HandsOn08LogicTest extends UnitContainerTestCase {
         //java10だと()でいける
     }
 
+    /**
+     * 特定の会員に紐づく購入を任意で検索
+     *
+     * @param memberId 会員Id
+     * @return 購入
+     */
     private Purchase findPurchase(Integer memberId) {
         return purchaseBhv.selectList(cb -> {
             cb.query().setMemberId_Equal(memberId);
