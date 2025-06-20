@@ -211,6 +211,7 @@ public class HandsOn08LogicTest extends UnitContainerTestCase {
             cb.query().setMemberStatusCode_Equal_仮会員();
             cb.fetchFirst(1);
         }).orElseThrow();
+        //確かに複数取得してjava内で1件に絞るより、取得の時点で1件に絞った方がクエリ負荷は軽そう（by tanaryo）
     }
 
     /**
