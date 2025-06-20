@@ -196,12 +196,22 @@ public class HandsOn08LogicTest extends UnitContainerTestCase {
         //ロックを保持したまま、別のロックの取得を待つのが前提？
     }
 
+    /**
+     * 仮会員を任意で検索
+     *
+     * @return 会員
+     */
     private Member findProvisionalMember() {
         return memberBhv.selectList(cb -> {
             cb.query().setMemberStatusCode_Equal_仮会員();
         }).stream().findAny().orElseThrow(NoSuchElementException::new);//java10だと()でいける
     }
 
+    /**
+     * 購入を持つ会員を任意で検索
+     *
+     * @return 会員
+     */
     private Member findExistsPurchaseMember() {
         return memberBhv.selectList(cb -> {
             cb.query().existsPurchase(subCB -> {
@@ -210,6 +220,12 @@ public class HandsOn08LogicTest extends UnitContainerTestCase {
         //java10だと()でいける
     }
 
+    /**
+     * 特定の会員に紐づく購入を任意で検索
+     *
+     * @param memberId 会員Id
+     * @return 購入
+     */
     private Purchase findPurchase(Integer memberId) {
         return purchaseBhv.selectList(cb -> {
             cb.query().setMemberId_Equal(memberId);
