@@ -34,6 +34,7 @@ public class HandsOn08Test extends UnitContainerTestCase {
      */
     public void test_updateMemberChangedToFormalized_会員が更新されていること() {
         // ## Arrange ##
+    	// TODO tanaryo Optionalの解決をもっと丁寧に by jflute (2025/06/19)
         Optional<Member> member = findProvisionalMember();
         Integer memberId = member.map(Member::getMemberId).orElse(null);
         Long versionNo = member.map(Member::getVersionNo).orElse(null);
@@ -42,12 +43,14 @@ public class HandsOn08Test extends UnitContainerTestCase {
         logic.updateMemberChangedToFormalized(memberId, versionNo);
 
         // ## Assert ##
+        // TODO tanaryo 全体のアサートは、Arrangeの中にあってもいい by jflute (2025/06/19)
         member.ifPresent(mb -> {
             assertTrue(mb.isMemberStatusCode仮会員());
         });
 
         memberBhv.selectByPK(memberId).ifPresent(updatedMember -> {
             assertTrue(updatedMember.isMemberStatusCode正式会員());
+            // TODO tanaryo assertEquals()というメソッドがあるので、そっちを使いましょう by jflute (2025/06/19)
             assertTrue(updatedMember.getVersionNo().equals(versionNo + 1));
         });
     }
@@ -64,9 +67,11 @@ public class HandsOn08Test extends UnitContainerTestCase {
         Long versionNo = member.map(Member::getVersionNo).orElse(null);
 
         // ## Act ##
+        // TODO tanaryo 一個目のupdateは、Arrangeと捉えていいかなと by jflute (2025/06/19)
         logic.updateMemberChangedToFormalized(memberId, versionNo);
 
         // ## Assert ##
+        // TODO tanaryo 例外クラス名、FQCNである必要はないかと by jflute (2025/06/19)
         assertException(org.dbflute.exception.EntityAlreadyUpdatedException.class, () -> {
             logic.updateMemberChangedToFormalized(memberId, versionNo);
         });
@@ -114,6 +119,7 @@ public class HandsOn08Test extends UnitContainerTestCase {
         try {
             logic.updateMemberChangedToFormalizedNonstrict(memberId);
         } catch (org.dbflute.exception.EntityAlreadyUpdatedException e) {
+        	// TODO jflute できてるんだけど、書き方のフォロー (2025/06/19)
             isThrowException = true;
         }
 

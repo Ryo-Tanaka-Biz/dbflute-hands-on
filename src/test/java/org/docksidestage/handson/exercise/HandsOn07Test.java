@@ -16,6 +16,7 @@ import org.docksidestage.handson.dbflute.exentity.MemberSecurity;
 import org.docksidestage.handson.logic.HandsOn07Logic;
 import org.docksidestage.handson.unit.UnitContainerTestCase;
 
+// TODO tanaryo テストクラス、Logicのテストクラスの名前と配置にしましょう by jflute (2025/06/19)
 /**
  * @author tanaryo
  */
@@ -44,6 +45,7 @@ public class HandsOn07Test extends UnitContainerTestCase {
      */
     public void test_insertMyselfMember_会員が登録されていること() {
         // ## Arrange ##
+    	// TODO tanaryo 定数でも、ローカル変数の場合は、普通のキャメルケースでも良い (というかそっちが多い) by jflute (2025/06/19)
         String MEMBER_ACCOUNT = "AAAAA";
         String MEMBER_NAME = "田中太郎";
         LocalDate MEMBER_BIRTHDATE = LocalDate.of(2000, 12, 31);
@@ -53,6 +55,8 @@ public class HandsOn07Test extends UnitContainerTestCase {
         member.setMemberName(MEMBER_NAME);
         member.setBirthdate(MEMBER_BIRTHDATE);
 
+        // [1on1でのふぉろー] UnitTestでのAccessContextのセットしているところついて。(あと、現場での話)
+        // TODO tanaryo コメントアウトにはコメントを by jflute (2025/06/19)
         //        member.setRegisterDatetime(LocalDateTime.of(2000, 12, 31, 12, 0));
         //        member.setRegisterUser("あああああ");
         //        member.setUpdateDatetime(LocalDateTime.of(2000, 12, 31, 12, 0));
@@ -61,6 +65,7 @@ public class HandsOn07Test extends UnitContainerTestCase {
 
         // ## Act ##
         logic.insertMyselfMember(member);//このタイミングでPKをentityにセットしているんだっけ確か
+        // TODO tanaryo この時点で、Optionalは解決してしまった方が万が一のときのエラーメッセージがわかりやすくなる by jflute (2025/06/19)
         OptionalEntity<Member> memberOpt = memberBhv.selectByPK(member.getMemberId());
 
         // ## Assert ##
@@ -96,6 +101,11 @@ public class HandsOn07Test extends UnitContainerTestCase {
         // ## Act ##
         logic.insertYourselfMember(member, memberSecurity);
         OptionalEntity<Member> memberOpt = memberBhv.selectByPK(member.getMemberId());
+        // TODO tanaryo そもそも、orElse(null)ってピンポイント以外は使わないって感覚で良い by jflute (2025/06/19)
+        // そのピンポイントとは？ => 本当に相手が null を求めているとき (引数とか、JSONの項目とか)
+        // それ以外では、ちゃんと「ないかもしれない」という状態で管理して、解決すべきに解決する。
+        // 業務的にあった当然でなければ例外でも良いような場合は、orElseThrow()系。
+        // 分岐であれば ifPresent() だし、デフォルト値解決であれば orElse(デフォルト値)。
         Integer memberId = memberOpt.map(op -> op.getMemberId()).orElse(null);
 
         int securityCount = memberSecurityBhv.selectCount(cb -> cb.query().setMemberId_Equal(memberId));

@@ -74,6 +74,7 @@ public class HandsOn08Logic {
         memberBhv.updateNonstrict(member);
     }
 
+    // TODO tanaryo 引数名 args じゃなくて arg by jflute (2025/06/19)
     /**
      * 指定された会員の購入を排他制御なしで削除する ※queryDelete(...)
      * 検索処理は入れずに削除してみましょう
