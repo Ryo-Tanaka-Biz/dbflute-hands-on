@@ -5,6 +5,7 @@ import javax.annotation.Resource;
 import org.docksidestage.handson.dbflute.exbhv.MemberBhv;
 import org.docksidestage.handson.dbflute.exbhv.MemberSecurityBhv;
 import org.docksidestage.handson.dbflute.exbhv.MemberServiceBhv;
+import org.docksidestage.handson.dbflute.exbhv.PurchaseBhv;
 import org.docksidestage.handson.dbflute.exentity.Member;
 import org.docksidestage.handson.dbflute.exentity.MemberSecurity;
 import org.docksidestage.handson.dbflute.exentity.MemberService;
@@ -25,6 +26,8 @@ public class HandsOn08Logic {
     //                                                                           =========
     @Resource
     private MemberBhv memberBhv;
+    @Resource
+    private PurchaseBhv purchaseBhv;
     @Resource
     private MemberSecurityBhv memberSecurityBhv;
     @Resource
@@ -69,6 +72,21 @@ public class HandsOn08Logic {
         member.setMemberId(memberId);
         member.setMemberStatusCode_正式会員();
         memberBhv.updateNonstrict(member);
+    }
+
+    /**
+     * 指定された会員の購入を排他制御なしで削除する ※queryDelete(...)
+     * 検索処理は入れずに削除してみましょう
+     * 苦難があっても頑張って削除してみましょう
+     * 引数の値は null も許される (null なら何もしない)
+     * @param memberId 会員Id
+     */
+    public void deletePurchaseSimply(Integer memberId){
+        if (memberId == null) {
+            return; // nullなら何もしない
+        }
+
+
     }
 
     /**
