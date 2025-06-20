@@ -43,15 +43,15 @@ public class HandsOn07LogicTest extends UnitContainerTestCase {
      */
     public void test_insertMyselfMember_会員が登録されていること() {
         // ## Arrange ##
-    	// TODO tanaryo 定数でも、ローカル変数の場合は、普通のキャメルケースでも良い (というかそっちが多い) by jflute (2025/06/19)
-        String MEMBER_ACCOUNT = "AAAAA";
-        String MEMBER_NAME = "田中太郎";
-        LocalDate MEMBER_BIRTHDATE = LocalDate.of(2000, 12, 31);
+    	// TODO done tanaryo 定数でも、ローカル変数の場合は、普通のキャメルケースでも良い (というかそっちが多い) by jflute (2025/06/19)
+        String memberAccount = "AAAAA";
+        String memberName = "田中太郎";
+        LocalDate memberBirthdate = LocalDate.of(2000, 12, 31);
 
         Member member = new Member();
-        member.setMemberAccount(MEMBER_ACCOUNT);
-        member.setMemberName(MEMBER_NAME);
-        member.setBirthdate(MEMBER_BIRTHDATE);
+        member.setMemberAccount(memberAccount);
+        member.setMemberName(memberName);
+        member.setBirthdate(memberBirthdate);
 
         // [1on1でのふぉろー] UnitTestでのAccessContextのセットしているところついて。(あと、現場での話)
         // TODO tanaryo コメントアウトにはコメントを by jflute (2025/06/19)
@@ -67,8 +67,8 @@ public class HandsOn07LogicTest extends UnitContainerTestCase {
         OptionalEntity<Member> memberOpt = memberBhv.selectByPK(member.getMemberId());
 
         // ## Assert ##
-        assertEquals(MEMBER_NAME, memberOpt.map(op -> op.getMemberName()).orElse(null));
-        assertEquals(MEMBER_BIRTHDATE, memberOpt.map(op -> op.getBirthdate()).orElse(null));
+        assertEquals(memberName, memberOpt.map(op -> op.getMemberName()).orElse(null));
+        assertEquals(memberBirthdate, memberOpt.map(op -> op.getBirthdate()).orElse(null));
     }
     // 共通カラムの設定したらschemaHTMLの共通カラムがグレーアウトした
     // 共通カラムのセットをコメントアウトしてテスト通ることを確認
@@ -78,23 +78,23 @@ public class HandsOn07LogicTest extends UnitContainerTestCase {
     //                                                                        ============
     public void test_insertYourselfMember_会員が登録されていること() {
         // ## Arrange ##
-        String MEMBER_ACCOUNT = "BBBBB";
-        String MEMBER_NAME = "山田ゆりこ";
-        LocalDate MEMBER_BIRTHDATE = LocalDate.of(1995, 6, 5);
+        String memberAccount = "BBBBB";
+        String memberName = "山田ゆりこ";
+        LocalDate memberBirthdate = LocalDate.of(1995, 6, 5);
 
-        String LOGIN_PASSWORD = "aaa";
-        String REMINDER_QUESTION = "bbb";
-        String REMINDER_ANSWER = "ccc";
+        String loginPassword = "aaa";
+        String reminderQuestion = "bbb";
+        String reminderAnswer = "ccc";
 
         Member member = new Member();
-        member.setMemberAccount(MEMBER_ACCOUNT);
-        member.setMemberName(MEMBER_NAME);
-        member.setBirthdate(MEMBER_BIRTHDATE);
+        member.setMemberAccount(memberAccount);
+        member.setMemberName(memberName);
+        member.setBirthdate(memberBirthdate);
 
         MemberSecurity memberSecurity = new MemberSecurity();
-        memberSecurity.setLoginPassword(LOGIN_PASSWORD);
-        memberSecurity.setReminderQuestion(REMINDER_QUESTION);
-        memberSecurity.setReminderAnswer(REMINDER_ANSWER);
+        memberSecurity.setLoginPassword(loginPassword);
+        memberSecurity.setReminderQuestion(reminderQuestion);
+        memberSecurity.setReminderAnswer(reminderAnswer);
 
         // ## Act ##
         logic.insertYourselfMember(member, memberSecurity);
@@ -111,7 +111,7 @@ public class HandsOn07LogicTest extends UnitContainerTestCase {
         int purchaseCount = purchaseBhv.selectCount(cb -> cb.query().setMemberId_Equal(memberId));
 
         // ## Assert ##
-        assertEquals(MEMBER_NAME, memberOpt.map(op -> op.getMemberName()).orElse(null));
+        assertEquals(memberName, memberOpt.map(op -> op.getMemberName()).orElse(null));
         assertEquals(1, securityCount);
         assertEquals(1, serviceCount);
         assertEquals(0, purchaseCount);
