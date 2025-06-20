@@ -7,10 +7,6 @@ import org.docksidestage.handson.dbflute.exbhv.MemberSecurityBhv;
 import org.docksidestage.handson.dbflute.exbhv.MemberServiceBhv;
 import org.docksidestage.handson.dbflute.exbhv.PurchaseBhv;
 import org.docksidestage.handson.dbflute.exentity.Member;
-import org.docksidestage.handson.dbflute.exentity.MemberSecurity;
-import org.docksidestage.handson.dbflute.exentity.MemberService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * author tanaryo
@@ -19,7 +15,6 @@ public class HandsOn08Logic {
     // ===================================================================================
     //                                                                          Definition
     //                                                                          ==========
-    private static final Logger logger = LoggerFactory.getLogger(HandsOn08Logic.class);
 
     // ===================================================================================
     //                                                                           Attribute

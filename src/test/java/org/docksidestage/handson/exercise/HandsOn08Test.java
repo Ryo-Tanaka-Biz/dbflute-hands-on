@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import javax.annotation.Resource;
 
-import org.dbflute.cbean.result.ListResultBean;
 import org.docksidestage.handson.dbflute.exbhv.MemberBhv;
 import org.docksidestage.handson.dbflute.exentity.Member;
 import org.docksidestage.handson.logic.HandsOn08Logic;

@@ -1,22 +1,15 @@
 package org.docksidestage.handson.logic;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
-
 import javax.annotation.Resource;
 
-import org.dbflute.cbean.result.ListResultBean;
 import org.docksidestage.handson.dbflute.exbhv.MemberBhv;
 import org.docksidestage.handson.dbflute.exbhv.MemberSecurityBhv;
 import org.docksidestage.handson.dbflute.exbhv.MemberServiceBhv;
 import org.docksidestage.handson.dbflute.exentity.Member;
 import org.docksidestage.handson.dbflute.exentity.MemberSecurity;
 import org.docksidestage.handson.dbflute.exentity.MemberService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-// TODO tanaryo ↑unusedの警告を見ましょう by jflute (2025/06/19)
+// TODO done tanaryo ↑unusedの警告を見ましょう by jflute (2025/06/19)
 /**
  * author tanaryo
  */
@@ -24,8 +17,7 @@ public class HandsOn07Logic {
     // ===================================================================================
     //                                                                          Definition
     //                                                                          ==========
-	// TODO tanaryo unusedの警告を見ましょう by jflute (2025/06/19)
-    private static final Logger logger = LoggerFactory.getLogger(HandsOn07Logic.class);
+	// TODO done tanaryo unusedの警告を見ましょう by jflute (2025/06/19)
 
     // ===================================================================================
     //                                                                           Attribute
