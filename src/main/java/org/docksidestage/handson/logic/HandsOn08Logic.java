@@ -39,8 +39,8 @@ public class HandsOn08Logic {
      * 排他制御ありで更新する
      * 引数の値で null は許されない
      *
-     * @param memberId 会員Id
-     * @param versionNo バージョンNo
+     * @param memberId 会員Id(NotNull)
+     * @param versionNo バージョンNo(NotNull)
      */
     public void updateMemberChangedToFormalized(Integer memberId, Long versionNo) {
         assertNotNull(memberId);
@@ -58,7 +58,7 @@ public class HandsOn08Logic {
      * 排他制御なしで更新する
      * 引数の値で null は許されない
      *
-     * @param memberId 会員Id
+     * @param memberId 会員Id(NotNull)
      */
     public void updateMemberChangedToFormalizedNonstrict(Integer memberId){
         assertNotNull(memberId);
@@ -75,7 +75,7 @@ public class HandsOn08Logic {
      * 検索処理は入れずに削除してみましょう
      * 苦難があっても頑張って削除してみましょう
      * 引数の値は null も許される (null なら何もしない)
-     * @param memberId 会員Id
+     * @param memberId 会員Id(NotNull)
      */
     public void deletePurchaseSimply(Integer memberId){
         if (memberId == null) {

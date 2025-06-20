@@ -34,11 +34,11 @@ public class HandsOn07Logic {
     // ===================================================================================
     //                                                                              suffix
     //                                                                        ============
-    // TODO tanaryo javadoc, (NotNull) をお願いします by jflute (2025/06/19)
+    // TODO done tanaryo javadoc, (NotNull) をお願いします by jflute (2025/06/19)
     /**
      * 自分自身の会員を登録
      *
-     * @param member 会員
+     * @param member 会員(NotNull)
      */
     public void insertMyselfMember(Member member) {
         doInsertMyselfMember(member);
@@ -52,8 +52,8 @@ public class HandsOn07Logic {
      *　ER図的には会員セキュリティと会員サービスか
      *　若干schemaHTMLと差異あり
      *
-     * @param member 会員
-     * @param memberSecurity 会員セキュリティ
+     * @param member 会員(NotNull)
+     * @param memberSecurity 会員セキュリティ(NotNull)
      */
     public void insertYourselfMember(Member member, MemberSecurity memberSecurity) {
         doInsertMyselfMember(member);
@@ -74,7 +74,7 @@ public class HandsOn07Logic {
      * 正式会員で登録
      * 現在日時を取得する Logic を作成して、正式会員日時を入れる
      *
-     * @param member 会員
+     * @param member 会員(NotNull)
      */
     private void doInsertMyselfMember(Member member) {
         member.setMemberStatusCode_正式会員();
@@ -85,8 +85,8 @@ public class HandsOn07Logic {
     /**
      * 会員セキュリティを登録
      *
-     * @param memberId 会員Id
-     * @param memberSecurity 会員セキュリティ
+     * @param memberId 会員Id(NotNull)
+     * @param memberSecurity 会員セキュリティ(NotNull)
      */
     private void insertMemberSecurity(Integer memberId, MemberSecurity memberSecurity) {
         memberSecurity.setMemberId(memberId);
@@ -97,7 +97,7 @@ public class HandsOn07Logic {
      * 会員サービスの初回登録
      * 初回なので会員ポイントは0、会員ランクはプラスチック
      *
-     * @param memberId 会員id
+     * @param memberId 会員Id(NotNull)
      */
     private void insertMemberService(Integer memberId) {
     	// [いいね] Serviceは会員登録時に動的な値がないので内部で閉じてるのGood
