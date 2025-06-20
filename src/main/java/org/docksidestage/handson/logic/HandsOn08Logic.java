@@ -57,7 +57,7 @@ public class HandsOn08Logic {
         memberBhv.updateNonstrict(member);
     }
 
-    // TODO done tanaryo javadoc, memberId は NotNull じゃなく、nullOKなので (NullAllowed) で by jflute (2025/06/21)
+    // done tanaryo javadoc, memberId は NotNull じゃなく、nullOKなので (NullAllowed) で by jflute (2025/06/21)
     // e.g. @param memberId 会員Id (NullAllowed: nullなら何もしない)
     /**
      * 指定された会員の購入を排他制御なしで削除する ※queryDelete(...)
@@ -73,7 +73,7 @@ public class HandsOn08Logic {
 
         // FK制約あるので、先に購入支払いを削除
         purchasePaymentBhv.queryDelete(cb ->{
-        	// TODO done tanaryo 惜しい。このsetupSelectは不要です。検索してデータ取るわけじゃないので。 by jflute (2025/06/21)
+        	// done tanaryo 惜しい。このsetupSelectは不要です。検索してデータ取るわけじゃないので。 by jflute (2025/06/21)
            cb.query().queryPurchase().setMemberId_Equal(memberId);
         });
 

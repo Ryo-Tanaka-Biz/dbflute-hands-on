@@ -12,7 +12,7 @@ import org.docksidestage.handson.dbflute.exentity.Member;
 import org.docksidestage.handson.dbflute.exentity.MemberSecurity;
 import org.docksidestage.handson.unit.UnitContainerTestCase;
 
-// TODO done tanaryo どうしてもimport文のunusedは出てしまいますね↑ by jflute (2025/06/21)
+// done tanaryo どうしてもimport文のunusedは出てしまいますね↑ by jflute (2025/06/21)
 // done tanaryo テストクラス、Logicのテストクラスの名前と配置にしましょう by jflute (2025/06/19)
 
 /**

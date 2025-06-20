@@ -11,7 +11,7 @@ import org.docksidestage.handson.dbflute.exentity.Member;
 import org.docksidestage.handson.dbflute.exentity.Purchase;
 import org.docksidestage.handson.unit.UnitContainerTestCase;
 
-// TODO done tanaryo javadocお願い by jflute (2025/06/21)
+// done tanaryo javadocお願い by jflute (2025/06/21)
 
 /**
  * @author tanaryo
@@ -198,15 +198,15 @@ public class HandsOn08LogicTest extends UnitContainerTestCase {
     // ===================================================================================
     //                                                                   Assist Test Logic
     //                                                                        ============
-    // TODO done tanaryo Assist Logic な感じのタグコメントが欲しいところ by jflute (2025/06/21)
-    // TODO done tanaryo javadoc, Nullの可否をお願いします by jflute (2025/06/21)
+    // done tanaryo Assist Logic な感じのタグコメントが欲しいところ by jflute (2025/06/21)
+    // done tanaryo javadoc, Nullの可否をお願いします by jflute (2025/06/21)
     /**
      * 仮会員を任意で検索
      *
      * @return Member(NotNull)
      */
     private Member findProvisionalMember() {
-        // TODO done tanaryo ConditionBeanのfetchFirst(1)でselectEntity()の方が無駄メモリがない by jflute (2025/06/21)
+        // done tanaryo ConditionBeanのfetchFirst(1)でselectEntity()の方が無駄メモリがない by jflute (2025/06/21)
         return memberBhv.selectEntity(cb -> {
             cb.query().setMemberStatusCode_Equal_仮会員();
             cb.fetchFirst(1);

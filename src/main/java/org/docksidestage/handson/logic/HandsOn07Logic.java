@@ -11,7 +11,7 @@ import org.docksidestage.handson.dbflute.exentity.MemberService;
 
 // done tanaryo ↑unusedの警告を見ましょう by jflute (2025/06/19)
 
-// TODO done tanaryo 細かいけど、authorは @author というようにアットマークを付けないと認識されないです by jflute (2025/06/21)
+// done tanaryo 細かいけど、authorは @author というようにアットマークを付けないと認識されないです by jflute (2025/06/21)
 /**
  * @author tanaryo
  */
