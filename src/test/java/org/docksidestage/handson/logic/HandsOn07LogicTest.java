@@ -1,4 +1,4 @@
-package org.docksidestage.handson.exercise;
+package org.docksidestage.handson.logic;
 
 import java.time.LocalDate;
 
@@ -11,14 +11,14 @@ import org.docksidestage.handson.dbflute.exbhv.MemberServiceBhv;
 import org.docksidestage.handson.dbflute.exbhv.PurchaseBhv;
 import org.docksidestage.handson.dbflute.exentity.Member;
 import org.docksidestage.handson.dbflute.exentity.MemberSecurity;
-import org.docksidestage.handson.logic.HandsOn07Logic;
 import org.docksidestage.handson.unit.UnitContainerTestCase;
 
-// TODO tanaryo テストクラス、Logicのテストクラスの名前と配置にしましょう by jflute (2025/06/19)
+// TODO done tanaryo テストクラス、Logicのテストクラスの名前と配置にしましょう by jflute (2025/06/19)
+
 /**
  * @author tanaryo
  */
-public class HandsOn07Test extends UnitContainerTestCase {
+public class HandsOn07LogicTest extends UnitContainerTestCase {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                    =========

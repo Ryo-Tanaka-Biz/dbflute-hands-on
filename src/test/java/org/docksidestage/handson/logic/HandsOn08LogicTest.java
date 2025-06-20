@@ -1,4 +1,4 @@
-package org.docksidestage.handson.exercise;
+package org.docksidestage.handson.logic;
 
 import java.util.Optional;
 
@@ -6,13 +6,12 @@ import javax.annotation.Resource;
 
 import org.docksidestage.handson.dbflute.exbhv.MemberBhv;
 import org.docksidestage.handson.dbflute.exentity.Member;
-import org.docksidestage.handson.logic.HandsOn08Logic;
 import org.docksidestage.handson.unit.UnitContainerTestCase;
 
 /**
  * @author tanaryo
  */
-public class HandsOn08Test extends UnitContainerTestCase {
+public class HandsOn08LogicTest extends UnitContainerTestCase {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                    =========
