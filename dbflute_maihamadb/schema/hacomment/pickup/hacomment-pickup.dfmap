@@ -1,0 +1,61 @@
+map:{
+    ; formatVersion = 1.0
+    ; pickupDatetime = 2025-06-21T16:22:29.940
+    ; hacoMap = map:{
+        ; diffList = list:{
+            ; map:{
+                ; diffCode = 20250621145039
+                ; diffDate = 2025/06/21 14:50:39
+                ; propertyList = list:{
+                    ; map:{
+                        ; hacomment = リマインダ機能が想定以上に利用されているため、分析のためにリマインダ機能の利用回数カラムを追加
+                        ; diffComment = null
+                        ; authorList = list:{
+                            ; ryo.tanaka
+                        }
+                        ; pieceCode = eab75672
+                        ; pieceOwner = ryo.tanaka
+                        ; pieceDatetime = 2025-06-21T16:17:37.935
+                        ; previousPieceList = list:{}
+                    }
+                }
+            }
+            ; map:{
+                ; diffCode = 20250621142755
+                ; diffDate = 2025/06/21 14:27:55
+                ; propertyList = list:{
+                    ; map:{
+                        ; hacomment = 商品の定価をつけることが必須になったため、REGULAR_PRICEをNOT_NULLにした。
+カラム名に誤字があったため、SERVICE_POINT_COUNTに修正
+                        ; diffComment = null
+                        ; authorList = list:{
+                            ; ryo.tanaka
+                        }
+                        ; pieceCode = d911f06
+                        ; pieceOwner = ryo.tanaka
+                        ; pieceDatetime = 2025-06-21T16:13:32.866
+                        ; previousPieceList = list:{}
+                    }
+                }
+            }
+            ; map:{
+                ; diffCode = 20250621153307
+                ; diffDate = 2025/06/21 15:33:07
+                ; propertyList = list:{
+                    ; map:{
+                        ; hacomment = 会員同士の交流を図る第一歩として、他の会員の購入履歴を閲覧できるようにした。
+そのデータ分析のためにテーブル追加した。
+                        ; diffComment = null
+                        ; authorList = list:{
+                            ; ryo.tanaka
+                        }
+                        ; pieceCode = 597c435d
+                        ; pieceOwner = ryo.tanaka
+                        ; pieceDatetime = 2025-06-21T16:19:39.432
+                        ; previousPieceList = list:{}
+                    }
+                }
+            }
+        }
+    }
+}
