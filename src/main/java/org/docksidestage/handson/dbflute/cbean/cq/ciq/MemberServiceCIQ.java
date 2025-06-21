@@ -61,8 +61,9 @@ public class MemberServiceCIQ extends AbstractBsMemberServiceCQ {
     // ===================================================================================
     //                                                                Override about Query
     //                                                                ====================
+    protected ConditionValue xgetCValueMemberServiceId() { return _myCQ.xdfgetMemberServiceId(); }
     protected ConditionValue xgetCValueMemberId() { return _myCQ.xdfgetMemberId(); }
-    protected ConditionValue xgetCValueAkirakaniOkashiiKaramuMei() { return _myCQ.xdfgetAkirakaniOkashiiKaramuMei(); }
+    protected ConditionValue xgetCValueServicePointCount() { return _myCQ.xdfgetServicePointCount(); }
     protected ConditionValue xgetCValueServiceRankCode() { return _myCQ.xdfgetServiceRankCode(); }
     protected ConditionValue xgetCValueRegisterDatetime() { return _myCQ.xdfgetRegisterDatetime(); }
     protected ConditionValue xgetCValueRegisterUser() { return _myCQ.xdfgetRegisterUser(); }

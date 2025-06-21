@@ -67,6 +67,74 @@ public class LoaderOfMember {
         return hd -> hd.handle(new LoaderOfMemberAddress().ready(_referrerMemberAddress, _selector));
     }
 
+    protected List<MemberFollowing> _referrerMemberFollowingByMyMemberId;
+
+    /**
+     * Load referrer of memberFollowingByMyMemberIdList by the set-upper of referrer. <br>
+     * (会員フォローイング)MEMBER_FOLLOWING by MY_MEMBER_ID, named 'memberFollowingByMyMemberIdList'.
+     * <pre>
+     * <span style="color: #0000C0">memberBhv</span>.<span style="color: #994747">load</span>(<span style="color: #553000">memberList</span>, <span style="color: #553000">memberLoader</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *     <span style="color: #553000">memberLoader</span>.<span style="color: #CC4747">loadMemberFollowingByMyMemberId</span>(<span style="color: #553000">followingCB</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *         <span style="color: #553000">followingCB</span>.setupSelect...
+     *         <span style="color: #553000">followingCB</span>.query().set...
+     *         <span style="color: #553000">followingCB</span>.query().addOrderBy...
+     *     }); <span style="color: #3F7E5E">// you can load nested referrer from here</span>
+     *     <span style="color: #3F7E5E">//}).withNestedReferrer(<span style="color: #553000">followingLoader</span> -&gt; {</span>
+     *     <span style="color: #3F7E5E">//    followingLoader.load...</span>
+     *     <span style="color: #3F7E5E">//});</span>
+     * });
+     * for (Member member : <span style="color: #553000">memberList</span>) {
+     *     ... = member.<span style="color: #CC4747">getMemberFollowingByMyMemberIdList()</span>;
+     * }
+     * </pre>
+     * About internal policy, the value of primary key (and others too) is treated as case-insensitive. <br>
+     * The condition-bean, which the set-upper provides, has settings before callback as follows:
+     * <pre>
+     * cb.query().setMyMemberId_InScope(pkList);
+     * cb.query().addOrderBy_MyMemberId_Asc();
+     * </pre>
+     * @param refCBLambda The callback to set up referrer condition-bean for loading referrer. (NotNull)
+     * @return The callback interface which you can load nested referrer by calling withNestedReferrer(). (NotNull)
+     */
+    public NestedReferrerLoaderGateway<LoaderOfMemberFollowing> loadMemberFollowingByMyMemberId(ReferrerConditionSetupper<MemberFollowingCB> refCBLambda) {
+        myBhv().loadMemberFollowingByMyMemberId(_selectedList, refCBLambda).withNestedReferrer(refLs -> _referrerMemberFollowingByMyMemberId = refLs);
+        return hd -> hd.handle(new LoaderOfMemberFollowing().ready(_referrerMemberFollowingByMyMemberId, _selector));
+    }
+
+    protected List<MemberFollowing> _referrerMemberFollowingByYourMemberId;
+
+    /**
+     * Load referrer of memberFollowingByYourMemberIdList by the set-upper of referrer. <br>
+     * (会員フォローイング)MEMBER_FOLLOWING by YOUR_MEMBER_ID, named 'memberFollowingByYourMemberIdList'.
+     * <pre>
+     * <span style="color: #0000C0">memberBhv</span>.<span style="color: #994747">load</span>(<span style="color: #553000">memberList</span>, <span style="color: #553000">memberLoader</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *     <span style="color: #553000">memberLoader</span>.<span style="color: #CC4747">loadMemberFollowingByYourMemberId</span>(<span style="color: #553000">followingCB</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *         <span style="color: #553000">followingCB</span>.setupSelect...
+     *         <span style="color: #553000">followingCB</span>.query().set...
+     *         <span style="color: #553000">followingCB</span>.query().addOrderBy...
+     *     }); <span style="color: #3F7E5E">// you can load nested referrer from here</span>
+     *     <span style="color: #3F7E5E">//}).withNestedReferrer(<span style="color: #553000">followingLoader</span> -&gt; {</span>
+     *     <span style="color: #3F7E5E">//    followingLoader.load...</span>
+     *     <span style="color: #3F7E5E">//});</span>
+     * });
+     * for (Member member : <span style="color: #553000">memberList</span>) {
+     *     ... = member.<span style="color: #CC4747">getMemberFollowingByYourMemberIdList()</span>;
+     * }
+     * </pre>
+     * About internal policy, the value of primary key (and others too) is treated as case-insensitive. <br>
+     * The condition-bean, which the set-upper provides, has settings before callback as follows:
+     * <pre>
+     * cb.query().setYourMemberId_InScope(pkList);
+     * cb.query().addOrderBy_YourMemberId_Asc();
+     * </pre>
+     * @param refCBLambda The callback to set up referrer condition-bean for loading referrer. (NotNull)
+     * @return The callback interface which you can load nested referrer by calling withNestedReferrer(). (NotNull)
+     */
+    public NestedReferrerLoaderGateway<LoaderOfMemberFollowing> loadMemberFollowingByYourMemberId(ReferrerConditionSetupper<MemberFollowingCB> refCBLambda) {
+        myBhv().loadMemberFollowingByYourMemberId(_selectedList, refCBLambda).withNestedReferrer(refLs -> _referrerMemberFollowingByYourMemberId = refLs);
+        return hd -> hd.handle(new LoaderOfMemberFollowing().ready(_referrerMemberFollowingByYourMemberId, _selector));
+    }
+
     protected List<MemberLogin> _referrerMemberLogin;
 
     /**

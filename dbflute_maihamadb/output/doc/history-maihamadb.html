@@ -213,6 +213,114 @@ dl.column-content dd span {
 <p class="sisterlink"><a href="./schema-maihamadb.html">to SchemaHTML</a></p>
 </div>
 
+<div class="section diffCode_20250621153307">
+	<h2>
+		<span class="titlediffno">diffNo. 7:</span> <span class="titlediffdatepart">2025/06/21</span> <span class="titledifftimepart">15:33:07</span>
+		<span class="titlediffauthor">by ryo.tanaka</span>
+		<span class="titlediffgitbranch">on master</span>
+	</h2>
+	<pre class="diffcomment"></pre>
+	<p class="tablecount">table count: 15&nbsp;-&gt;&nbsp;16</p>
+
+	<h3>Add Table</h3>
+	<ul class="table-content">
+		<li><a href="./schema-maihamadb.html#member_following">MEMBER_FOLLOWING</a></li>
+	</ul>
+</div>
+<div class="section diffCode_20250621151944">
+	<h2>
+		<span class="titlediffno">diffNo. 6:</span> <span class="titlediffdatepart">2025/06/21</span> <span class="titledifftimepart">15:19:44</span>
+		<span class="titlediffauthor">by ryo.tanaka</span>
+		<span class="titlediffgitbranch">on master</span>
+	</h2>
+	<pre class="diffcomment"></pre>
+
+	<h3>Change Table</h3>
+	<div class="table-content">
+		<h4>PRODUCT_STATUS</h4>
+		<div class="change-table-content">
+			<h5>Add Column</h5>
+			<ul class="column-content">
+				<li>DISPLAY_ORDER</li>
+			</ul>
+			<h5>Add UQ</h5>
+			<ul class="column-content">
+				<li>DISPLAY_ORDER</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="section diffCode_20250621145039">
+	<h2>
+		<span class="titlediffno">diffNo. 5:</span> <span class="titlediffdatepart">2025/06/21</span> <span class="titledifftimepart">14:50:39</span>
+		<span class="titlediffauthor">by ryo.tanaka</span>
+		<span class="titlediffgitbranch">on master</span>
+	</h2>
+	<pre class="diffcomment"></pre>
+
+	<h3>Change Table</h3>
+	<div class="table-content">
+		<h4>MEMBER_SECURITY</h4>
+		<div class="change-table-content">
+			<h5>Add Column</h5>
+			<ul class="column-content">
+				<li>REMINDER_USE_COUNT</li>
+			</ul>
+		</div>
+		<h4>MEMBER_SERVICE</h4>
+		<div class="change-table-content">
+			<h5>Add Column</h5>
+			<ul class="column-content">
+				<li>MEMBER_SERVICE_ID</li>
+			</ul>
+			<h5>Change PK</h5>
+			<dl class="column-content">
+				<dt>PRIMARY</dt>
+				<dd><span>Column</span>MEMBER_ID&nbsp;-&gt;&nbsp;MEMBER_SERVICE_ID</dd>
+			</dl>
+			<h5>Add UQ</h5>
+			<ul class="column-content">
+				<li>MEMBER_ID</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="section diffCode_20250621142755">
+	<h2>
+		<span class="titlediffno">diffNo. 4:</span> <span class="titlediffdatepart">2025/06/21</span> <span class="titledifftimepart">14:27:55</span>
+		<span class="titlediffauthor">by ryo.tanaka</span>
+		<span class="titlediffgitbranch">on master</span>
+	</h2>
+	<pre class="diffcomment"></pre>
+
+	<h3>Change Table</h3>
+	<div class="table-content">
+		<h4>MEMBER_SERVICE</h4>
+		<div class="change-table-content">
+			<h5>Add Column</h5>
+			<ul class="column-content">
+				<li>SERVICE_POINT_COUNT</li>
+			</ul>
+			<h5>Delete Column</h5>
+			<ul class="column-content">
+				<li>AKIRAKANI_OKASHII_KARAMU_MEI</li>
+			</ul>
+			<h5>Change Index</h5>
+			<dl class="column-content">
+				<dt>IX_MEMBER_SERVICE_POINT_COUNT</dt>
+				<dd><span>Column</span>AKIRAKANI_OKASHII_KARAMU_MEI&nbsp;-&gt;&nbsp;SERVICE_POINT_COUNT</dd>
+			</dl>
+		</div>
+		<h4>PRODUCT</h4>
+		<div class="change-table-content">
+			<h5>Change Column</h5>
+			<dl class="column-content">
+				<dt>REGULAR_PRICE</dt>
+				<dd><span>Not Null</span>false&nbsp;-&gt;&nbsp;true</dd>
+			</dl>
+		</div>
+	</div>
+</div>
 <div class="section diffCode_20250613170037">
 	<h2>
 		<span class="titlediffno">diffNo. 3:</span> <span class="titlediffdatepart">2025/06/13</span> <span class="titledifftimepart">17:00:37</span>
@@ -223,7 +331,7 @@ dl.column-content dd span {
 
 	<h3>Change Table</h3>
 	<div class="table-content">
-		<h4><a href="./schema-maihamadb.html#purchase">PURCHASE</a></h4>
+		<h4>PURCHASE</h4>
 		<div class="change-table-content">
 			<h5>Change Column</h5>
 			<dl class="column-content">
@@ -433,10 +541,65 @@ dl.column-content dd span {
     function Hacomment() {
         this.embeddedPickup = {
             'diffList' : [
+                {
+                    'diffCode' : '20250621145039',
+                    'diffDate' : '2025/06/21 14:50:39',
+                    'properties' : [
+                        {
+                            'hacomment' : 'リマインダ機能が想定以上に利用されているため、分析のためにリマインダ機能の利用回数カラムを追加',
+                            'authorList' : ['ryo.tanaka'],
+                            'pieceCode' : 'eab75672',
+                            'pieceDatetime' : '2025-06-21T16:17:37.935',
+                            'previousPieces' : []
+                        }
+                    ]
+                }
+                , {
+                    'diffCode' : '20250621142755',
+                    'diffDate' : '2025/06/21 14:27:55',
+                    'properties' : [
+                        {
+                            'hacomment' : '商品の定価をつけることが必須になったため、REGULAR_PRICEをNOT_NULLにした。<br>カラム名に誤字があったため、SERVICE_POINT_COUNTに修正',
+                            'authorList' : ['ryo.tanaka'],
+                            'pieceCode' : 'd911f06',
+                            'pieceDatetime' : '2025-06-21T16:13:32.866',
+                            'previousPieces' : []
+                        }
+                    ]
+                }
+                , {
+                    'diffCode' : '20250621153307',
+                    'diffDate' : '2025/06/21 15:33:07',
+                    'properties' : [
+                        {
+                            'hacomment' : '会員同士の交流を図る第一歩として、他の会員の購入履歴を閲覧できるようにした。<br>そのデータ分析のためにテーブル追加した。',
+                            'authorList' : ['ryo.tanaka'],
+                            'pieceCode' : '597c435d',
+                            'pieceDatetime' : '2025-06-21T16:19:39.432',
+                            'previousPieces' : []
+                        }
+                    ]
+                }
             ]
         };
         this.pickupStore = {
-            '20250613170037' : {
+            '20250621153307' : {
+                'diffDate' : '2025/06/21 15:33:07',
+                'diffComment' : ''
+            }
+            , '20250621151944' : {
+                'diffDate' : '2025/06/21 15:19:44',
+                'diffComment' : ''
+            }
+            , '20250621145039' : {
+                'diffDate' : '2025/06/21 14:50:39',
+                'diffComment' : ''
+            }
+            , '20250621142755' : {
+                'diffDate' : '2025/06/21 14:27:55',
+                'diffComment' : ''
+            }
+            , '20250613170037' : {
                 'diffDate' : '2025/06/13 17:00:37',
                 'diffComment' : ''
             }

@@ -43,8 +43,9 @@ public class MemberServiceDbm extends AbstractDBMeta {
     protected final Map<String, PropertyGateway> _epgMap = newHashMap();
     { xsetupEpg(); }
     protected void xsetupEpg() {
+        setupEpg(_epgMap, et -> ((MemberService)et).getMemberServiceId(), (et, vl) -> ((MemberService)et).setMemberServiceId(cti(vl)), "memberServiceId");
         setupEpg(_epgMap, et -> ((MemberService)et).getMemberId(), (et, vl) -> ((MemberService)et).setMemberId(cti(vl)), "memberId");
-        setupEpg(_epgMap, et -> ((MemberService)et).getAkirakaniOkashiiKaramuMei(), (et, vl) -> ((MemberService)et).setAkirakaniOkashiiKaramuMei(cti(vl)), "akirakaniOkashiiKaramuMei");
+        setupEpg(_epgMap, et -> ((MemberService)et).getServicePointCount(), (et, vl) -> ((MemberService)et).setServicePointCount(cti(vl)), "servicePointCount");
         setupEpg(_epgMap, et -> ((MemberService)et).getServiceRankCode(), (et, vl) -> {
             CDef.ServiceRank cls = (CDef.ServiceRank)gcls(et, columnServiceRankCode(), vl);
             if (cls != null) {
@@ -93,8 +94,9 @@ public class MemberServiceDbm extends AbstractDBMeta {
     // ===================================================================================
     //                                                                         Column Info
     //                                                                         ===========
-    protected final ColumnInfo _columnMemberId = cci("MEMBER_ID", "MEMBER_ID", null, "会員ID", Integer.class, "memberId", null, true, false, true, "INT", 10, 0, null, null, false, null, null, "member", null, null, false);
-    protected final ColumnInfo _columnAkirakaniOkashiiKaramuMei = cci("AKIRAKANI_OKASHII_KARAMU_MEI", "AKIRAKANI_OKASHII_KARAMU_MEI", null, "サービスポイント数", Integer.class, "akirakaniOkashiiKaramuMei", null, false, false, true, "INT", 10, 0, null, null, false, null, null, null, null, null, false);
+    protected final ColumnInfo _columnMemberServiceId = cci("MEMBER_SERVICE_ID", "MEMBER_SERVICE_ID", null, "会員サービスID", Integer.class, "memberServiceId", null, true, true, true, "INT", 10, 0, null, null, false, null, null, null, null, null, false);
+    protected final ColumnInfo _columnMemberId = cci("MEMBER_ID", "MEMBER_ID", null, "会員ID", Integer.class, "memberId", null, false, false, true, "INT", 10, 0, null, null, false, null, null, "member", null, null, false);
+    protected final ColumnInfo _columnServicePointCount = cci("SERVICE_POINT_COUNT", "SERVICE_POINT_COUNT", null, "サービスポイント数", Integer.class, "servicePointCount", null, false, false, true, "INT", 10, 0, null, null, false, null, null, null, null, null, false);
     protected final ColumnInfo _columnServiceRankCode = cci("SERVICE_RANK_CODE", "SERVICE_RANK_CODE", null, "サービスランクコード", String.class, "serviceRankCode", null, false, false, true, "CHAR", 3, 0, null, null, false, null, null, "serviceRank", null, CDef.DefMeta.ServiceRank, false);
     protected final ColumnInfo _columnRegisterDatetime = cci("REGISTER_DATETIME", "REGISTER_DATETIME", null, null, java.time.LocalDateTime.class, "registerDatetime", null, false, false, true, "DATETIME", 19, 0, null, null, true, null, null, null, null, null, false);
     protected final ColumnInfo _columnRegisterUser = cci("REGISTER_USER", "REGISTER_USER", null, null, String.class, "registerUser", null, false, false, true, "VARCHAR", 200, 0, null, null, true, null, null, null, null, null, false);
@@ -103,15 +105,20 @@ public class MemberServiceDbm extends AbstractDBMeta {
     protected final ColumnInfo _columnVersionNo = cci("VERSION_NO", "VERSION_NO", null, null, Long.class, "versionNo", null, false, false, true, "BIGINT", 19, 0, null, null, false, OptimisticLockType.VERSION_NO, null, null, null, null, false);
 
     /**
-     * (会員ID)MEMBER_ID: {PK, NotNull, INT(10), FK to member}
+     * (会員サービスID)MEMBER_SERVICE_ID: {PK, ID, NotNull, INT(10)}
+     * @return The information object of specified column. (NotNull)
+     */
+    public ColumnInfo columnMemberServiceId() { return _columnMemberServiceId; }
+    /**
+     * (会員ID)MEMBER_ID: {UQ, NotNull, INT(10), FK to member}
      * @return The information object of specified column. (NotNull)
      */
     public ColumnInfo columnMemberId() { return _columnMemberId; }
     /**
-     * (サービスポイント数)AKIRAKANI_OKASHII_KARAMU_MEI: {IX, NotNull, INT(10)}
+     * (サービスポイント数)SERVICE_POINT_COUNT: {IX, NotNull, INT(10)}
      * @return The information object of specified column. (NotNull)
      */
-    public ColumnInfo columnAkirakaniOkashiiKaramuMei() { return _columnAkirakaniOkashiiKaramuMei; }
+    public ColumnInfo columnServicePointCount() { return _columnServicePointCount; }
     /**
      * (サービスランクコード)SERVICE_RANK_CODE: {IX, NotNull, CHAR(3), FK to service_rank, classification=ServiceRank}
      * @return The information object of specified column. (NotNull)
@@ -145,8 +152,9 @@ public class MemberServiceDbm extends AbstractDBMeta {
 
     protected List<ColumnInfo> ccil() {
         List<ColumnInfo> ls = newArrayList();
+        ls.add(columnMemberServiceId());
         ls.add(columnMemberId());
-        ls.add(columnAkirakaniOkashiiKaramuMei());
+        ls.add(columnServicePointCount());
         ls.add(columnServiceRankCode());
         ls.add(columnRegisterDatetime());
         ls.add(columnRegisterUser());
@@ -164,9 +172,14 @@ public class MemberServiceDbm extends AbstractDBMeta {
     // -----------------------------------------------------
     //                                       Primary Element
     //                                       ---------------
-    protected UniqueInfo cpui() { return hpcpui(columnMemberId()); }
+    protected UniqueInfo cpui() { return hpcpui(columnMemberServiceId()); }
     public boolean hasPrimaryKey() { return true; }
     public boolean hasCompoundPrimaryKey() { return false; }
+
+    // -----------------------------------------------------
+    //                                        Unique Element
+    //                                        --------------
+    public UniqueInfo uniqueOf() { return hpcui(columnMemberId()); }
 
     // ===================================================================================
     //                                                                       Relation Info
@@ -200,6 +213,7 @@ public class MemberServiceDbm extends AbstractDBMeta {
     // ===================================================================================
     //                                                                        Various Info
     //                                                                        ============
+    public boolean hasIdentity() { return true; }
     public boolean hasVersionNo() { return true; }
     public ColumnInfo getVersionNoColumnInfo() { return _columnVersionNo; }
     public boolean hasCommonColumn() { return true; }

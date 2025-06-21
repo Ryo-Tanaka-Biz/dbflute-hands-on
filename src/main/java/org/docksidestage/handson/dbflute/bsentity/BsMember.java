@@ -349,6 +349,46 @@ public abstract class BsMember extends AbstractEntity implements DomainEntity, E
         _memberAddressList = memberAddressList;
     }
 
+    /** (会員フォローイング)MEMBER_FOLLOWING by MY_MEMBER_ID, named 'memberFollowingByMyMemberIdList'. */
+    protected List<MemberFollowing> _memberFollowingByMyMemberIdList;
+
+    /**
+     * [get] (会員フォローイング)MEMBER_FOLLOWING by MY_MEMBER_ID, named 'memberFollowingByMyMemberIdList'.
+     * @return The entity list of referrer property 'memberFollowingByMyMemberIdList'. (NotNull: even if no loading, returns empty list)
+     */
+    public List<MemberFollowing> getMemberFollowingByMyMemberIdList() {
+        if (_memberFollowingByMyMemberIdList == null) { _memberFollowingByMyMemberIdList = newReferrerList(); }
+        return _memberFollowingByMyMemberIdList;
+    }
+
+    /**
+     * [set] (会員フォローイング)MEMBER_FOLLOWING by MY_MEMBER_ID, named 'memberFollowingByMyMemberIdList'.
+     * @param memberFollowingByMyMemberIdList The entity list of referrer property 'memberFollowingByMyMemberIdList'. (NullAllowed)
+     */
+    public void setMemberFollowingByMyMemberIdList(List<MemberFollowing> memberFollowingByMyMemberIdList) {
+        _memberFollowingByMyMemberIdList = memberFollowingByMyMemberIdList;
+    }
+
+    /** (会員フォローイング)MEMBER_FOLLOWING by YOUR_MEMBER_ID, named 'memberFollowingByYourMemberIdList'. */
+    protected List<MemberFollowing> _memberFollowingByYourMemberIdList;
+
+    /**
+     * [get] (会員フォローイング)MEMBER_FOLLOWING by YOUR_MEMBER_ID, named 'memberFollowingByYourMemberIdList'.
+     * @return The entity list of referrer property 'memberFollowingByYourMemberIdList'. (NotNull: even if no loading, returns empty list)
+     */
+    public List<MemberFollowing> getMemberFollowingByYourMemberIdList() {
+        if (_memberFollowingByYourMemberIdList == null) { _memberFollowingByYourMemberIdList = newReferrerList(); }
+        return _memberFollowingByYourMemberIdList;
+    }
+
+    /**
+     * [set] (会員フォローイング)MEMBER_FOLLOWING by YOUR_MEMBER_ID, named 'memberFollowingByYourMemberIdList'.
+     * @param memberFollowingByYourMemberIdList The entity list of referrer property 'memberFollowingByYourMemberIdList'. (NullAllowed)
+     */
+    public void setMemberFollowingByYourMemberIdList(List<MemberFollowing> memberFollowingByYourMemberIdList) {
+        _memberFollowingByYourMemberIdList = memberFollowingByYourMemberIdList;
+    }
+
     /** (会員ログイン情報)MEMBER_LOGIN by MEMBER_ID, named 'memberLoginList'. */
     protected List<MemberLogin> _memberLoginList;
 
@@ -432,6 +472,10 @@ public abstract class BsMember extends AbstractEntity implements DomainEntity, E
         { sb.append(li).append(xbRDS(_memberWithdrawalAsOne, "memberWithdrawalAsOne")); }
         if (_memberAddressList != null) { for (MemberAddress et : _memberAddressList)
         { if (et != null) { sb.append(li).append(xbRDS(et, "memberAddressList")); } } }
+        if (_memberFollowingByMyMemberIdList != null) { for (MemberFollowing et : _memberFollowingByMyMemberIdList)
+        { if (et != null) { sb.append(li).append(xbRDS(et, "memberFollowingByMyMemberIdList")); } } }
+        if (_memberFollowingByYourMemberIdList != null) { for (MemberFollowing et : _memberFollowingByYourMemberIdList)
+        { if (et != null) { sb.append(li).append(xbRDS(et, "memberFollowingByYourMemberIdList")); } } }
         if (_memberLoginList != null) { for (MemberLogin et : _memberLoginList)
         { if (et != null) { sb.append(li).append(xbRDS(et, "memberLoginList")); } } }
         if (_purchaseList != null) { for (Purchase et : _purchaseList)
@@ -480,6 +524,10 @@ public abstract class BsMember extends AbstractEntity implements DomainEntity, E
         { sb.append(dm).append("memberWithdrawalAsOne"); }
         if (_memberAddressList != null && !_memberAddressList.isEmpty())
         { sb.append(dm).append("memberAddressList"); }
+        if (_memberFollowingByMyMemberIdList != null && !_memberFollowingByMyMemberIdList.isEmpty())
+        { sb.append(dm).append("memberFollowingByMyMemberIdList"); }
+        if (_memberFollowingByYourMemberIdList != null && !_memberFollowingByYourMemberIdList.isEmpty())
+        { sb.append(dm).append("memberFollowingByYourMemberIdList"); }
         if (_memberLoginList != null && !_memberLoginList.isEmpty())
         { sb.append(dm).append("memberLoginList"); }
         if (_purchaseList != null && !_purchaseList.isEmpty())

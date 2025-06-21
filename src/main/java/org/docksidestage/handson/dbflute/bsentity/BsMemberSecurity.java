@@ -40,6 +40,9 @@ public abstract class BsMemberSecurity extends AbstractEntity implements DomainE
     /** (リマインダ回答)REMINDER_ANSWER: {NotNull, VARCHAR(50)} */
     protected String _reminderAnswer;
 
+    /** (リマインダ回数)REMINDER_USE_COUNT: {NotNull, INT(10)} */
+    protected Integer _reminderUseCount;
+
     /** REGISTER_DATETIME: {NotNull, DATETIME(19)} */
     protected java.time.LocalDateTime _registerDatetime;
 
@@ -148,6 +151,7 @@ public abstract class BsMemberSecurity extends AbstractEntity implements DomainE
         sb.append(dm).append(xfND(_loginPassword));
         sb.append(dm).append(xfND(_reminderQuestion));
         sb.append(dm).append(xfND(_reminderAnswer));
+        sb.append(dm).append(xfND(_reminderUseCount));
         sb.append(dm).append(xfND(_registerDatetime));
         sb.append(dm).append(xfND(_registerUser));
         sb.append(dm).append(xfND(_updateDatetime));
@@ -259,6 +263,26 @@ public abstract class BsMemberSecurity extends AbstractEntity implements DomainE
     public void setReminderAnswer(String reminderAnswer) {
         registerModifiedProperty("reminderAnswer");
         _reminderAnswer = reminderAnswer;
+    }
+
+    /**
+     * [get] (リマインダ回数)REMINDER_USE_COUNT: {NotNull, INT(10)} <br>
+     * パスワードを忘れた際のリマインダ機能の利用回数。このカラムから忘れっぽい人を分析する
+     * @return The value of the column 'REMINDER_USE_COUNT'. (basically NotNull if selected: for the constraint)
+     */
+    public Integer getReminderUseCount() {
+        checkSpecifiedProperty("reminderUseCount");
+        return _reminderUseCount;
+    }
+
+    /**
+     * [set] (リマインダ回数)REMINDER_USE_COUNT: {NotNull, INT(10)} <br>
+     * パスワードを忘れた際のリマインダ機能の利用回数。このカラムから忘れっぽい人を分析する
+     * @param reminderUseCount The value of the column 'REMINDER_USE_COUNT'. (basically NotNull if update: for the constraint)
+     */
+    public void setReminderUseCount(Integer reminderUseCount) {
+        registerModifiedProperty("reminderUseCount");
+        _reminderUseCount = reminderUseCount;
     }
 
     /**

@@ -73,6 +73,26 @@ public class BsMemberServiceCQ extends AbstractBsMemberServiceCQ {
     // ===================================================================================
     //                                                                               Query
     //                                                                               =====
+    protected ConditionValue _memberServiceId;
+    public ConditionValue xdfgetMemberServiceId()
+    { if (_memberServiceId == null) { _memberServiceId = nCV(); }
+      return _memberServiceId; }
+    protected ConditionValue xgetCValueMemberServiceId() { return xdfgetMemberServiceId(); }
+
+    /**
+     * Add order-by as ascend. <br>
+     * (会員サービスID)MEMBER_SERVICE_ID: {PK, ID, NotNull, INT(10)}
+     * @return this. (NotNull)
+     */
+    public BsMemberServiceCQ addOrderBy_MemberServiceId_Asc() { regOBA("MEMBER_SERVICE_ID"); return this; }
+
+    /**
+     * Add order-by as descend. <br>
+     * (会員サービスID)MEMBER_SERVICE_ID: {PK, ID, NotNull, INT(10)}
+     * @return this. (NotNull)
+     */
+    public BsMemberServiceCQ addOrderBy_MemberServiceId_Desc() { regOBD("MEMBER_SERVICE_ID"); return this; }
+
     protected ConditionValue _memberId;
     public ConditionValue xdfgetMemberId()
     { if (_memberId == null) { _memberId = nCV(); }
@@ -81,37 +101,37 @@ public class BsMemberServiceCQ extends AbstractBsMemberServiceCQ {
 
     /**
      * Add order-by as ascend. <br>
-     * (会員ID)MEMBER_ID: {PK, NotNull, INT(10), FK to member}
+     * (会員ID)MEMBER_ID: {UQ, NotNull, INT(10), FK to member}
      * @return this. (NotNull)
      */
     public BsMemberServiceCQ addOrderBy_MemberId_Asc() { regOBA("MEMBER_ID"); return this; }
 
     /**
      * Add order-by as descend. <br>
-     * (会員ID)MEMBER_ID: {PK, NotNull, INT(10), FK to member}
+     * (会員ID)MEMBER_ID: {UQ, NotNull, INT(10), FK to member}
      * @return this. (NotNull)
      */
     public BsMemberServiceCQ addOrderBy_MemberId_Desc() { regOBD("MEMBER_ID"); return this; }
 
-    protected ConditionValue _akirakaniOkashiiKaramuMei;
-    public ConditionValue xdfgetAkirakaniOkashiiKaramuMei()
-    { if (_akirakaniOkashiiKaramuMei == null) { _akirakaniOkashiiKaramuMei = nCV(); }
-      return _akirakaniOkashiiKaramuMei; }
-    protected ConditionValue xgetCValueAkirakaniOkashiiKaramuMei() { return xdfgetAkirakaniOkashiiKaramuMei(); }
+    protected ConditionValue _servicePointCount;
+    public ConditionValue xdfgetServicePointCount()
+    { if (_servicePointCount == null) { _servicePointCount = nCV(); }
+      return _servicePointCount; }
+    protected ConditionValue xgetCValueServicePointCount() { return xdfgetServicePointCount(); }
 
     /**
      * Add order-by as ascend. <br>
-     * (サービスポイント数)AKIRAKANI_OKASHII_KARAMU_MEI: {IX, NotNull, INT(10)}
+     * (サービスポイント数)SERVICE_POINT_COUNT: {IX, NotNull, INT(10)}
      * @return this. (NotNull)
      */
-    public BsMemberServiceCQ addOrderBy_AkirakaniOkashiiKaramuMei_Asc() { regOBA("AKIRAKANI_OKASHII_KARAMU_MEI"); return this; }
+    public BsMemberServiceCQ addOrderBy_ServicePointCount_Asc() { regOBA("SERVICE_POINT_COUNT"); return this; }
 
     /**
      * Add order-by as descend. <br>
-     * (サービスポイント数)AKIRAKANI_OKASHII_KARAMU_MEI: {IX, NotNull, INT(10)}
+     * (サービスポイント数)SERVICE_POINT_COUNT: {IX, NotNull, INT(10)}
      * @return this. (NotNull)
      */
-    public BsMemberServiceCQ addOrderBy_AkirakaniOkashiiKaramuMei_Desc() { regOBD("AKIRAKANI_OKASHII_KARAMU_MEI"); return this; }
+    public BsMemberServiceCQ addOrderBy_ServicePointCount_Desc() { regOBD("SERVICE_POINT_COUNT"); return this; }
 
     protected ConditionValue _serviceRankCode;
     public ConditionValue xdfgetServiceRankCode()

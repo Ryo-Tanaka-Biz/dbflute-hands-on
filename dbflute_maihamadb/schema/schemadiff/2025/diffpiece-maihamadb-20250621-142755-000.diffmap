@@ -1,0 +1,47 @@
+map:{
+    ; 2025/06/21 14:27:55.000 = map:{
+        ; diffDate = 2025/06/21 14:27:55.000
+        ; diffAuthor = ryo.tanaka
+        ; diffGitBranch = master
+        ; tableDiff = map:{
+            ; member_service = map:{
+                ; tableName = member_service
+                ; diffType = CHANGE
+                ; columnDiff = map:{
+                    ; SERVICE_POINT_COUNT = map:{
+                        ; columnName = SERVICE_POINT_COUNT
+                        ; diffType = ADD
+                    }
+                    ; AKIRAKANI_OKASHII_KARAMU_MEI = map:{
+                        ; columnName = AKIRAKANI_OKASHII_KARAMU_MEI
+                        ; diffType = DELETE
+                    }
+                }
+                ; indexDiff = map:{
+                    ; IX_MEMBER_SERVICE_POINT_COUNT = map:{
+                        ; constraintName = IX_MEMBER_SERVICE_POINT_COUNT
+                        ; diffType = CHANGE
+                        ; columnDiff = map:{
+                            ; next = SERVICE_POINT_COUNT
+                            ; previous = AKIRAKANI_OKASHII_KARAMU_MEI
+                        }
+                    }
+                }
+            }
+            ; product = map:{
+                ; tableName = product
+                ; diffType = CHANGE
+                ; columnDiff = map:{
+                    ; REGULAR_PRICE = map:{
+                        ; columnName = REGULAR_PRICE
+                        ; diffType = CHANGE
+                        ; notNullDiff = map:{
+                            ; next = true
+                            ; previous = false
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

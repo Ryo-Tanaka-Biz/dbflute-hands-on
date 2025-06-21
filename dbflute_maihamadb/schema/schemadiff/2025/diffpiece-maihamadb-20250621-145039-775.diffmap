@@ -1,0 +1,45 @@
+map:{
+    ; 2025/06/21 14:50:39.775 = map:{
+        ; diffDate = 2025/06/21 14:50:39.775
+        ; diffAuthor = ryo.tanaka
+        ; diffGitBranch = master
+        ; tableDiff = map:{
+            ; member_security = map:{
+                ; tableName = member_security
+                ; diffType = CHANGE
+                ; columnDiff = map:{
+                    ; REMINDER_USE_COUNT = map:{
+                        ; columnName = REMINDER_USE_COUNT
+                        ; diffType = ADD
+                    }
+                }
+            }
+            ; member_service = map:{
+                ; tableName = member_service
+                ; diffType = CHANGE
+                ; columnDiff = map:{
+                    ; MEMBER_SERVICE_ID = map:{
+                        ; columnName = MEMBER_SERVICE_ID
+                        ; diffType = ADD
+                    }
+                }
+                ; primaryKeyDiff = map:{
+                    ; PRIMARY = map:{
+                        ; constraintName = PRIMARY
+                        ; diffType = CHANGE
+                        ; columnDiff = map:{
+                            ; next = MEMBER_SERVICE_ID
+                            ; previous = MEMBER_ID
+                        }
+                    }
+                }
+                ; uniqueKeyDiff = map:{
+                    ; MEMBER_ID = map:{
+                        ; constraintName = MEMBER_ID
+                        ; diffType = ADD
+                    }
+                }
+            }
+        }
+    }
+}

@@ -552,7 +552,7 @@ pre.spolicyviodisp {
 		<td class="namecell" data-name="member"><a href="#member" title="type=TABLE, primaryKey={MEMBER_ID}, nameLength=6, columnCount=11">MEMBER</a></td>
 		<td class="typecell">TABLE</td>
 		<td class="relcell"><a href="#member_status" title="FK_MEMBER_MEMBER_STATUS">MEMBER_STATUS</a>, <a href="#member_address" class="additionalfk" title="FK_MEMBER_MEMBER_ADDRESS_VALID: fixedCondition=&quot;$$foreignAlias$$.VALID_BEGIN_DATE &lt;= /*$$locationBase$$.parameterMapMemberAddressAsValid.targetDate*/null\n     and $$foreignAlias$$.VALID_END_DATE &gt;= /*$$locationBase$$.parameterMapMemberAddressAsValid.targetDate*/null&quot;, comment=有効な会員住所 (現在日時を入れれば現在住所)">MEMBER_ADDRESS(AsValid)</a>, <a href="#member_login" class="additionalfk" title="FK_MEMBER_MEMBER_LOGIN_LATEST: fixedCondition=&quot;$$foreignAlias$$.LOGIN_DATETIME = ($$sqbegin$$\nselect max(login.LOGIN_DATETIME)\nfrom MEMBER_LOGIN login\nwhere login.MEMBER_ID = $$foreignAlias$$.MEMBER_ID\n)$$sqend$$&quot;, comment=最終ログイン情報">MEMBER_LOGIN(AsLatest)</a></td>
-		<td class="relcell"><a href="#member_address" title="FK_MEMBER_ADDRESS_MEMBER">MEMBER_ADDRESS</a>, <a href="#member_login" title="FK_MEMBER_LOGIN_MEMBER">MEMBER_LOGIN</a>, <a href="#member_security" title="FK_MEMBER_SECURITY_MEMBER">MEMBER_SECURITY</a>, <a href="#member_service" title="FK_MEMBER_SERVICE_MEMBER">MEMBER_SERVICE</a>, <a href="#member_withdrawal" title="FK_MEMBER_WITHDRAWAL_MEMBER">MEMBER_WITHDRAWAL</a>, <a href="#purchase" title="FK_PURCHASE_MEMBER">PURCHASE</a></td>
+		<td class="relcell"><a href="#member_address" title="FK_MEMBER_ADDRESS_MEMBER">MEMBER_ADDRESS</a>, <a href="#member_following" title="FK_MEMBER_FOLLOWING_MY_MEMBER">MEMBER_FOLLOWING</a>, <a href="#member_following" title="FK_MEMBER_FOLLOWING_YOUR_MEMBER">MEMBER_FOLLOWING</a>, <a href="#member_login" title="FK_MEMBER_LOGIN_MEMBER">MEMBER_LOGIN</a>, <a href="#member_security" title="FK_MEMBER_SECURITY_MEMBER">MEMBER_SECURITY</a>, <a href="#member_service" title="FK_MEMBER_SERVICE_MEMBER">MEMBER_SERVICE</a>, <a href="#member_withdrawal" title="FK_MEMBER_WITHDRAWAL_MEMBER">MEMBER_WITHDRAWAL</a>, <a href="#purchase" title="FK_PURCHASE_MEMBER">PURCHASE</a></td>
 		<td class="commentcell member_comment"><pre>会員登録時にデータが登録される。
 基本的に物理削除はなく、退会したらステータスが退会会員になる。</pre></td>
 		<td class="subcell">Member</td>
@@ -572,6 +572,17 @@ pre.spolicyviodisp {
 	</tr>
 	<tr>
 		<td class="rownumcell">3</td>
+		<td class="aliascell">会員フォローイング</td>
+		<td class="namecell" data-name="member_following"><a href="#member_following" title="type=TABLE, primaryKey={MEMBER_FOLLOWING_ID}, nameLength=16, columnCount=4">MEMBER_FOLLOWING</a></td>
+		<td class="typecell">TABLE</td>
+		<td class="relcell"><a href="#member" title="FK_MEMBER_FOLLOWING_MY_MEMBER">MEMBER</a>, <a href="#member" title="FK_MEMBER_FOLLOWING_YOUR_MEMBER">MEMBER</a></td>
+		<td class="relcell">&nbsp;</td>
+		<td class="commentcell member_following_comment"><pre>とある会員が他の会員をフォローできる。すると、フォローした会員の購入履歴が閲覧できる。</pre></td>
+		<td class="subcell">MemberFollowing</td>
+		<td class="subcell">2025/06/21</td>
+	</tr>
+	<tr>
+		<td class="rownumcell">4</td>
 		<td class="aliascell">会員ログイン情報</td>
 		<td class="namecell" data-name="member_login"><a href="#member_login" title="type=TABLE, primaryKey={MEMBER_LOGIN_ID}, nameLength=12, columnCount=5">MEMBER_LOGIN</a></td>
 		<td class="typecell">TABLE</td>
@@ -582,9 +593,9 @@ pre.spolicyviodisp {
 		<td class="subcell">2025/01/04</td>
 	</tr>
 	<tr>
-		<td class="rownumcell">4</td>
+		<td class="rownumcell">5</td>
 		<td class="aliascell">会員セキュリティ情報</td>
-		<td class="namecell" data-name="member_security"><a href="#member_security" title="type=TABLE, primaryKey={MEMBER_ID}, nameLength=15, columnCount=9">MEMBER_SECURITY</a></td>
+		<td class="namecell" data-name="member_security"><a href="#member_security" title="type=TABLE, primaryKey={MEMBER_ID}, nameLength=15, columnCount=10">MEMBER_SECURITY</a></td>
 		<td class="typecell">TABLE</td>
 		<td class="relcell"><a href="#member" title="FK_MEMBER_SECURITY_MEMBER">MEMBER</a></td>
 		<td class="relcell">&nbsp;</td>
@@ -593,9 +604,9 @@ pre.spolicyviodisp {
 		<td class="subcell">2025/01/04</td>
 	</tr>
 	<tr>
-		<td class="rownumcell">5</td>
+		<td class="rownumcell">6</td>
 		<td class="aliascell">会員サービス</td>
-		<td class="namecell" data-name="member_service"><a href="#member_service" title="type=TABLE, primaryKey={MEMBER_ID}, nameLength=14, columnCount=8">MEMBER_SERVICE</a></td>
+		<td class="namecell" data-name="member_service"><a href="#member_service" title="type=TABLE, primaryKey={MEMBER_SERVICE_ID}, nameLength=14, columnCount=9">MEMBER_SERVICE</a></td>
 		<td class="typecell">TABLE</td>
 		<td class="relcell"><a href="#member" title="FK_MEMBER_SERVICE_MEMBER">MEMBER</a>, <a href="#service_rank" title="FK_MEMBER_SERVICE_SERVICE_RANK_CODE">SERVICE_RANK</a></td>
 		<td class="relcell">&nbsp;</td>
@@ -604,7 +615,7 @@ pre.spolicyviodisp {
 		<td class="subcell">2025/01/04</td>
 	</tr>
 	<tr>
-		<td class="rownumcell">6</td>
+		<td class="rownumcell">7</td>
 		<td class="aliascell">会員ステータス</td>
 		<td class="namecell" data-name="member_status"><a href="#member_status" title="type=TABLE, primaryKey={MEMBER_STATUS_CODE}, nameLength=13, columnCount=4">MEMBER_STATUS</a></td>
 		<td class="typecell">TABLE</td>
@@ -615,7 +626,7 @@ pre.spolicyviodisp {
 		<td class="subcell">2025/01/04</td>
 	</tr>
 	<tr>
-		<td class="rownumcell">7</td>
+		<td class="rownumcell">8</td>
 		<td class="aliascell">会員退会情報</td>
 		<td class="namecell" data-name="member_withdrawal"><a href="#member_withdrawal" title="type=TABLE, primaryKey={MEMBER_ID}, nameLength=17, columnCount=8">MEMBER_WITHDRAWAL</a></td>
 		<td class="typecell">TABLE</td>
@@ -627,7 +638,7 @@ pre.spolicyviodisp {
 		<td class="subcell">2025/01/04</td>
 	</tr>
 	<tr>
-		<td class="rownumcell">8</td>
+		<td class="rownumcell">9</td>
 		<td class="aliascell">商品</td>
 		<td class="namecell" data-name="product"><a href="#product" title="type=TABLE, primaryKey={PRODUCT_ID}, nameLength=7, columnCount=11">PRODUCT</a></td>
 		<td class="typecell">TABLE</td>
@@ -638,7 +649,7 @@ pre.spolicyviodisp {
 		<td class="subcell">2025/01/04</td>
 	</tr>
 	<tr>
-		<td class="rownumcell">9</td>
+		<td class="rownumcell">10</td>
 		<td class="aliascell">商品カテゴリ</td>
 		<td class="namecell" data-name="product_category"><a href="#product_category" title="type=TABLE, primaryKey={PRODUCT_CATEGORY_CODE}, nameLength=16, columnCount=3">PRODUCT_CATEGORY</a></td>
 		<td class="typecell">TABLE</td>
@@ -650,9 +661,9 @@ pre.spolicyviodisp {
 		<td class="subcell">2025/01/04</td>
 	</tr>
 	<tr>
-		<td class="rownumcell">10</td>
+		<td class="rownumcell">11</td>
 		<td class="aliascell">商品ステータス</td>
-		<td class="namecell" data-name="product_status"><a href="#product_status" title="type=TABLE, primaryKey={PRODUCT_STATUS_CODE}, nameLength=14, columnCount=2">PRODUCT_STATUS</a></td>
+		<td class="namecell" data-name="product_status"><a href="#product_status" title="type=TABLE, primaryKey={PRODUCT_STATUS_CODE}, nameLength=14, columnCount=3">PRODUCT_STATUS</a></td>
 		<td class="typecell">TABLE</td>
 		<td class="relcell">&nbsp;</td>
 		<td class="relcell"><a href="#product" title="FK_PRODUCT_PRODUCT_STATUS">PRODUCT</a></td>
@@ -661,7 +672,7 @@ pre.spolicyviodisp {
 		<td class="subcell">2025/01/04</td>
 	</tr>
 	<tr>
-		<td class="rownumcell">11</td>
+		<td class="rownumcell">12</td>
 		<td class="aliascell">購入</td>
 		<td class="namecell" data-name="purchase"><a href="#purchase" title="type=TABLE, primaryKey={PURCHASE_ID}, nameLength=8, columnCount=12">PURCHASE</a></td>
 		<td class="typecell">TABLE</td>
@@ -673,7 +684,7 @@ pre.spolicyviodisp {
 		<td class="subcell">2025/01/04</td>
 	</tr>
 	<tr>
-		<td class="rownumcell">12</td>
+		<td class="rownumcell">13</td>
 		<td class="aliascell">購入支払</td>
 		<td class="namecell" data-name="purchase_payment"><a href="#purchase_payment" title="type=TABLE, primaryKey={PURCHASE_PAYMENT_ID}, nameLength=16, columnCount=9">PURCHASE_PAYMENT</a></td>
 		<td class="typecell">TABLE</td>
@@ -685,7 +696,7 @@ pre.spolicyviodisp {
 		<td class="subcell">2025/01/04</td>
 	</tr>
 	<tr>
-		<td class="rownumcell">13</td>
+		<td class="rownumcell">14</td>
 		<td class="aliascell">地域</td>
 		<td class="namecell" data-name="region"><a href="#region" title="type=TABLE, primaryKey={REGION_ID}, nameLength=6, columnCount=2">REGION</a></td>
 		<td class="typecell">TABLE</td>
@@ -697,7 +708,7 @@ pre.spolicyviodisp {
 		<td class="subcell">2025/01/04</td>
 	</tr>
 	<tr>
-		<td class="rownumcell">14</td>
+		<td class="rownumcell">15</td>
 		<td class="aliascell">サービスランク</td>
 		<td class="namecell" data-name="service_rank"><a href="#service_rank" title="type=TABLE, primaryKey={SERVICE_RANK_CODE}, nameLength=12, columnCount=6">SERVICE_RANK</a></td>
 		<td class="typecell">TABLE</td>
@@ -709,7 +720,7 @@ pre.spolicyviodisp {
 		<td class="subcell">2025/01/04</td>
 	</tr>
 	<tr>
-		<td class="rownumcell">15</td>
+		<td class="rownumcell">16</td>
 		<td class="aliascell">退会理由</td>
 		<td class="namecell" data-name="withdrawal_reason"><a href="#withdrawal_reason" title="type=TABLE, primaryKey={WITHDRAWAL_REASON_CODE}, nameLength=17, columnCount=3">WITHDRAWAL_REASON</a></td>
 		<td class="typecell">TABLE</td>
@@ -765,7 +776,7 @@ pre.spolicyviodisp {
 		<td class="typecell">INT</td>
 		<td class="sizecell"> 10 </td>
 		<td class="relcell"><a href="#member_address" class="additionalfk" title="FK_MEMBER_MEMBER_ADDRESS_VALID: fixedCondition=&quot;$$foreignAlias$$.VALID_BEGIN_DATE &lt;= /*$$locationBase$$.parameterMapMemberAddressAsValid.targetDate*/null\n     and $$foreignAlias$$.VALID_END_DATE &gt;= /*$$locationBase$$.parameterMapMemberAddressAsValid.targetDate*/null&quot;, comment=有効な会員住所 (現在日時を入れれば現在住所)">MEMBER_ADDRESS(AsValid)</a>,<br><a href="#member_login" class="additionalfk" title="FK_MEMBER_MEMBER_LOGIN_LATEST: fixedCondition=&quot;$$foreignAlias$$.LOGIN_DATETIME = ($$sqbegin$$\nselect max(login.LOGIN_DATETIME)\nfrom MEMBER_LOGIN login\nwhere login.MEMBER_ID = $$foreignAlias$$.MEMBER_ID\n)$$sqend$$&quot;, comment=最終ログイン情報">MEMBER_LOGIN(AsLatest)</a>&nbsp;</td>
-		<td class="relcell"><a href="#member_address" title="FK_MEMBER_ADDRESS_MEMBER">MEMBER_ADDRESS</a>,<br><a href="#member_login" title="FK_MEMBER_LOGIN_MEMBER">MEMBER_LOGIN</a>,<br><a href="#member_security" title="FK_MEMBER_SECURITY_MEMBER">MEMBER_SECURITY</a>,<br><a href="#member_service" title="FK_MEMBER_SERVICE_MEMBER">MEMBER_SERVICE</a>,<br><a href="#member_withdrawal" title="FK_MEMBER_WITHDRAWAL_MEMBER">MEMBER_WITHDRAWAL</a>,<br><a href="#purchase" title="FK_PURCHASE_MEMBER">PURCHASE</a>&nbsp;</td>
+		<td class="relcell"><a href="#member_address" title="FK_MEMBER_ADDRESS_MEMBER">MEMBER_ADDRESS</a>,<br><a href="#member_following" title="FK_MEMBER_FOLLOWING_MY_MEMBER">MEMBER_FOLLOWING</a>,<br><a href="#member_following" title="FK_MEMBER_FOLLOWING_YOUR_MEMBER">MEMBER_FOLLOWING</a>,<br><a href="#member_login" title="FK_MEMBER_LOGIN_MEMBER">MEMBER_LOGIN</a>,<br><a href="#member_security" title="FK_MEMBER_SECURITY_MEMBER">MEMBER_SECURITY</a>,<br><a href="#member_service" title="FK_MEMBER_SERVICE_MEMBER">MEMBER_SERVICE</a>,<br><a href="#member_withdrawal" title="FK_MEMBER_WITHDRAWAL_MEMBER">MEMBER_WITHDRAWAL</a>,<br><a href="#purchase" title="FK_PURCHASE_MEMBER">PURCHASE</a>&nbsp;</td>
 		<td class="relcell"> &nbsp;</td>
 		<td class="commentcell"><pre>会員を識別するID。連番として基本的に自動採番される。
 （会員IDだけに限らず）採番方法はDBMSによって変わる。</pre></td>
@@ -1216,6 +1227,114 @@ pre.spolicyviodisp {
 	</tbody>
 </table>
 
+<h2 id="member_following" title="type=TABLE, primaryKey={MEMBER_FOLLOWING_ID}, nameLength=16, columnCount=4">
+(会員フォローイング)MEMBER_FOLLOWING
+&nbsp;<span class="tablefirstdatetitle">since 2025/06/21</span>
+</h2>
+<div class="tablecomment member_following_comment" data-name="member_following"><pre>とある会員が他の会員をフォローできる。すると、フォローした会員の購入履歴が閲覧できる。</pre></div>
+<input type="hidden" value="member_following">
+<table class="tablecontent">
+	<thead>
+	<tr>
+		<th class="rownumhead">No.</th>
+		<th>PK</th>
+		<th>ID</th>
+		<th>UQ</th>
+		<th>IX</th>
+		<th>Not<br />Null</th>
+		<th>Alias</th>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Size</th>
+		<th>ForeignTable</th>
+		<th>ReferrerTable</th>
+		<th>Classification</th>
+		<th>ColumnComment</th>
+		<th>PropertyName</th>
+		<th>JavaType</th>
+		<th>Since</th>
+	</tr>
+	</thead>
+	<tbody id="member_following-body">
+	<tr>
+		<td class="rownumcell">1</td>
+		<td class="flgcell" title="PRIMARY">o</td>
+		<td class="flgcell">o</td>
+		<td class="flgcell">&nbsp;</td>
+		<td class="flgcell">&nbsp;</td>
+		<td class="flgcell">*</td>
+		<td class="aliascell">会員フォローイングID</td>
+		<td class=" columnnamecell" id="member_following_member_following_id">MEMBER_FOLLOWING_ID</td>
+		<td class="typecell">BIGINT</td>
+		<td class="sizecell"> 19 </td>
+		<td class="relcell">&nbsp;&nbsp;</td>
+		<td class="relcell">&nbsp;</td>
+		<td class="relcell"> &nbsp;</td>
+		<td class="commentcell"><pre>連番</pre></td>
+		<td class="subcell">memberFollowingId</td>
+		<td class="subcell">Long</td>
+		<td class="subcell">first</td>
+	</tr>
+	<tr>
+		<td class="rownumcell">2</td>
+		<td class="flgcell">&nbsp;</td>
+		<td class="flgcell"> &nbsp;</td>
+		<td class="flgcell" title="MY_MEMBER_ID(MY_MEMBER_ID, YOUR_MEMBER_ID)">o<span class="flgplus">+</span></td>
+		<td class="flgcell" title="IX_MEMBER_FOLLOWING_UNIQUE_REVERSE(YOUR_MEMBER_ID, MY_MEMBER_ID)"><span class="flgplus">+</span>o</td>
+		<td class="flgcell">*</td>
+		<td class="aliascell">わたし</td>
+		<td class=" columnnamecell" id="member_following_my_member_id">MY_MEMBER_ID</td>
+		<td class="typecell">INT</td>
+		<td class="sizecell"> 10 </td>
+		<td class="relcell"><a href="#member" title="FK_MEMBER_FOLLOWING_MY_MEMBER">MEMBER</a>&nbsp;</td>
+		<td class="relcell">&nbsp;</td>
+		<td class="relcell"> &nbsp;</td>
+		<td class="commentcell"><pre>気になった人がいて...勇気を振り絞った会員のID。</pre></td>
+		<td class="subcell">myMemberId</td>
+		<td class="subcell">Integer</td>
+		<td class="subcell">first</td>
+	</tr>
+	<tr>
+		<td class="rownumcell">3</td>
+		<td class="flgcell">&nbsp;</td>
+		<td class="flgcell"> &nbsp;</td>
+		<td class="flgcell" title="MY_MEMBER_ID(MY_MEMBER_ID, YOUR_MEMBER_ID)"><span class="flgplus">+</span>o</td>
+		<td class="flgcell" title="IX_MEMBER_FOLLOWING_UNIQUE_REVERSE(YOUR_MEMBER_ID, MY_MEMBER_ID)">o<span class="flgplus">+</span></td>
+		<td class="flgcell">*</td>
+		<td class="aliascell">あなた</td>
+		<td class=" columnnamecell" id="member_following_your_member_id">YOUR_MEMBER_ID</td>
+		<td class="typecell">INT</td>
+		<td class="sizecell"> 10 </td>
+		<td class="relcell"><a href="#member" title="FK_MEMBER_FOLLOWING_YOUR_MEMBER">MEMBER</a>&nbsp;</td>
+		<td class="relcell">&nbsp;</td>
+		<td class="relcell"> &nbsp;</td>
+		<td class="commentcell"><pre>いきなりのアクションに...ちょっと心揺らいだ会員のID。</pre></td>
+		<td class="subcell">yourMemberId</td>
+		<td class="subcell">Integer</td>
+		<td class="subcell">first</td>
+	</tr>
+	<tr>
+		<td class="rownumcell">4</td>
+		<td class="flgcell">&nbsp;</td>
+		<td class="flgcell"> &nbsp;</td>
+		<td class="flgcell">&nbsp;</td>
+		<td class="flgcell" title="IX_MEMBER_FOLLOWING_FOLLOW_DATETIME(FOLLOW_DATETIME)">o</td>
+		<td class="flgcell">*</td>
+		<td class="aliascell">その瞬間</td>
+		<td class=" columnnamecell" id="member_following_follow_datetime">FOLLOW_DATETIME</td>
+		<td class="typecell">DATETIME</td>
+		<td class="sizecell"> 19 </td>
+		<td class="relcell">&nbsp;&nbsp;</td>
+		<td class="relcell">&nbsp;</td>
+		<td class="relcell"> &nbsp;</td>
+		<td class="commentcell"><pre>ふりかえるとちょっと恥ずかしい気持ちになる日時</pre></td>
+		<td class="subcell">followDatetime</td>
+		<td class="subcell">LocalDateTime</td>
+		<td class="subcell">first</td>
+	</tr>
+	</tbody>
+</table>
+
 <h2 id="member_login" title="type=TABLE, primaryKey={MEMBER_LOGIN_ID}, nameLength=12, columnCount=5">
 (会員ログイン情報)MEMBER_LOGIN
 &nbsp;<span class="tablefirstdatetitle">since 2025/01/04</span>
@@ -1343,7 +1462,7 @@ pre.spolicyviodisp {
 	</tbody>
 </table>
 
-<h2 id="member_security" title="type=TABLE, primaryKey={MEMBER_ID}, nameLength=15, columnCount=9">
+<h2 id="member_security" title="type=TABLE, primaryKey={MEMBER_ID}, nameLength=15, columnCount=10">
 (会員セキュリティ情報)MEMBER_SECURITY
 &nbsp;<span class="tablefirstdatetitle">since 2025/01/04</span>
 </h2>
@@ -1456,6 +1575,25 @@ pre.spolicyviodisp {
 		<td class="flgcell">&nbsp;</td>
 		<td class="flgcell">&nbsp;</td>
 		<td class="flgcell">*</td>
+		<td class="aliascell">リマインダ回数</td>
+		<td class=" columnnamecell" id="member_security_reminder_use_count">REMINDER_USE_COUNT</td>
+		<td class="typecell">INT</td>
+		<td class="sizecell"> 10 </td>
+		<td class="relcell">&nbsp;&nbsp;</td>
+		<td class="relcell">&nbsp;</td>
+		<td class="relcell"> &nbsp;</td>
+		<td class="commentcell"><pre>パスワードを忘れた際のリマインダ機能の利用回数。このカラムから忘れっぽい人を分析する</pre></td>
+		<td class="subcell">reminderUseCount</td>
+		<td class="subcell">Integer</td>
+		<td class="subcell">2025/06/21</td>
+	</tr>
+	<tr>
+		<td class="rownumcell">6</td>
+		<td class="flgcell">&nbsp;</td>
+		<td class="flgcell"> &nbsp;</td>
+		<td class="flgcell">&nbsp;</td>
+		<td class="flgcell">&nbsp;</td>
+		<td class="flgcell">*</td>
 		<td class="aliascell comcolcell"></td>
 		<td class="comcolcell columnnamecell" id="member_security_register_datetime">REGISTER_DATETIME</td>
 		<td class="typecell">DATETIME</td>
@@ -1469,7 +1607,7 @@ pre.spolicyviodisp {
 		<td class="subcell">first</td>
 	</tr>
 	<tr>
-		<td class="rownumcell">6</td>
+		<td class="rownumcell">7</td>
 		<td class="flgcell">&nbsp;</td>
 		<td class="flgcell"> &nbsp;</td>
 		<td class="flgcell">&nbsp;</td>
@@ -1488,7 +1626,7 @@ pre.spolicyviodisp {
 		<td class="subcell">first</td>
 	</tr>
 	<tr>
-		<td class="rownumcell">7</td>
+		<td class="rownumcell">8</td>
 		<td class="flgcell">&nbsp;</td>
 		<td class="flgcell"> &nbsp;</td>
 		<td class="flgcell">&nbsp;</td>
@@ -1507,7 +1645,7 @@ pre.spolicyviodisp {
 		<td class="subcell">first</td>
 	</tr>
 	<tr>
-		<td class="rownumcell">8</td>
+		<td class="rownumcell">9</td>
 		<td class="flgcell">&nbsp;</td>
 		<td class="flgcell"> &nbsp;</td>
 		<td class="flgcell">&nbsp;</td>
@@ -1526,7 +1664,7 @@ pre.spolicyviodisp {
 		<td class="subcell">first</td>
 	</tr>
 	<tr>
-		<td class="rownumcell">9</td>
+		<td class="rownumcell">10</td>
 		<td class="flgcell">&nbsp;</td>
 		<td class="flgcell"> &nbsp;</td>
 		<td class="flgcell">&nbsp;</td>
@@ -1547,7 +1685,7 @@ pre.spolicyviodisp {
 	</tbody>
 </table>
 
-<h2 id="member_service" title="type=TABLE, primaryKey={MEMBER_ID}, nameLength=14, columnCount=8">
+<h2 id="member_service" title="type=TABLE, primaryKey={MEMBER_SERVICE_ID}, nameLength=14, columnCount=9">
 (会員サービス)MEMBER_SERVICE
 &nbsp;<span class="tablefirstdatetitle">since 2025/01/04</span>
 </h2>
@@ -1579,8 +1717,27 @@ pre.spolicyviodisp {
 	<tr>
 		<td class="rownumcell">1</td>
 		<td class="flgcell" title="PRIMARY">o</td>
-		<td class="flgcell"> &nbsp;</td>
+		<td class="flgcell">o</td>
 		<td class="flgcell">&nbsp;</td>
+		<td class="flgcell">&nbsp;</td>
+		<td class="flgcell">*</td>
+		<td class="aliascell">会員サービスID</td>
+		<td class=" columnnamecell" id="member_service_member_service_id">MEMBER_SERVICE_ID</td>
+		<td class="typecell">INT</td>
+		<td class="sizecell"> 10 </td>
+		<td class="relcell">&nbsp;&nbsp;</td>
+		<td class="relcell">&nbsp;</td>
+		<td class="relcell"> &nbsp;</td>
+		<td class="commentcell"><pre>会員サービスを識別するID。連番として基本的に自動採番される。</pre></td>
+		<td class="subcell">memberServiceId</td>
+		<td class="subcell">Integer</td>
+		<td class="subcell">2025/06/21</td>
+	</tr>
+	<tr>
+		<td class="rownumcell">2</td>
+		<td class="flgcell">&nbsp;</td>
+		<td class="flgcell"> &nbsp;</td>
+		<td class="flgcell" title="MEMBER_ID(MEMBER_ID)">o</td>
 		<td class="flgcell">&nbsp;</td>
 		<td class="flgcell">*</td>
 		<td class="aliascell">会員ID</td>
@@ -1596,14 +1753,14 @@ pre.spolicyviodisp {
 		<td class="subcell">first</td>
 	</tr>
 	<tr>
-		<td class="rownumcell">2</td>
+		<td class="rownumcell">3</td>
 		<td class="flgcell">&nbsp;</td>
 		<td class="flgcell"> &nbsp;</td>
 		<td class="flgcell">&nbsp;</td>
-		<td class="flgcell" title="IX_MEMBER_SERVICE_POINT_COUNT(AKIRAKANI_OKASHII_KARAMU_MEI)">o</td>
+		<td class="flgcell" title="IX_MEMBER_SERVICE_POINT_COUNT(SERVICE_POINT_COUNT)">o</td>
 		<td class="flgcell">*</td>
 		<td class="aliascell">サービスポイント数</td>
-		<td class=" columnnamecell" id="member_service_akirakani_okashii_karamu_mei">AKIRAKANI_OKASHII_KARAMU_MEI</td>
+		<td class=" columnnamecell" id="member_service_service_point_count">SERVICE_POINT_COUNT</td>
 		<td class="typecell">INT</td>
 		<td class="sizecell"> 10 </td>
 		<td class="relcell">&nbsp;&nbsp;</td>
@@ -1611,12 +1768,12 @@ pre.spolicyviodisp {
 		<td class="relcell"> &nbsp;</td>
 		<td class="commentcell"><pre>会員が現在利用できるサービスポイントの数。
 基本的に、購入時には増えてポイントを使ったら減る。</pre></td>
-		<td class="subcell">akirakaniOkashiiKaramuMei</td>
+		<td class="subcell">servicePointCount</td>
 		<td class="subcell">Integer</td>
-		<td class="subcell">first</td>
+		<td class="subcell">2025/06/21</td>
 	</tr>
 	<tr>
-		<td class="rownumcell">3</td>
+		<td class="rownumcell">4</td>
 		<td class="flgcell">&nbsp;</td>
 		<td class="flgcell"> &nbsp;</td>
 		<td class="flgcell">&nbsp;</td>
@@ -1636,7 +1793,7 @@ pre.spolicyviodisp {
 		<td class="subcell">first</td>
 	</tr>
 	<tr>
-		<td class="rownumcell">4</td>
+		<td class="rownumcell">5</td>
 		<td class="flgcell">&nbsp;</td>
 		<td class="flgcell"> &nbsp;</td>
 		<td class="flgcell">&nbsp;</td>
@@ -1655,7 +1812,7 @@ pre.spolicyviodisp {
 		<td class="subcell">first</td>
 	</tr>
 	<tr>
-		<td class="rownumcell">5</td>
+		<td class="rownumcell">6</td>
 		<td class="flgcell">&nbsp;</td>
 		<td class="flgcell"> &nbsp;</td>
 		<td class="flgcell">&nbsp;</td>
@@ -1674,7 +1831,7 @@ pre.spolicyviodisp {
 		<td class="subcell">first</td>
 	</tr>
 	<tr>
-		<td class="rownumcell">6</td>
+		<td class="rownumcell">7</td>
 		<td class="flgcell">&nbsp;</td>
 		<td class="flgcell"> &nbsp;</td>
 		<td class="flgcell">&nbsp;</td>
@@ -1693,7 +1850,7 @@ pre.spolicyviodisp {
 		<td class="subcell">first</td>
 	</tr>
 	<tr>
-		<td class="rownumcell">7</td>
+		<td class="rownumcell">8</td>
 		<td class="flgcell">&nbsp;</td>
 		<td class="flgcell"> &nbsp;</td>
 		<td class="flgcell">&nbsp;</td>
@@ -1712,7 +1869,7 @@ pre.spolicyviodisp {
 		<td class="subcell">first</td>
 	</tr>
 	<tr>
-		<td class="rownumcell">8</td>
+		<td class="rownumcell">9</td>
 		<td class="flgcell">&nbsp;</td>
 		<td class="flgcell"> &nbsp;</td>
 		<td class="flgcell">&nbsp;</td>
@@ -2161,7 +2318,7 @@ pre.spolicyviodisp {
 		<td class="flgcell"> &nbsp;</td>
 		<td class="flgcell">&nbsp;</td>
 		<td class="flgcell">&nbsp;</td>
-		<td class="flgcell"> &nbsp;</td>
+		<td class="flgcell">*</td>
 		<td class="aliascell">定価</td>
 		<td class=" columnnamecell" id="product_regular_price">REGULAR_PRICE</td>
 		<td class="typecell">INT</td>
@@ -2362,7 +2519,7 @@ pre.spolicyviodisp {
 	</tbody>
 </table>
 
-<h2 id="product_status" title="type=TABLE, primaryKey={PRODUCT_STATUS_CODE}, nameLength=14, columnCount=2">
+<h2 id="product_status" title="type=TABLE, primaryKey={PRODUCT_STATUS_CODE}, nameLength=14, columnCount=3">
 (商品ステータス)PRODUCT_STATUS
 &nbsp;<span class="tablefirstdatetitle">since 2025/01/04</span>
 </h2>
@@ -2428,6 +2585,25 @@ pre.spolicyviodisp {
 		<td class="subcell">productStatusName</td>
 		<td class="subcell">String</td>
 		<td class="subcell">first</td>
+	</tr>
+	<tr>
+		<td class="rownumcell">3</td>
+		<td class="flgcell">&nbsp;</td>
+		<td class="flgcell"> &nbsp;</td>
+		<td class="flgcell" title="DISPLAY_ORDER(DISPLAY_ORDER)">o</td>
+		<td class="flgcell">&nbsp;</td>
+		<td class="flgcell">*</td>
+		<td class="aliascell">表示順</td>
+		<td class=" columnnamecell" id="product_status_display_order">DISPLAY_ORDER</td>
+		<td class="typecell">INT</td>
+		<td class="sizecell"> 10 </td>
+		<td class="relcell">&nbsp;&nbsp;</td>
+		<td class="relcell">&nbsp;</td>
+		<td class="relcell"> &nbsp;</td>
+		<td class="commentcell"><pre>&nbsp;</pre></td>
+		<td class="subcell">displayOrder</td>
+		<td class="subcell">Integer</td>
+		<td class="subcell">2025/06/21</td>
 	</tr>
 	</tbody>
 </table>
@@ -4242,6 +4418,23 @@ function StoreClient() {
 				}
 			}
 		}
+		, 'member_following': {
+			'databaseComment': 'とある会員が他の会員をフォローできる。すると、フォローした会員の購入履歴が閲覧できる。'
+			, 'columns': {
+				'MEMBER_FOLLOWING_ID': {
+					'databaseComment': '連番'
+				}
+				, 'MY_MEMBER_ID': {
+					'databaseComment': '気になった人がいて...勇気を振り絞った会員のID。'
+				}
+				, 'YOUR_MEMBER_ID': {
+					'databaseComment': 'いきなりのアクションに...ちょっと心揺らいだ会員のID。'
+				}
+				, 'FOLLOW_DATETIME': {
+					'databaseComment': 'ふりかえるとちょっと恥ずかしい気持ちになる日時'
+				}
+			}
+		}
 		, 'member_login': {
 			'databaseComment': 'ログインするたびに登録されるログイン履歴。'
 			, 'columns': {
@@ -4277,6 +4470,9 @@ function StoreClient() {
 				, 'REMINDER_ANSWER': {
 					'databaseComment': 'パスワードを忘れた際のリマインダ機能における質問の答え。'
 				}
+				, 'REMINDER_USE_COUNT': {
+					'databaseComment': 'パスワードを忘れた際のリマインダ機能の利用回数。このカラムから忘れっぽい人を分析する'
+				}
 				, 'REGISTER_DATETIME': {
 					'databaseComment': ''
 				}
@@ -4297,10 +4493,13 @@ function StoreClient() {
 		, 'member_service': {
 			'databaseComment': '会員のサービス情報（ポイントサービスなど）。'
 			, 'columns': {
-				'MEMBER_ID': {
+				'MEMBER_SERVICE_ID': {
+					'databaseComment': '会員サービスを識別するID。連番として基本的に自動採番される。'
+				}
+				, 'MEMBER_ID': {
 					'databaseComment': '会員を参照するID。ユニークなので、会員とは&nbsp;one-to-one&nbsp;の関係に。'
 				}
-				, 'AKIRAKANI_OKASHII_KARAMU_MEI': {
+				, 'SERVICE_POINT_COUNT': {
 					'databaseComment': '会員が現在利用できるサービスポイントの数。<br>基本的に、購入時には増えてポイントを使ったら減る。'
 				}
 				, 'SERVICE_RANK_CODE': {
@@ -4428,6 +4627,9 @@ function StoreClient() {
 					'databaseComment': ''
 				}
 				, 'PRODUCT_STATUS_NAME': {
+					'databaseComment': ''
+				}
+				, 'DISPLAY_ORDER': {
 					'databaseComment': ''
 				}
 			}

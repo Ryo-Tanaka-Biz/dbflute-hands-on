@@ -109,6 +109,42 @@
             <index-column name="REGION_ID" position="1"/>
         </index>
     </table>
+    <table
+        comment="会員フォローイング: とある会員が他の会員をフォローできる。すると、フォローした会員の購入履歴が閲覧できる。"
+        name="member_following" schema="maihamadb.$$NoNameSchema$$" type="TABLE">
+        <column autoIncrement="true" comment="会員フォローイングID: 連番"
+            dbType="BIGINT" javaType="Long" name="MEMBER_FOLLOWING_ID"
+            pkName="PRIMARY" pkPosition="1" primaryKey="true"
+            required="true" size="19" type="BIGINT"/>
+        <column comment="わたし: 気になった人がいて...勇気を振り絞った会員のID。" dbType="INT"
+            javaType="Integer" name="MY_MEMBER_ID" required="true"
+            size="10" type="INTEGER"/>
+        <column comment="あなた: いきなりのアクションに...ちょっと心揺らいだ会員のID。"
+            dbType="INT" javaType="Integer" name="YOUR_MEMBER_ID"
+            required="true" size="10" type="INTEGER"/>
+        <column comment="その瞬間: ふりかえるとちょっと恥ずかしい気持ちになる日時"
+            dbType="DATETIME" javaType="java.time.LocalDateTime"
+            name="FOLLOW_DATETIME" required="true" size="19" type="TIMESTAMP"/>
+        <foreign-key foreignSchema="maihamadb.$$NoNameSchema$$"
+            foreignTable="member" name="FK_MEMBER_FOLLOWING_MY_MEMBER">
+            <reference foreign="MEMBER_ID" local="MY_MEMBER_ID"/>
+        </foreign-key>
+        <foreign-key foreignSchema="maihamadb.$$NoNameSchema$$"
+            foreignTable="member" name="FK_MEMBER_FOLLOWING_YOUR_MEMBER">
+            <reference foreign="MEMBER_ID" local="YOUR_MEMBER_ID"/>
+        </foreign-key>
+        <unique name="MY_MEMBER_ID">
+            <unique-column name="MY_MEMBER_ID" position="1"/>
+            <unique-column name="YOUR_MEMBER_ID" position="2"/>
+        </unique>
+        <index name="IX_MEMBER_FOLLOWING_FOLLOW_DATETIME">
+            <index-column name="FOLLOW_DATETIME" position="1"/>
+        </index>
+        <index name="IX_MEMBER_FOLLOWING_UNIQUE_REVERSE">
+            <index-column name="YOUR_MEMBER_ID" position="1"/>
+            <index-column name="MY_MEMBER_ID" position="2"/>
+        </index>
+    </table>
     <table comment="会員ログイン情報: ログインするたびに登録されるログイン履歴。" name="member_login"
         schema="maihamadb.$$NoNameSchema$$" type="TABLE">
         <column autoIncrement="true" comment="会員ログインID" dbType="BIGINT"
@@ -161,6 +197,10 @@
         <column comment="リマインダ回答: パスワードを忘れた際のリマインダ機能における質問の答え。"
             dbType="VARCHAR" javaType="String" name="REMINDER_ANSWER"
             required="true" size="50" type="VARCHAR"/>
+        <column
+            comment="リマインダ回数: パスワードを忘れた際のリマインダ機能の利用回数。このカラムから忘れっぽい人を分析する"
+            dbType="INT" javaType="Integer" name="REMINDER_USE_COUNT"
+            required="true" size="10" type="INTEGER"/>
         <column comment="" dbType="DATETIME"
             javaType="java.time.LocalDateTime" name="REGISTER_DATETIME"
             required="true" size="19" type="TIMESTAMP"/>
@@ -180,15 +220,18 @@
     </table>
     <table comment="会員サービス: 会員のサービス情報（ポイントサービスなど）。"
         name="member_service" schema="maihamadb.$$NoNameSchema$$" type="TABLE">
+        <column autoIncrement="true"
+            comment="会員サービスID: 会員サービスを識別するID。連番として基本的に自動採番される。"
+            dbType="INT" javaType="Integer" name="MEMBER_SERVICE_ID"
+            pkName="PRIMARY" pkPosition="1" primaryKey="true"
+            required="true" size="10" type="INTEGER"/>
         <column comment="会員ID: 会員を参照するID。ユニークなので、会員とは one-to-one の関係に。"
             dbType="INT" javaType="Integer" name="MEMBER_ID"
-            pkName="PRIMARY" pkPosition="1" primaryKey="true"
             required="true" size="10" type="INTEGER"/>
         <column
             comment="サービスポイント数: 会員が現在利用できるサービスポイントの数。&#xa;基本的に、購入時には増えてポイントを使ったら減る。"
-            dbType="INT" javaType="Integer"
-            name="AKIRAKANI_OKASHII_KARAMU_MEI" required="true"
-            size="10" type="INTEGER"/>
+            dbType="INT" javaType="Integer" name="SERVICE_POINT_COUNT"
+            required="true" size="10" type="INTEGER"/>
         <column
             comment="サービスランクコード: サービスランクを参照するコード。&#xa;どんなランクがあるのかドキドキですね。"
             dbType="CHAR" javaType="String" name="SERVICE_RANK_CODE"
@@ -213,11 +256,14 @@
             foreignTable="service_rank" name="FK_MEMBER_SERVICE_SERVICE_RANK_CODE">
             <reference foreign="SERVICE_RANK_CODE" local="SERVICE_RANK_CODE"/>
         </foreign-key>
+        <unique name="MEMBER_ID">
+            <unique-column name="MEMBER_ID" position="1"/>
+        </unique>
         <index name="FK_MEMBER_SERVICE_SERVICE_RANK_CODE">
             <index-column name="SERVICE_RANK_CODE" position="1"/>
         </index>
         <index name="IX_MEMBER_SERVICE_POINT_COUNT">
-            <index-column name="AKIRAKANI_OKASHII_KARAMU_MEI" position="1"/>
+            <index-column name="SERVICE_POINT_COUNT" position="1"/>
         </index>
     </table>
     <table comment="会員ステータス" name="member_status"
@@ -293,7 +339,7 @@
         <column comment="" dbType="CHAR" javaType="String"
             name="PRODUCT_STATUS_CODE" required="true" size="3" type="CHAR"/>
         <column comment="定価" dbType="INT" javaType="Integer"
-            name="REGULAR_PRICE" size="10" type="INTEGER"/>
+            name="REGULAR_PRICE" required="true" size="10" type="INTEGER"/>
         <column comment="" dbType="DATETIME"
             javaType="java.time.LocalDateTime" name="REGISTER_DATETIME"
             required="true" size="19" type="TIMESTAMP"/>
@@ -351,6 +397,11 @@
             primaryKey="true" required="true" size="3" type="CHAR"/>
         <column comment="商品ステータス名称" dbType="VARCHAR" javaType="String"
             name="PRODUCT_STATUS_NAME" required="true" size="50" type="VARCHAR"/>
+        <column comment="表示順" dbType="INT" javaType="Integer"
+            name="DISPLAY_ORDER" required="true" size="10" type="INTEGER"/>
+        <unique name="DISPLAY_ORDER">
+            <unique-column name="DISPLAY_ORDER" position="1"/>
+        </unique>
     </table>
     <table
         comment="購入: 一つの商品に対する一回の購入を表現する。&#xa;一回の購入で一つの商品を複数個買うこともある。"

@@ -376,7 +376,7 @@ public class BsProductCB extends AbstractConditionBean {
          */
         public SpecifiedColumn columnProductStatusCode() { return doColumn("PRODUCT_STATUS_CODE"); }
         /**
-         * (定価)REGULAR_PRICE: {INT(10)}
+         * (定価)REGULAR_PRICE: {NotNull, INT(10)}
          * @return The information object of specified column. (NotNull)
          */
         public SpecifiedColumn columnRegularPrice() { return doColumn("REGULAR_PRICE"); }

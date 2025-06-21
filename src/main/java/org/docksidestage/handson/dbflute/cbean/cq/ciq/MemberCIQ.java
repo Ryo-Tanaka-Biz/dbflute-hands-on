@@ -64,17 +64,29 @@ public class MemberCIQ extends AbstractBsMemberCQ {
     protected ConditionValue xgetCValueMemberId() { return _myCQ.xdfgetMemberId(); }
     public String keepMemberId_ExistsReferrer_MemberAddressList(MemberAddressCQ sq)
     { throwIICBOE("ExistsReferrer"); return null; }
+    public String keepMemberId_ExistsReferrer_MemberFollowingByMyMemberIdList(MemberFollowingCQ sq)
+    { throwIICBOE("ExistsReferrer"); return null; }
+    public String keepMemberId_ExistsReferrer_MemberFollowingByYourMemberIdList(MemberFollowingCQ sq)
+    { throwIICBOE("ExistsReferrer"); return null; }
     public String keepMemberId_ExistsReferrer_MemberLoginList(MemberLoginCQ sq)
     { throwIICBOE("ExistsReferrer"); return null; }
     public String keepMemberId_ExistsReferrer_PurchaseList(PurchaseCQ sq)
     { throwIICBOE("ExistsReferrer"); return null; }
     public String keepMemberId_NotExistsReferrer_MemberAddressList(MemberAddressCQ sq)
     { throwIICBOE("NotExistsReferrer"); return null; }
+    public String keepMemberId_NotExistsReferrer_MemberFollowingByMyMemberIdList(MemberFollowingCQ sq)
+    { throwIICBOE("NotExistsReferrer"); return null; }
+    public String keepMemberId_NotExistsReferrer_MemberFollowingByYourMemberIdList(MemberFollowingCQ sq)
+    { throwIICBOE("NotExistsReferrer"); return null; }
     public String keepMemberId_NotExistsReferrer_MemberLoginList(MemberLoginCQ sq)
     { throwIICBOE("NotExistsReferrer"); return null; }
     public String keepMemberId_NotExistsReferrer_PurchaseList(PurchaseCQ sq)
     { throwIICBOE("NotExistsReferrer"); return null; }
     public String keepMemberId_SpecifyDerivedReferrer_MemberAddressList(MemberAddressCQ sq)
+    { throwIICBOE("(Specify)DerivedReferrer"); return null; }
+    public String keepMemberId_SpecifyDerivedReferrer_MemberFollowingByMyMemberIdList(MemberFollowingCQ sq)
+    { throwIICBOE("(Specify)DerivedReferrer"); return null; }
+    public String keepMemberId_SpecifyDerivedReferrer_MemberFollowingByYourMemberIdList(MemberFollowingCQ sq)
     { throwIICBOE("(Specify)DerivedReferrer"); return null; }
     public String keepMemberId_SpecifyDerivedReferrer_MemberLoginList(MemberLoginCQ sq)
     { throwIICBOE("(Specify)DerivedReferrer"); return null; }
@@ -83,6 +95,14 @@ public class MemberCIQ extends AbstractBsMemberCQ {
     public String keepMemberId_QueryDerivedReferrer_MemberAddressList(MemberAddressCQ sq)
     { throwIICBOE("(Query)DerivedReferrer"); return null; }
     public String keepMemberId_QueryDerivedReferrer_MemberAddressListParameter(Object vl)
+    { throwIICBOE("(Query)DerivedReferrer"); return null; }
+    public String keepMemberId_QueryDerivedReferrer_MemberFollowingByMyMemberIdList(MemberFollowingCQ sq)
+    { throwIICBOE("(Query)DerivedReferrer"); return null; }
+    public String keepMemberId_QueryDerivedReferrer_MemberFollowingByMyMemberIdListParameter(Object vl)
+    { throwIICBOE("(Query)DerivedReferrer"); return null; }
+    public String keepMemberId_QueryDerivedReferrer_MemberFollowingByYourMemberIdList(MemberFollowingCQ sq)
+    { throwIICBOE("(Query)DerivedReferrer"); return null; }
+    public String keepMemberId_QueryDerivedReferrer_MemberFollowingByYourMemberIdListParameter(Object vl)
     { throwIICBOE("(Query)DerivedReferrer"); return null; }
     public String keepMemberId_QueryDerivedReferrer_MemberLoginList(MemberLoginCQ sq)
     { throwIICBOE("(Query)DerivedReferrer"); return null; }

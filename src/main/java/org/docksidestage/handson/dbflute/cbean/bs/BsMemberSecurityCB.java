@@ -335,6 +335,11 @@ public class BsMemberSecurityCB extends AbstractConditionBean {
          */
         public SpecifiedColumn columnReminderAnswer() { return doColumn("REMINDER_ANSWER"); }
         /**
+         * (リマインダ回数)REMINDER_USE_COUNT: {NotNull, INT(10)}
+         * @return The information object of specified column. (NotNull)
+         */
+        public SpecifiedColumn columnReminderUseCount() { return doColumn("REMINDER_USE_COUNT"); }
+        /**
          * REGISTER_DATETIME: {NotNull, DATETIME(19)}
          * @return The information object of specified column. (NotNull)
          */

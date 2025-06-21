@@ -688,6 +688,40 @@ public class BsMemberCB extends AbstractConditionBean {
         }
         /**
          * Prepare for (Specify)DerivedReferrer (correlated sub-query). <br>
+         * {select max(FOO) from member_following where ...) as FOO_MAX} <br>
+         * (会員フォローイング)MEMBER_FOLLOWING by MY_MEMBER_ID, named 'memberFollowingByMyMemberIdList'.
+         * <pre>
+         * cb.specify().<span style="color: #CC4747">derived${relationMethodIdentityName}()</span>.<span style="color: #CC4747">max</span>(followingCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+         *     followingCB.specify().<span style="color: #CC4747">column...</span> <span style="color: #3F7E5E">// derived column by function</span>
+         *     followingCB.query().set... <span style="color: #3F7E5E">// referrer condition</span>
+         * }, MemberFollowing.<span style="color: #CC4747">ALIAS_foo...</span>);
+         * </pre>
+         * @return The object to set up a function for referrer table. (NotNull)
+         */
+        public HpSDRFunction<MemberFollowingCB, MemberCQ> derivedMemberFollowingByMyMemberId() {
+            assertDerived("memberFollowingByMyMemberIdList"); if (xhasSyncQyCall()) { xsyncQyCall().qy(); } // for sync (for example, this in ColumnQuery)
+            return cHSDRF(_baseCB, _qyCall.qy(), (String fn, SubQuery<MemberFollowingCB> sq, MemberCQ cq, String al, DerivedReferrerOption op)
+                    -> cq.xsderiveMemberFollowingByMyMemberIdList(fn, sq, al, op), _dbmetaProvider);
+        }
+        /**
+         * Prepare for (Specify)DerivedReferrer (correlated sub-query). <br>
+         * {select max(FOO) from member_following where ...) as FOO_MAX} <br>
+         * (会員フォローイング)MEMBER_FOLLOWING by YOUR_MEMBER_ID, named 'memberFollowingByYourMemberIdList'.
+         * <pre>
+         * cb.specify().<span style="color: #CC4747">derived${relationMethodIdentityName}()</span>.<span style="color: #CC4747">max</span>(followingCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+         *     followingCB.specify().<span style="color: #CC4747">column...</span> <span style="color: #3F7E5E">// derived column by function</span>
+         *     followingCB.query().set... <span style="color: #3F7E5E">// referrer condition</span>
+         * }, MemberFollowing.<span style="color: #CC4747">ALIAS_foo...</span>);
+         * </pre>
+         * @return The object to set up a function for referrer table. (NotNull)
+         */
+        public HpSDRFunction<MemberFollowingCB, MemberCQ> derivedMemberFollowingByYourMemberId() {
+            assertDerived("memberFollowingByYourMemberIdList"); if (xhasSyncQyCall()) { xsyncQyCall().qy(); } // for sync (for example, this in ColumnQuery)
+            return cHSDRF(_baseCB, _qyCall.qy(), (String fn, SubQuery<MemberFollowingCB> sq, MemberCQ cq, String al, DerivedReferrerOption op)
+                    -> cq.xsderiveMemberFollowingByYourMemberIdList(fn, sq, al, op), _dbmetaProvider);
+        }
+        /**
+         * Prepare for (Specify)DerivedReferrer (correlated sub-query). <br>
          * {select max(FOO) from member_login where ...) as FOO_MAX} <br>
          * (会員ログイン情報)MEMBER_LOGIN by MEMBER_ID, named 'memberLoginList'.
          * <pre>

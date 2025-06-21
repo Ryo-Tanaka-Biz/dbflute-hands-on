@@ -795,7 +795,7 @@ public abstract class AbstractBsProductCQ extends AbstractConditionQuery {
 
     /**
      * Equal(=). And NullIgnored, OnlyOnceRegistered. <br>
-     * (定価)REGULAR_PRICE: {INT(10)}
+     * (定価)REGULAR_PRICE: {NotNull, INT(10)}
      * @param regularPrice The value of regularPrice as equal. (basically NotNull: error as default, or no condition as option)
      */
     public void setRegularPrice_Equal(Integer regularPrice) {
@@ -808,7 +808,7 @@ public abstract class AbstractBsProductCQ extends AbstractConditionQuery {
 
     /**
      * NotEqual(&lt;&gt;). And NullIgnored, OnlyOnceRegistered. <br>
-     * (定価)REGULAR_PRICE: {INT(10)}
+     * (定価)REGULAR_PRICE: {NotNull, INT(10)}
      * @param regularPrice The value of regularPrice as notEqual. (basically NotNull: error as default, or no condition as option)
      */
     public void setRegularPrice_NotEqual(Integer regularPrice) {
@@ -821,7 +821,7 @@ public abstract class AbstractBsProductCQ extends AbstractConditionQuery {
 
     /**
      * GreaterThan(&gt;). And NullIgnored, OnlyOnceRegistered. <br>
-     * (定価)REGULAR_PRICE: {INT(10)}
+     * (定価)REGULAR_PRICE: {NotNull, INT(10)}
      * @param regularPrice The value of regularPrice as greaterThan. (basically NotNull: error as default, or no condition as option)
      */
     public void setRegularPrice_GreaterThan(Integer regularPrice) {
@@ -830,7 +830,7 @@ public abstract class AbstractBsProductCQ extends AbstractConditionQuery {
 
     /**
      * LessThan(&lt;). And NullIgnored, OnlyOnceRegistered. <br>
-     * (定価)REGULAR_PRICE: {INT(10)}
+     * (定価)REGULAR_PRICE: {NotNull, INT(10)}
      * @param regularPrice The value of regularPrice as lessThan. (basically NotNull: error as default, or no condition as option)
      */
     public void setRegularPrice_LessThan(Integer regularPrice) {
@@ -839,7 +839,7 @@ public abstract class AbstractBsProductCQ extends AbstractConditionQuery {
 
     /**
      * GreaterEqual(&gt;=). And NullIgnored, OnlyOnceRegistered. <br>
-     * (定価)REGULAR_PRICE: {INT(10)}
+     * (定価)REGULAR_PRICE: {NotNull, INT(10)}
      * @param regularPrice The value of regularPrice as greaterEqual. (basically NotNull: error as default, or no condition as option)
      */
     public void setRegularPrice_GreaterEqual(Integer regularPrice) {
@@ -848,7 +848,7 @@ public abstract class AbstractBsProductCQ extends AbstractConditionQuery {
 
     /**
      * LessEqual(&lt;=). And NullIgnored, OnlyOnceRegistered. <br>
-     * (定価)REGULAR_PRICE: {INT(10)}
+     * (定価)REGULAR_PRICE: {NotNull, INT(10)}
      * @param regularPrice The value of regularPrice as lessEqual. (basically NotNull: error as default, or no condition as option)
      */
     public void setRegularPrice_LessEqual(Integer regularPrice) {
@@ -859,7 +859,7 @@ public abstract class AbstractBsProductCQ extends AbstractConditionQuery {
      * RangeOf with various options. (versatile) <br>
      * {(default) minNumber &lt;= column &lt;= maxNumber} <br>
      * And NullIgnored, OnlyOnceRegistered. <br>
-     * (定価)REGULAR_PRICE: {INT(10)}
+     * (定価)REGULAR_PRICE: {NotNull, INT(10)}
      * @param minNumber The min number of regularPrice. (basically NotNull: if op.allowOneSide(), null allowed)
      * @param maxNumber The max number of regularPrice. (basically NotNull: if op.allowOneSide(), null allowed)
      * @param opLambda The callback for option of range-of. (NotNull)
@@ -872,7 +872,7 @@ public abstract class AbstractBsProductCQ extends AbstractConditionQuery {
      * RangeOf with various options. (versatile) <br>
      * {(default) minNumber &lt;= column &lt;= maxNumber} <br>
      * And NullIgnored, OnlyOnceRegistered. <br>
-     * (定価)REGULAR_PRICE: {INT(10)}
+     * (定価)REGULAR_PRICE: {NotNull, INT(10)}
      * @param minNumber The min number of regularPrice. (basically NotNull: if op.allowOneSide(), null allowed)
      * @param maxNumber The max number of regularPrice. (basically NotNull: if op.allowOneSide(), null allowed)
      * @param rangeOfOption The option of range-of. (NotNull)
@@ -883,7 +883,7 @@ public abstract class AbstractBsProductCQ extends AbstractConditionQuery {
 
     /**
      * InScope {in (1, 2)}. And NullIgnored, NullElementIgnored, SeveralRegistered. <br>
-     * (定価)REGULAR_PRICE: {INT(10)}
+     * (定価)REGULAR_PRICE: {NotNull, INT(10)}
      * @param regularPriceList The collection of regularPrice as inScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     public void setRegularPrice_InScope(Collection<Integer> regularPriceList) {
@@ -896,7 +896,7 @@ public abstract class AbstractBsProductCQ extends AbstractConditionQuery {
 
     /**
      * NotInScope {not in (1, 2)}. And NullIgnored, NullElementIgnored, SeveralRegistered. <br>
-     * (定価)REGULAR_PRICE: {INT(10)}
+     * (定価)REGULAR_PRICE: {NotNull, INT(10)}
      * @param regularPriceList The collection of regularPrice as notInScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     public void setRegularPrice_NotInScope(Collection<Integer> regularPriceList) {
@@ -906,18 +906,6 @@ public abstract class AbstractBsProductCQ extends AbstractConditionQuery {
     protected void doSetRegularPrice_NotInScope(Collection<Integer> regularPriceList) {
         regINS(CK_NINS, cTL(regularPriceList), xgetCValueRegularPrice(), "REGULAR_PRICE");
     }
-
-    /**
-     * IsNull {is null}. And OnlyOnceRegistered. <br>
-     * (定価)REGULAR_PRICE: {INT(10)}
-     */
-    public void setRegularPrice_IsNull() { regRegularPrice(CK_ISN, DOBJ); }
-
-    /**
-     * IsNotNull {is not null}. And OnlyOnceRegistered. <br>
-     * (定価)REGULAR_PRICE: {INT(10)}
-     */
-    public void setRegularPrice_IsNotNull() { regRegularPrice(CK_ISNN, DOBJ); }
 
     protected void regRegularPrice(ConditionKey ky, Object vl) { regQ(ky, vl, xgetCValueRegularPrice(), "REGULAR_PRICE"); }
     protected abstract ConditionValue xgetCValueRegularPrice();

@@ -1,0 +1,25 @@
+map:{
+    ; 2025/06/21 15:19:44.998 = map:{
+        ; diffDate = 2025/06/21 15:19:44.998
+        ; diffAuthor = ryo.tanaka
+        ; diffGitBranch = master
+        ; tableDiff = map:{
+            ; product_status = map:{
+                ; tableName = product_status
+                ; diffType = CHANGE
+                ; columnDiff = map:{
+                    ; DISPLAY_ORDER = map:{
+                        ; columnName = DISPLAY_ORDER
+                        ; diffType = ADD
+                    }
+                }
+                ; uniqueKeyDiff = map:{
+                    ; DISPLAY_ORDER = map:{
+                        ; constraintName = DISPLAY_ORDER
+                        ; diffType = ADD
+                    }
+                }
+            }
+        }
+    }
+}

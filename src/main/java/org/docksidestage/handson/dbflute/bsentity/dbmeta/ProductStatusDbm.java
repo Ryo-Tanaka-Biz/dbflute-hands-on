@@ -51,6 +51,7 @@ public class ProductStatusDbm extends AbstractDBMeta {
             }
         }, "productStatusCode");
         setupEpg(_epgMap, et -> ((ProductStatus)et).getProductStatusName(), (et, vl) -> ((ProductStatus)et).setProductStatusName((String)vl), "productStatusName");
+        setupEpg(_epgMap, et -> ((ProductStatus)et).getDisplayOrder(), (et, vl) -> ((ProductStatus)et).setDisplayOrder(cti(vl)), "displayOrder");
     }
     public PropertyGateway findPropertyGateway(String prop)
     { return doFindEpg(_epgMap, prop); }
@@ -75,6 +76,7 @@ public class ProductStatusDbm extends AbstractDBMeta {
     //                                                                         ===========
     protected final ColumnInfo _columnProductStatusCode = cci("PRODUCT_STATUS_CODE", "PRODUCT_STATUS_CODE", null, "商品ステータスコード", String.class, "productStatusCode", null, true, false, true, "CHAR", 3, 0, null, null, false, null, null, null, "productList", CDef.DefMeta.ProductStatus, false);
     protected final ColumnInfo _columnProductStatusName = cci("PRODUCT_STATUS_NAME", "PRODUCT_STATUS_NAME", null, "商品ステータス名称", String.class, "productStatusName", null, false, false, true, "VARCHAR", 50, 0, null, null, false, null, null, null, null, null, false);
+    protected final ColumnInfo _columnDisplayOrder = cci("DISPLAY_ORDER", "DISPLAY_ORDER", null, "表示順", Integer.class, "displayOrder", null, false, false, true, "INT", 10, 0, null, null, false, null, null, null, null, null, false);
 
     /**
      * (商品ステータスコード)PRODUCT_STATUS_CODE: {PK, NotNull, CHAR(3), classification=ProductStatus}
@@ -86,11 +88,17 @@ public class ProductStatusDbm extends AbstractDBMeta {
      * @return The information object of specified column. (NotNull)
      */
     public ColumnInfo columnProductStatusName() { return _columnProductStatusName; }
+    /**
+     * (表示順)DISPLAY_ORDER: {UQ, NotNull, INT(10)}
+     * @return The information object of specified column. (NotNull)
+     */
+    public ColumnInfo columnDisplayOrder() { return _columnDisplayOrder; }
 
     protected List<ColumnInfo> ccil() {
         List<ColumnInfo> ls = newArrayList();
         ls.add(columnProductStatusCode());
         ls.add(columnProductStatusName());
+        ls.add(columnDisplayOrder());
         return ls;
     }
 
@@ -105,6 +113,11 @@ public class ProductStatusDbm extends AbstractDBMeta {
     protected UniqueInfo cpui() { return hpcpui(columnProductStatusCode()); }
     public boolean hasPrimaryKey() { return true; }
     public boolean hasCompoundPrimaryKey() { return false; }
+
+    // -----------------------------------------------------
+    //                                        Unique Element
+    //                                        --------------
+    public UniqueInfo uniqueOf() { return hpcui(columnDisplayOrder()); }
 
     // ===================================================================================
     //                                                                       Relation Info

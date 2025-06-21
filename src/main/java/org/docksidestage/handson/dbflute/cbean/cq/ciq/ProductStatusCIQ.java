@@ -73,6 +73,7 @@ public class ProductStatusCIQ extends AbstractBsProductStatusCQ {
     public String keepProductStatusCode_QueryDerivedReferrer_ProductListParameter(Object vl)
     { throwIICBOE("(Query)DerivedReferrer"); return null; }
     protected ConditionValue xgetCValueProductStatusName() { return _myCQ.xdfgetProductStatusName(); }
+    protected ConditionValue xgetCValueDisplayOrder() { return _myCQ.xdfgetDisplayOrder(); }
     protected Map<String, Object> xfindFixedConditionDynamicParameterMap(String pp) { return null; }
     public String keepScalarCondition(ProductStatusCQ sq)
     { throwIICBOE("ScalarCondition"); return null; }

@@ -95,6 +95,18 @@ public class BsProductStatusCB extends AbstractConditionBean {
         return (ProductStatusCB)this;
     }
 
+    /**
+     * Accept the query condition of unique key as equal.
+     * @param displayOrder (表示順): UQ, NotNull, INT(10). (NotNull)
+     * @return this. (NotNull)
+     */
+    public ProductStatusCB acceptUniqueOf(Integer displayOrder) {
+        assertObjectNotNull("displayOrder", displayOrder);
+        BsProductStatusCB cb = this;
+        cb.query().setDisplayOrder_Equal(displayOrder);
+        return (ProductStatusCB)this;
+    }
+
     public ConditionBean addOrderBy_PK_Asc() {
         query().addOrderBy_ProductStatusCode_Asc();
         return this;
@@ -297,6 +309,11 @@ public class BsProductStatusCB extends AbstractConditionBean {
          * @return The information object of specified column. (NotNull)
          */
         public SpecifiedColumn columnProductStatusName() { return doColumn("PRODUCT_STATUS_NAME"); }
+        /**
+         * (表示順)DISPLAY_ORDER: {UQ, NotNull, INT(10)}
+         * @return The information object of specified column. (NotNull)
+         */
+        public SpecifiedColumn columnDisplayOrder() { return doColumn("DISPLAY_ORDER"); }
         public void everyColumn() { doEveryColumn(); }
         public void exceptRecordMetaColumn() { doExceptRecordMetaColumn(); }
         @Override

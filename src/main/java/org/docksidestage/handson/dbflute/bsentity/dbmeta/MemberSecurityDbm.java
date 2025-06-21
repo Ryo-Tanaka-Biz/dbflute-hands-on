@@ -47,6 +47,7 @@ public class MemberSecurityDbm extends AbstractDBMeta {
         setupEpg(_epgMap, et -> ((MemberSecurity)et).getLoginPassword(), (et, vl) -> ((MemberSecurity)et).setLoginPassword((String)vl), "loginPassword");
         setupEpg(_epgMap, et -> ((MemberSecurity)et).getReminderQuestion(), (et, vl) -> ((MemberSecurity)et).setReminderQuestion((String)vl), "reminderQuestion");
         setupEpg(_epgMap, et -> ((MemberSecurity)et).getReminderAnswer(), (et, vl) -> ((MemberSecurity)et).setReminderAnswer((String)vl), "reminderAnswer");
+        setupEpg(_epgMap, et -> ((MemberSecurity)et).getReminderUseCount(), (et, vl) -> ((MemberSecurity)et).setReminderUseCount(cti(vl)), "reminderUseCount");
         setupEpg(_epgMap, et -> ((MemberSecurity)et).getRegisterDatetime(), (et, vl) -> ((MemberSecurity)et).setRegisterDatetime(ctldt(vl)), "registerDatetime");
         setupEpg(_epgMap, et -> ((MemberSecurity)et).getRegisterUser(), (et, vl) -> ((MemberSecurity)et).setRegisterUser((String)vl), "registerUser");
         setupEpg(_epgMap, et -> ((MemberSecurity)et).getUpdateDatetime(), (et, vl) -> ((MemberSecurity)et).setUpdateDatetime(ctldt(vl)), "updateDatetime");
@@ -90,6 +91,7 @@ public class MemberSecurityDbm extends AbstractDBMeta {
     protected final ColumnInfo _columnLoginPassword = cci("LOGIN_PASSWORD", "LOGIN_PASSWORD", null, "ログインパスワード", String.class, "loginPassword", null, false, false, true, "VARCHAR", 50, 0, null, null, false, null, null, null, null, null, false);
     protected final ColumnInfo _columnReminderQuestion = cci("REMINDER_QUESTION", "REMINDER_QUESTION", null, "リマインダ質問", String.class, "reminderQuestion", null, false, false, true, "VARCHAR", 50, 0, null, null, false, null, null, null, null, null, false);
     protected final ColumnInfo _columnReminderAnswer = cci("REMINDER_ANSWER", "REMINDER_ANSWER", null, "リマインダ回答", String.class, "reminderAnswer", null, false, false, true, "VARCHAR", 50, 0, null, null, false, null, null, null, null, null, false);
+    protected final ColumnInfo _columnReminderUseCount = cci("REMINDER_USE_COUNT", "REMINDER_USE_COUNT", null, "リマインダ回数", Integer.class, "reminderUseCount", null, false, false, true, "INT", 10, 0, null, null, false, null, null, null, null, null, false);
     protected final ColumnInfo _columnRegisterDatetime = cci("REGISTER_DATETIME", "REGISTER_DATETIME", null, null, java.time.LocalDateTime.class, "registerDatetime", null, false, false, true, "DATETIME", 19, 0, null, null, true, null, null, null, null, null, false);
     protected final ColumnInfo _columnRegisterUser = cci("REGISTER_USER", "REGISTER_USER", null, null, String.class, "registerUser", null, false, false, true, "VARCHAR", 200, 0, null, null, true, null, null, null, null, null, false);
     protected final ColumnInfo _columnUpdateDatetime = cci("UPDATE_DATETIME", "UPDATE_DATETIME", null, null, java.time.LocalDateTime.class, "updateDatetime", null, false, false, true, "DATETIME", 19, 0, null, null, true, null, null, null, null, null, false);
@@ -116,6 +118,11 @@ public class MemberSecurityDbm extends AbstractDBMeta {
      * @return The information object of specified column. (NotNull)
      */
     public ColumnInfo columnReminderAnswer() { return _columnReminderAnswer; }
+    /**
+     * (リマインダ回数)REMINDER_USE_COUNT: {NotNull, INT(10)}
+     * @return The information object of specified column. (NotNull)
+     */
+    public ColumnInfo columnReminderUseCount() { return _columnReminderUseCount; }
     /**
      * REGISTER_DATETIME: {NotNull, DATETIME(19)}
      * @return The information object of specified column. (NotNull)
@@ -148,6 +155,7 @@ public class MemberSecurityDbm extends AbstractDBMeta {
         ls.add(columnLoginPassword());
         ls.add(columnReminderQuestion());
         ls.add(columnReminderAnswer());
+        ls.add(columnReminderUseCount());
         ls.add(columnRegisterDatetime());
         ls.add(columnRegisterUser());
         ls.add(columnUpdateDatetime());

@@ -178,6 +178,44 @@ public abstract class AbstractBsMemberCQ extends AbstractConditionQuery {
 
     /**
      * Set up ExistsReferrer (correlated sub-query). <br>
+     * {exists (select MY_MEMBER_ID from member_following where ...)} <br>
+     * (会員フォローイング)member_following by MY_MEMBER_ID, named 'memberFollowingByMyMemberIdAsOne'.
+     * <pre>
+     * cb.query().<span style="color: #CC4747">existsMemberFollowingByMyMemberId</span>(followingCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *     followingCB.query().set...
+     * });
+     * </pre>
+     * @param subCBLambda The callback for sub-query of MemberFollowingByMyMemberIdList for 'exists'. (NotNull)
+     */
+    public void existsMemberFollowingByMyMemberId(SubQuery<MemberFollowingCB> subCBLambda) {
+        assertObjectNotNull("subCBLambda", subCBLambda);
+        MemberFollowingCB cb = new MemberFollowingCB(); cb.xsetupForExistsReferrer(this);
+        lockCall(() -> subCBLambda.query(cb)); String pp = keepMemberId_ExistsReferrer_MemberFollowingByMyMemberIdList(cb.query());
+        registerExistsReferrer(cb.query(), "MEMBER_ID", "MY_MEMBER_ID", pp, "memberFollowingByMyMemberIdList");
+    }
+    public abstract String keepMemberId_ExistsReferrer_MemberFollowingByMyMemberIdList(MemberFollowingCQ sq);
+
+    /**
+     * Set up ExistsReferrer (correlated sub-query). <br>
+     * {exists (select YOUR_MEMBER_ID from member_following where ...)} <br>
+     * (会員フォローイング)member_following by YOUR_MEMBER_ID, named 'memberFollowingByYourMemberIdAsOne'.
+     * <pre>
+     * cb.query().<span style="color: #CC4747">existsMemberFollowingByYourMemberId</span>(followingCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *     followingCB.query().set...
+     * });
+     * </pre>
+     * @param subCBLambda The callback for sub-query of MemberFollowingByYourMemberIdList for 'exists'. (NotNull)
+     */
+    public void existsMemberFollowingByYourMemberId(SubQuery<MemberFollowingCB> subCBLambda) {
+        assertObjectNotNull("subCBLambda", subCBLambda);
+        MemberFollowingCB cb = new MemberFollowingCB(); cb.xsetupForExistsReferrer(this);
+        lockCall(() -> subCBLambda.query(cb)); String pp = keepMemberId_ExistsReferrer_MemberFollowingByYourMemberIdList(cb.query());
+        registerExistsReferrer(cb.query(), "MEMBER_ID", "YOUR_MEMBER_ID", pp, "memberFollowingByYourMemberIdList");
+    }
+    public abstract String keepMemberId_ExistsReferrer_MemberFollowingByYourMemberIdList(MemberFollowingCQ sq);
+
+    /**
+     * Set up ExistsReferrer (correlated sub-query). <br>
      * {exists (select MEMBER_ID from member_login where ...)} <br>
      * (会員ログイン情報)member_login by MEMBER_ID, named 'memberLoginAsOne'.
      * <pre>
@@ -235,6 +273,44 @@ public abstract class AbstractBsMemberCQ extends AbstractConditionQuery {
 
     /**
      * Set up NotExistsReferrer (correlated sub-query). <br>
+     * {not exists (select MY_MEMBER_ID from member_following where ...)} <br>
+     * (会員フォローイング)member_following by MY_MEMBER_ID, named 'memberFollowingByMyMemberIdAsOne'.
+     * <pre>
+     * cb.query().<span style="color: #CC4747">notExistsMemberFollowingByMyMemberId</span>(followingCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *     followingCB.query().set...
+     * });
+     * </pre>
+     * @param subCBLambda The callback for sub-query of MemberId_NotExistsReferrer_MemberFollowingByMyMemberIdList for 'not exists'. (NotNull)
+     */
+    public void notExistsMemberFollowingByMyMemberId(SubQuery<MemberFollowingCB> subCBLambda) {
+        assertObjectNotNull("subCBLambda", subCBLambda);
+        MemberFollowingCB cb = new MemberFollowingCB(); cb.xsetupForExistsReferrer(this);
+        lockCall(() -> subCBLambda.query(cb)); String pp = keepMemberId_NotExistsReferrer_MemberFollowingByMyMemberIdList(cb.query());
+        registerNotExistsReferrer(cb.query(), "MEMBER_ID", "MY_MEMBER_ID", pp, "memberFollowingByMyMemberIdList");
+    }
+    public abstract String keepMemberId_NotExistsReferrer_MemberFollowingByMyMemberIdList(MemberFollowingCQ sq);
+
+    /**
+     * Set up NotExistsReferrer (correlated sub-query). <br>
+     * {not exists (select YOUR_MEMBER_ID from member_following where ...)} <br>
+     * (会員フォローイング)member_following by YOUR_MEMBER_ID, named 'memberFollowingByYourMemberIdAsOne'.
+     * <pre>
+     * cb.query().<span style="color: #CC4747">notExistsMemberFollowingByYourMemberId</span>(followingCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *     followingCB.query().set...
+     * });
+     * </pre>
+     * @param subCBLambda The callback for sub-query of MemberId_NotExistsReferrer_MemberFollowingByYourMemberIdList for 'not exists'. (NotNull)
+     */
+    public void notExistsMemberFollowingByYourMemberId(SubQuery<MemberFollowingCB> subCBLambda) {
+        assertObjectNotNull("subCBLambda", subCBLambda);
+        MemberFollowingCB cb = new MemberFollowingCB(); cb.xsetupForExistsReferrer(this);
+        lockCall(() -> subCBLambda.query(cb)); String pp = keepMemberId_NotExistsReferrer_MemberFollowingByYourMemberIdList(cb.query());
+        registerNotExistsReferrer(cb.query(), "MEMBER_ID", "YOUR_MEMBER_ID", pp, "memberFollowingByYourMemberIdList");
+    }
+    public abstract String keepMemberId_NotExistsReferrer_MemberFollowingByYourMemberIdList(MemberFollowingCQ sq);
+
+    /**
+     * Set up NotExistsReferrer (correlated sub-query). <br>
      * {not exists (select MEMBER_ID from member_login where ...)} <br>
      * (会員ログイン情報)member_login by MEMBER_ID, named 'memberLoginAsOne'.
      * <pre>
@@ -279,6 +355,22 @@ public abstract class AbstractBsMemberCQ extends AbstractConditionQuery {
     }
     public abstract String keepMemberId_SpecifyDerivedReferrer_MemberAddressList(MemberAddressCQ sq);
 
+    public void xsderiveMemberFollowingByMyMemberIdList(String fn, SubQuery<MemberFollowingCB> sq, String al, DerivedReferrerOption op) {
+        assertObjectNotNull("subQuery", sq);
+        MemberFollowingCB cb = new MemberFollowingCB(); cb.xsetupForDerivedReferrer(this);
+        lockCall(() -> sq.query(cb)); String pp = keepMemberId_SpecifyDerivedReferrer_MemberFollowingByMyMemberIdList(cb.query());
+        registerSpecifyDerivedReferrer(fn, cb.query(), "MEMBER_ID", "MY_MEMBER_ID", pp, "memberFollowingByMyMemberIdList", al, op);
+    }
+    public abstract String keepMemberId_SpecifyDerivedReferrer_MemberFollowingByMyMemberIdList(MemberFollowingCQ sq);
+
+    public void xsderiveMemberFollowingByYourMemberIdList(String fn, SubQuery<MemberFollowingCB> sq, String al, DerivedReferrerOption op) {
+        assertObjectNotNull("subQuery", sq);
+        MemberFollowingCB cb = new MemberFollowingCB(); cb.xsetupForDerivedReferrer(this);
+        lockCall(() -> sq.query(cb)); String pp = keepMemberId_SpecifyDerivedReferrer_MemberFollowingByYourMemberIdList(cb.query());
+        registerSpecifyDerivedReferrer(fn, cb.query(), "MEMBER_ID", "YOUR_MEMBER_ID", pp, "memberFollowingByYourMemberIdList", al, op);
+    }
+    public abstract String keepMemberId_SpecifyDerivedReferrer_MemberFollowingByYourMemberIdList(MemberFollowingCQ sq);
+
     public void xsderiveMemberLoginList(String fn, SubQuery<MemberLoginCB> sq, String al, DerivedReferrerOption op) {
         assertObjectNotNull("subQuery", sq);
         MemberLoginCB cb = new MemberLoginCB(); cb.xsetupForDerivedReferrer(this);
@@ -321,6 +413,60 @@ public abstract class AbstractBsMemberCQ extends AbstractConditionQuery {
     }
     public abstract String keepMemberId_QueryDerivedReferrer_MemberAddressList(MemberAddressCQ sq);
     public abstract String keepMemberId_QueryDerivedReferrer_MemberAddressListParameter(Object vl);
+
+    /**
+     * Prepare for (Query)DerivedReferrer (correlated sub-query). <br>
+     * {FOO &lt;= (select max(BAR) from member_following where ...)} <br>
+     * (会員フォローイング)member_following by MY_MEMBER_ID, named 'memberFollowingByMyMemberIdAsOne'.
+     * <pre>
+     * cb.query().<span style="color: #CC4747">derivedMemberFollowingByMyMemberId()</span>.<span style="color: #CC4747">max</span>(followingCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *     followingCB.specify().<span style="color: #CC4747">columnFoo...</span> <span style="color: #3F7E5E">// derived column by function</span>
+     *     followingCB.query().setBar... <span style="color: #3F7E5E">// referrer condition</span>
+     * }).<span style="color: #CC4747">greaterEqual</span>(123); <span style="color: #3F7E5E">// condition to derived column</span>
+     * </pre>
+     * @return The object to set up a function for referrer table. (NotNull)
+     */
+    public HpQDRFunction<MemberFollowingCB> derivedMemberFollowingByMyMemberId() {
+        return xcreateQDRFunctionMemberFollowingByMyMemberIdList();
+    }
+    protected HpQDRFunction<MemberFollowingCB> xcreateQDRFunctionMemberFollowingByMyMemberIdList() {
+        return xcQDRFunc((fn, sq, rd, vl, op) -> xqderiveMemberFollowingByMyMemberIdList(fn, sq, rd, vl, op));
+    }
+    public void xqderiveMemberFollowingByMyMemberIdList(String fn, SubQuery<MemberFollowingCB> sq, String rd, Object vl, DerivedReferrerOption op) {
+        assertObjectNotNull("subQuery", sq);
+        MemberFollowingCB cb = new MemberFollowingCB(); cb.xsetupForDerivedReferrer(this);
+        lockCall(() -> sq.query(cb)); String sqpp = keepMemberId_QueryDerivedReferrer_MemberFollowingByMyMemberIdList(cb.query()); String prpp = keepMemberId_QueryDerivedReferrer_MemberFollowingByMyMemberIdListParameter(vl);
+        registerQueryDerivedReferrer(fn, cb.query(), "MEMBER_ID", "MY_MEMBER_ID", sqpp, "memberFollowingByMyMemberIdList", rd, vl, prpp, op);
+    }
+    public abstract String keepMemberId_QueryDerivedReferrer_MemberFollowingByMyMemberIdList(MemberFollowingCQ sq);
+    public abstract String keepMemberId_QueryDerivedReferrer_MemberFollowingByMyMemberIdListParameter(Object vl);
+
+    /**
+     * Prepare for (Query)DerivedReferrer (correlated sub-query). <br>
+     * {FOO &lt;= (select max(BAR) from member_following where ...)} <br>
+     * (会員フォローイング)member_following by YOUR_MEMBER_ID, named 'memberFollowingByYourMemberIdAsOne'.
+     * <pre>
+     * cb.query().<span style="color: #CC4747">derivedMemberFollowingByYourMemberId()</span>.<span style="color: #CC4747">max</span>(followingCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *     followingCB.specify().<span style="color: #CC4747">columnFoo...</span> <span style="color: #3F7E5E">// derived column by function</span>
+     *     followingCB.query().setBar... <span style="color: #3F7E5E">// referrer condition</span>
+     * }).<span style="color: #CC4747">greaterEqual</span>(123); <span style="color: #3F7E5E">// condition to derived column</span>
+     * </pre>
+     * @return The object to set up a function for referrer table. (NotNull)
+     */
+    public HpQDRFunction<MemberFollowingCB> derivedMemberFollowingByYourMemberId() {
+        return xcreateQDRFunctionMemberFollowingByYourMemberIdList();
+    }
+    protected HpQDRFunction<MemberFollowingCB> xcreateQDRFunctionMemberFollowingByYourMemberIdList() {
+        return xcQDRFunc((fn, sq, rd, vl, op) -> xqderiveMemberFollowingByYourMemberIdList(fn, sq, rd, vl, op));
+    }
+    public void xqderiveMemberFollowingByYourMemberIdList(String fn, SubQuery<MemberFollowingCB> sq, String rd, Object vl, DerivedReferrerOption op) {
+        assertObjectNotNull("subQuery", sq);
+        MemberFollowingCB cb = new MemberFollowingCB(); cb.xsetupForDerivedReferrer(this);
+        lockCall(() -> sq.query(cb)); String sqpp = keepMemberId_QueryDerivedReferrer_MemberFollowingByYourMemberIdList(cb.query()); String prpp = keepMemberId_QueryDerivedReferrer_MemberFollowingByYourMemberIdListParameter(vl);
+        registerQueryDerivedReferrer(fn, cb.query(), "MEMBER_ID", "YOUR_MEMBER_ID", sqpp, "memberFollowingByYourMemberIdList", rd, vl, prpp, op);
+    }
+    public abstract String keepMemberId_QueryDerivedReferrer_MemberFollowingByYourMemberIdList(MemberFollowingCQ sq);
+    public abstract String keepMemberId_QueryDerivedReferrer_MemberFollowingByYourMemberIdListParameter(Object vl);
 
     /**
      * Prepare for (Query)DerivedReferrer (correlated sub-query). <br>

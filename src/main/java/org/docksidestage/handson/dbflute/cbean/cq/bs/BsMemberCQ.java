@@ -82,6 +82,12 @@ public class BsMemberCQ extends AbstractBsMemberCQ {
     public Map<String, MemberAddressCQ> xdfgetMemberId_ExistsReferrer_MemberAddressList() { return xgetSQueMap("memberId_ExistsReferrer_MemberAddressList"); }
     public String keepMemberId_ExistsReferrer_MemberAddressList(MemberAddressCQ sq) { return xkeepSQue("memberId_ExistsReferrer_MemberAddressList", sq); }
 
+    public Map<String, MemberFollowingCQ> xdfgetMemberId_ExistsReferrer_MemberFollowingByMyMemberIdList() { return xgetSQueMap("memberId_ExistsReferrer_MemberFollowingByMyMemberIdList"); }
+    public String keepMemberId_ExistsReferrer_MemberFollowingByMyMemberIdList(MemberFollowingCQ sq) { return xkeepSQue("memberId_ExistsReferrer_MemberFollowingByMyMemberIdList", sq); }
+
+    public Map<String, MemberFollowingCQ> xdfgetMemberId_ExistsReferrer_MemberFollowingByYourMemberIdList() { return xgetSQueMap("memberId_ExistsReferrer_MemberFollowingByYourMemberIdList"); }
+    public String keepMemberId_ExistsReferrer_MemberFollowingByYourMemberIdList(MemberFollowingCQ sq) { return xkeepSQue("memberId_ExistsReferrer_MemberFollowingByYourMemberIdList", sq); }
+
     public Map<String, MemberLoginCQ> xdfgetMemberId_ExistsReferrer_MemberLoginList() { return xgetSQueMap("memberId_ExistsReferrer_MemberLoginList"); }
     public String keepMemberId_ExistsReferrer_MemberLoginList(MemberLoginCQ sq) { return xkeepSQue("memberId_ExistsReferrer_MemberLoginList", sq); }
 
@@ -91,6 +97,12 @@ public class BsMemberCQ extends AbstractBsMemberCQ {
     public Map<String, MemberAddressCQ> xdfgetMemberId_NotExistsReferrer_MemberAddressList() { return xgetSQueMap("memberId_NotExistsReferrer_MemberAddressList"); }
     public String keepMemberId_NotExistsReferrer_MemberAddressList(MemberAddressCQ sq) { return xkeepSQue("memberId_NotExistsReferrer_MemberAddressList", sq); }
 
+    public Map<String, MemberFollowingCQ> xdfgetMemberId_NotExistsReferrer_MemberFollowingByMyMemberIdList() { return xgetSQueMap("memberId_NotExistsReferrer_MemberFollowingByMyMemberIdList"); }
+    public String keepMemberId_NotExistsReferrer_MemberFollowingByMyMemberIdList(MemberFollowingCQ sq) { return xkeepSQue("memberId_NotExistsReferrer_MemberFollowingByMyMemberIdList", sq); }
+
+    public Map<String, MemberFollowingCQ> xdfgetMemberId_NotExistsReferrer_MemberFollowingByYourMemberIdList() { return xgetSQueMap("memberId_NotExistsReferrer_MemberFollowingByYourMemberIdList"); }
+    public String keepMemberId_NotExistsReferrer_MemberFollowingByYourMemberIdList(MemberFollowingCQ sq) { return xkeepSQue("memberId_NotExistsReferrer_MemberFollowingByYourMemberIdList", sq); }
+
     public Map<String, MemberLoginCQ> xdfgetMemberId_NotExistsReferrer_MemberLoginList() { return xgetSQueMap("memberId_NotExistsReferrer_MemberLoginList"); }
     public String keepMemberId_NotExistsReferrer_MemberLoginList(MemberLoginCQ sq) { return xkeepSQue("memberId_NotExistsReferrer_MemberLoginList", sq); }
 
@@ -99,6 +111,12 @@ public class BsMemberCQ extends AbstractBsMemberCQ {
 
     public Map<String, MemberAddressCQ> xdfgetMemberId_SpecifyDerivedReferrer_MemberAddressList() { return xgetSQueMap("memberId_SpecifyDerivedReferrer_MemberAddressList"); }
     public String keepMemberId_SpecifyDerivedReferrer_MemberAddressList(MemberAddressCQ sq) { return xkeepSQue("memberId_SpecifyDerivedReferrer_MemberAddressList", sq); }
+
+    public Map<String, MemberFollowingCQ> xdfgetMemberId_SpecifyDerivedReferrer_MemberFollowingByMyMemberIdList() { return xgetSQueMap("memberId_SpecifyDerivedReferrer_MemberFollowingByMyMemberIdList"); }
+    public String keepMemberId_SpecifyDerivedReferrer_MemberFollowingByMyMemberIdList(MemberFollowingCQ sq) { return xkeepSQue("memberId_SpecifyDerivedReferrer_MemberFollowingByMyMemberIdList", sq); }
+
+    public Map<String, MemberFollowingCQ> xdfgetMemberId_SpecifyDerivedReferrer_MemberFollowingByYourMemberIdList() { return xgetSQueMap("memberId_SpecifyDerivedReferrer_MemberFollowingByYourMemberIdList"); }
+    public String keepMemberId_SpecifyDerivedReferrer_MemberFollowingByYourMemberIdList(MemberFollowingCQ sq) { return xkeepSQue("memberId_SpecifyDerivedReferrer_MemberFollowingByYourMemberIdList", sq); }
 
     public Map<String, MemberLoginCQ> xdfgetMemberId_SpecifyDerivedReferrer_MemberLoginList() { return xgetSQueMap("memberId_SpecifyDerivedReferrer_MemberLoginList"); }
     public String keepMemberId_SpecifyDerivedReferrer_MemberLoginList(MemberLoginCQ sq) { return xkeepSQue("memberId_SpecifyDerivedReferrer_MemberLoginList", sq); }
@@ -110,6 +128,16 @@ public class BsMemberCQ extends AbstractBsMemberCQ {
     public String keepMemberId_QueryDerivedReferrer_MemberAddressList(MemberAddressCQ sq) { return xkeepSQue("memberId_QueryDerivedReferrer_MemberAddressList", sq); }
     public Map<String, Object> xdfgetMemberId_QueryDerivedReferrer_MemberAddressListParameter() { return xgetSQuePmMap("memberId_QueryDerivedReferrer_MemberAddressList"); }
     public String keepMemberId_QueryDerivedReferrer_MemberAddressListParameter(Object pm) { return xkeepSQuePm("memberId_QueryDerivedReferrer_MemberAddressList", pm); }
+
+    public Map<String, MemberFollowingCQ> xdfgetMemberId_QueryDerivedReferrer_MemberFollowingByMyMemberIdList() { return xgetSQueMap("memberId_QueryDerivedReferrer_MemberFollowingByMyMemberIdList"); }
+    public String keepMemberId_QueryDerivedReferrer_MemberFollowingByMyMemberIdList(MemberFollowingCQ sq) { return xkeepSQue("memberId_QueryDerivedReferrer_MemberFollowingByMyMemberIdList", sq); }
+    public Map<String, Object> xdfgetMemberId_QueryDerivedReferrer_MemberFollowingByMyMemberIdListParameter() { return xgetSQuePmMap("memberId_QueryDerivedReferrer_MemberFollowingByMyMemberIdList"); }
+    public String keepMemberId_QueryDerivedReferrer_MemberFollowingByMyMemberIdListParameter(Object pm) { return xkeepSQuePm("memberId_QueryDerivedReferrer_MemberFollowingByMyMemberIdList", pm); }
+
+    public Map<String, MemberFollowingCQ> xdfgetMemberId_QueryDerivedReferrer_MemberFollowingByYourMemberIdList() { return xgetSQueMap("memberId_QueryDerivedReferrer_MemberFollowingByYourMemberIdList"); }
+    public String keepMemberId_QueryDerivedReferrer_MemberFollowingByYourMemberIdList(MemberFollowingCQ sq) { return xkeepSQue("memberId_QueryDerivedReferrer_MemberFollowingByYourMemberIdList", sq); }
+    public Map<String, Object> xdfgetMemberId_QueryDerivedReferrer_MemberFollowingByYourMemberIdListParameter() { return xgetSQuePmMap("memberId_QueryDerivedReferrer_MemberFollowingByYourMemberIdList"); }
+    public String keepMemberId_QueryDerivedReferrer_MemberFollowingByYourMemberIdListParameter(Object pm) { return xkeepSQuePm("memberId_QueryDerivedReferrer_MemberFollowingByYourMemberIdList", pm); }
 
     public Map<String, MemberLoginCQ> xdfgetMemberId_QueryDerivedReferrer_MemberLoginList() { return xgetSQueMap("memberId_QueryDerivedReferrer_MemberLoginList"); }
     public String keepMemberId_QueryDerivedReferrer_MemberLoginList(MemberLoginCQ sq) { return xkeepSQue("memberId_QueryDerivedReferrer_MemberLoginList", sq); }

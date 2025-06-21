@@ -85,7 +85,7 @@ public class HandsOn07Logic {
         // [いいね] Serviceは会員登録時に動的な値がないので内部で閉じてるのGood
         MemberService memberService = new MemberService();
         memberService.setMemberId(memberId);
-        memberService.setAkirakaniOkashiiKaramuMei(0);
+        memberService.setServicePointCount(0);
         memberService.setServiceRankCode_Plastic();
         memberServiceBhv.insert(memberService);
     }

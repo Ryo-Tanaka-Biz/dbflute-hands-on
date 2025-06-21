@@ -406,6 +406,123 @@ public abstract class AbstractBsProductStatusCQ extends AbstractConditionQuery {
     protected void regProductStatusName(ConditionKey ky, Object vl) { regQ(ky, vl, xgetCValueProductStatusName(), "PRODUCT_STATUS_NAME"); }
     protected abstract ConditionValue xgetCValueProductStatusName();
 
+    /**
+     * Equal(=). And NullIgnored, OnlyOnceRegistered. <br>
+     * (表示順)DISPLAY_ORDER: {UQ, NotNull, INT(10)}
+     * @param displayOrder The value of displayOrder as equal. (basically NotNull: error as default, or no condition as option)
+     */
+    public void setDisplayOrder_Equal(Integer displayOrder) {
+        doSetDisplayOrder_Equal(displayOrder);
+    }
+
+    protected void doSetDisplayOrder_Equal(Integer displayOrder) {
+        regDisplayOrder(CK_EQ, displayOrder);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). And NullIgnored, OnlyOnceRegistered. <br>
+     * (表示順)DISPLAY_ORDER: {UQ, NotNull, INT(10)}
+     * @param displayOrder The value of displayOrder as notEqual. (basically NotNull: error as default, or no condition as option)
+     */
+    public void setDisplayOrder_NotEqual(Integer displayOrder) {
+        doSetDisplayOrder_NotEqual(displayOrder);
+    }
+
+    protected void doSetDisplayOrder_NotEqual(Integer displayOrder) {
+        regDisplayOrder(CK_NES, displayOrder);
+    }
+
+    /**
+     * GreaterThan(&gt;). And NullIgnored, OnlyOnceRegistered. <br>
+     * (表示順)DISPLAY_ORDER: {UQ, NotNull, INT(10)}
+     * @param displayOrder The value of displayOrder as greaterThan. (basically NotNull: error as default, or no condition as option)
+     */
+    public void setDisplayOrder_GreaterThan(Integer displayOrder) {
+        regDisplayOrder(CK_GT, displayOrder);
+    }
+
+    /**
+     * LessThan(&lt;). And NullIgnored, OnlyOnceRegistered. <br>
+     * (表示順)DISPLAY_ORDER: {UQ, NotNull, INT(10)}
+     * @param displayOrder The value of displayOrder as lessThan. (basically NotNull: error as default, or no condition as option)
+     */
+    public void setDisplayOrder_LessThan(Integer displayOrder) {
+        regDisplayOrder(CK_LT, displayOrder);
+    }
+
+    /**
+     * GreaterEqual(&gt;=). And NullIgnored, OnlyOnceRegistered. <br>
+     * (表示順)DISPLAY_ORDER: {UQ, NotNull, INT(10)}
+     * @param displayOrder The value of displayOrder as greaterEqual. (basically NotNull: error as default, or no condition as option)
+     */
+    public void setDisplayOrder_GreaterEqual(Integer displayOrder) {
+        regDisplayOrder(CK_GE, displayOrder);
+    }
+
+    /**
+     * LessEqual(&lt;=). And NullIgnored, OnlyOnceRegistered. <br>
+     * (表示順)DISPLAY_ORDER: {UQ, NotNull, INT(10)}
+     * @param displayOrder The value of displayOrder as lessEqual. (basically NotNull: error as default, or no condition as option)
+     */
+    public void setDisplayOrder_LessEqual(Integer displayOrder) {
+        regDisplayOrder(CK_LE, displayOrder);
+    }
+
+    /**
+     * RangeOf with various options. (versatile) <br>
+     * {(default) minNumber &lt;= column &lt;= maxNumber} <br>
+     * And NullIgnored, OnlyOnceRegistered. <br>
+     * (表示順)DISPLAY_ORDER: {UQ, NotNull, INT(10)}
+     * @param minNumber The min number of displayOrder. (basically NotNull: if op.allowOneSide(), null allowed)
+     * @param maxNumber The max number of displayOrder. (basically NotNull: if op.allowOneSide(), null allowed)
+     * @param opLambda The callback for option of range-of. (NotNull)
+     */
+    public void setDisplayOrder_RangeOf(Integer minNumber, Integer maxNumber, ConditionOptionCall<RangeOfOption> opLambda) {
+        setDisplayOrder_RangeOf(minNumber, maxNumber, xcROOP(opLambda));
+    }
+
+    /**
+     * RangeOf with various options. (versatile) <br>
+     * {(default) minNumber &lt;= column &lt;= maxNumber} <br>
+     * And NullIgnored, OnlyOnceRegistered. <br>
+     * (表示順)DISPLAY_ORDER: {UQ, NotNull, INT(10)}
+     * @param minNumber The min number of displayOrder. (basically NotNull: if op.allowOneSide(), null allowed)
+     * @param maxNumber The max number of displayOrder. (basically NotNull: if op.allowOneSide(), null allowed)
+     * @param rangeOfOption The option of range-of. (NotNull)
+     */
+    protected void setDisplayOrder_RangeOf(Integer minNumber, Integer maxNumber, RangeOfOption rangeOfOption) {
+        regROO(minNumber, maxNumber, xgetCValueDisplayOrder(), "DISPLAY_ORDER", rangeOfOption);
+    }
+
+    /**
+     * InScope {in (1, 2)}. And NullIgnored, NullElementIgnored, SeveralRegistered. <br>
+     * (表示順)DISPLAY_ORDER: {UQ, NotNull, INT(10)}
+     * @param displayOrderList The collection of displayOrder as inScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
+     */
+    public void setDisplayOrder_InScope(Collection<Integer> displayOrderList) {
+        doSetDisplayOrder_InScope(displayOrderList);
+    }
+
+    protected void doSetDisplayOrder_InScope(Collection<Integer> displayOrderList) {
+        regINS(CK_INS, cTL(displayOrderList), xgetCValueDisplayOrder(), "DISPLAY_ORDER");
+    }
+
+    /**
+     * NotInScope {not in (1, 2)}. And NullIgnored, NullElementIgnored, SeveralRegistered. <br>
+     * (表示順)DISPLAY_ORDER: {UQ, NotNull, INT(10)}
+     * @param displayOrderList The collection of displayOrder as notInScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
+     */
+    public void setDisplayOrder_NotInScope(Collection<Integer> displayOrderList) {
+        doSetDisplayOrder_NotInScope(displayOrderList);
+    }
+
+    protected void doSetDisplayOrder_NotInScope(Collection<Integer> displayOrderList) {
+        regINS(CK_NINS, cTL(displayOrderList), xgetCValueDisplayOrder(), "DISPLAY_ORDER");
+    }
+
+    protected void regDisplayOrder(ConditionKey ky, Object vl) { regQ(ky, vl, xgetCValueDisplayOrder(), "DISPLAY_ORDER"); }
+    protected abstract ConditionValue xgetCValueDisplayOrder();
+
     // ===================================================================================
     //                                                                     ScalarCondition
     //                                                                     ===============

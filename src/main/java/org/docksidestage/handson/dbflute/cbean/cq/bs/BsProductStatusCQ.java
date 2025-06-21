@@ -127,6 +127,26 @@ public class BsProductStatusCQ extends AbstractBsProductStatusCQ {
      */
     public BsProductStatusCQ addOrderBy_ProductStatusName_Desc() { regOBD("PRODUCT_STATUS_NAME"); return this; }
 
+    protected ConditionValue _displayOrder;
+    public ConditionValue xdfgetDisplayOrder()
+    { if (_displayOrder == null) { _displayOrder = nCV(); }
+      return _displayOrder; }
+    protected ConditionValue xgetCValueDisplayOrder() { return xdfgetDisplayOrder(); }
+
+    /**
+     * Add order-by as ascend. <br>
+     * (表示順)DISPLAY_ORDER: {UQ, NotNull, INT(10)}
+     * @return this. (NotNull)
+     */
+    public BsProductStatusCQ addOrderBy_DisplayOrder_Asc() { regOBA("DISPLAY_ORDER"); return this; }
+
+    /**
+     * Add order-by as descend. <br>
+     * (表示順)DISPLAY_ORDER: {UQ, NotNull, INT(10)}
+     * @return this. (NotNull)
+     */
+    public BsProductStatusCQ addOrderBy_DisplayOrder_Desc() { regOBD("DISPLAY_ORDER"); return this; }
+
     // ===================================================================================
     //                                                             SpecifiedDerivedOrderBy
     //                                                             =======================

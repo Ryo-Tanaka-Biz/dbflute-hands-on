@@ -100,7 +100,7 @@ public class MemberDbm extends AbstractDBMeta {
     // ===================================================================================
     //                                                                         Column Info
     //                                                                         ===========
-    protected final ColumnInfo _columnMemberId = cci("MEMBER_ID", "MEMBER_ID", null, "会員ID", Integer.class, "memberId", null, true, true, true, "INT", 10, 0, null, null, false, null, null, "memberAddressAsValid,memberLoginAsLatest,memberSecurityAsOne,memberServiceAsOne,memberWithdrawalAsOne", "memberAddressList,memberLoginList,purchaseList", null, false);
+    protected final ColumnInfo _columnMemberId = cci("MEMBER_ID", "MEMBER_ID", null, "会員ID", Integer.class, "memberId", null, true, true, true, "INT", 10, 0, null, null, false, null, null, "memberAddressAsValid,memberLoginAsLatest,memberSecurityAsOne,memberServiceAsOne,memberWithdrawalAsOne", "memberAddressList,memberFollowingByMyMemberIdList,memberFollowingByYourMemberIdList,memberLoginList,purchaseList", null, false);
     protected final ColumnInfo _columnMemberName = cci("MEMBER_NAME", "MEMBER_NAME", null, "会員名称", String.class, "memberName", null, false, false, true, "VARCHAR", 160, 0, null, null, false, null, null, null, null, null, false);
     protected final ColumnInfo _columnMemberAccount = cci("MEMBER_ACCOUNT", "MEMBER_ACCOUNT", null, "会員アカウント", String.class, "memberAccount", null, false, false, true, "VARCHAR", 50, 0, null, null, false, null, null, null, null, null, false);
     protected final ColumnInfo _columnMemberStatusCode = cci("MEMBER_STATUS_CODE", "MEMBER_STATUS_CODE", null, "会員ステータスコード", String.class, "memberStatusCode", null, false, false, true, "CHAR", 3, 0, null, null, false, null, null, "memberStatus", null, CDef.DefMeta.MemberStatus, false);
@@ -270,6 +270,22 @@ public class MemberDbm extends AbstractDBMeta {
     public ReferrerInfo referrerMemberAddressList() {
         Map<ColumnInfo, ColumnInfo> mp = newLinkedHashMap(columnMemberId(), MemberAddressDbm.getInstance().columnMemberId());
         return cri("FK_MEMBER_ADDRESS_MEMBER", "memberAddressList", this, MemberAddressDbm.getInstance(), mp, false, "member");
+    }
+    /**
+     * (会員フォローイング)MEMBER_FOLLOWING by MY_MEMBER_ID, named 'memberFollowingByMyMemberIdList'.
+     * @return The information object of referrer property. (NotNull)
+     */
+    public ReferrerInfo referrerMemberFollowingByMyMemberIdList() {
+        Map<ColumnInfo, ColumnInfo> mp = newLinkedHashMap(columnMemberId(), MemberFollowingDbm.getInstance().columnMyMemberId());
+        return cri("FK_MEMBER_FOLLOWING_MY_MEMBER", "memberFollowingByMyMemberIdList", this, MemberFollowingDbm.getInstance(), mp, false, "memberByMyMemberId");
+    }
+    /**
+     * (会員フォローイング)MEMBER_FOLLOWING by YOUR_MEMBER_ID, named 'memberFollowingByYourMemberIdList'.
+     * @return The information object of referrer property. (NotNull)
+     */
+    public ReferrerInfo referrerMemberFollowingByYourMemberIdList() {
+        Map<ColumnInfo, ColumnInfo> mp = newLinkedHashMap(columnMemberId(), MemberFollowingDbm.getInstance().columnYourMemberId());
+        return cri("FK_MEMBER_FOLLOWING_YOUR_MEMBER", "memberFollowingByYourMemberIdList", this, MemberFollowingDbm.getInstance(), mp, false, "memberByYourMemberId");
     }
     /**
      * (会員ログイン情報)MEMBER_LOGIN by MEMBER_ID, named 'memberLoginList'.

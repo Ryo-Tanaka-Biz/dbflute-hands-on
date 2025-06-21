@@ -85,10 +85,22 @@ public class BsMemberServiceCB extends AbstractConditionBean {
     //                                                                 ===================
     /**
      * Accept the query condition of primary key as equal.
-     * @param memberId (会員ID): PK, NotNull, INT(10), FK to member. (NotNull)
+     * @param memberServiceId (会員サービスID): PK, ID, NotNull, INT(10). (NotNull)
      * @return this. (NotNull)
      */
-    public MemberServiceCB acceptPK(Integer memberId) {
+    public MemberServiceCB acceptPK(Integer memberServiceId) {
+        assertObjectNotNull("memberServiceId", memberServiceId);
+        BsMemberServiceCB cb = this;
+        cb.query().setMemberServiceId_Equal(memberServiceId);
+        return (MemberServiceCB)this;
+    }
+
+    /**
+     * Accept the query condition of unique key as equal.
+     * @param memberId (会員ID): UQ, NotNull, INT(10), FK to member. (NotNull)
+     * @return this. (NotNull)
+     */
+    public MemberServiceCB acceptUniqueOf(Integer memberId) {
         assertObjectNotNull("memberId", memberId);
         BsMemberServiceCB cb = this;
         cb.query().setMemberId_Equal(memberId);
@@ -96,12 +108,12 @@ public class BsMemberServiceCB extends AbstractConditionBean {
     }
 
     public ConditionBean addOrderBy_PK_Asc() {
-        query().addOrderBy_MemberId_Asc();
+        query().addOrderBy_MemberServiceId_Asc();
         return this;
     }
 
     public ConditionBean addOrderBy_PK_Desc() {
-        query().addOrderBy_MemberId_Desc();
+        query().addOrderBy_MemberServiceId_Desc();
         return this;
     }
 
@@ -262,6 +274,9 @@ public class BsMemberServiceCB extends AbstractConditionBean {
      */
     public MemberNss setupSelect_Member() {
         assertSetupSelectPurpose("member");
+        if (hasSpecifiedLocalColumn()) {
+            specify().columnMemberId();
+        }
         doSetupSelect(() -> query().queryMember());
         if (_nssMember == null || !_nssMember.hasConditionQuery())
         { _nssMember = new MemberNss(query().queryMember()); }
@@ -336,15 +351,20 @@ public class BsMemberServiceCB extends AbstractConditionBean {
                              , HpSDRFunctionFactory sdrFuncFactory)
         { super(baseCB, qyCall, purpose, dbmetaProvider, sdrFuncFactory); }
         /**
-         * (会員ID)MEMBER_ID: {PK, NotNull, INT(10), FK to member}
+         * (会員サービスID)MEMBER_SERVICE_ID: {PK, ID, NotNull, INT(10)}
+         * @return The information object of specified column. (NotNull)
+         */
+        public SpecifiedColumn columnMemberServiceId() { return doColumn("MEMBER_SERVICE_ID"); }
+        /**
+         * (会員ID)MEMBER_ID: {UQ, NotNull, INT(10), FK to member}
          * @return The information object of specified column. (NotNull)
          */
         public SpecifiedColumn columnMemberId() { return doColumn("MEMBER_ID"); }
         /**
-         * (サービスポイント数)AKIRAKANI_OKASHII_KARAMU_MEI: {IX, NotNull, INT(10)}
+         * (サービスポイント数)SERVICE_POINT_COUNT: {IX, NotNull, INT(10)}
          * @return The information object of specified column. (NotNull)
          */
-        public SpecifiedColumn columnAkirakaniOkashiiKaramuMei() { return doColumn("AKIRAKANI_OKASHII_KARAMU_MEI"); }
+        public SpecifiedColumn columnServicePointCount() { return doColumn("SERVICE_POINT_COUNT"); }
         /**
          * (サービスランクコード)SERVICE_RANK_CODE: {IX, NotNull, CHAR(3), FK to service_rank, classification=ServiceRank}
          * @return The information object of specified column. (NotNull)
@@ -379,7 +399,11 @@ public class BsMemberServiceCB extends AbstractConditionBean {
         public void exceptRecordMetaColumn() { doExceptRecordMetaColumn(); }
         @Override
         protected void doSpecifyRequiredColumn() {
-            columnMemberId(); // PK
+            columnMemberServiceId(); // PK
+            if (qyCall().qy().hasConditionQueryMember()
+                    || qyCall().qy().xgetReferrerQuery() instanceof MemberCQ) {
+                columnMemberId(); // FK or one-to-one referrer
+            }
             if (qyCall().qy().hasConditionQueryServiceRank()
                     || qyCall().qy().xgetReferrerQuery() instanceof ServiceRankCQ) {
                 columnServiceRankCode(); // FK or one-to-one referrer

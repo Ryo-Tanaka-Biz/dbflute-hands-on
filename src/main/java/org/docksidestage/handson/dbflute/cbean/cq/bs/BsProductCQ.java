@@ -195,14 +195,14 @@ public class BsProductCQ extends AbstractBsProductCQ {
 
     /**
      * Add order-by as ascend. <br>
-     * (定価)REGULAR_PRICE: {INT(10)}
+     * (定価)REGULAR_PRICE: {NotNull, INT(10)}
      * @return this. (NotNull)
      */
     public BsProductCQ addOrderBy_RegularPrice_Asc() { regOBA("REGULAR_PRICE"); return this; }
 
     /**
      * Add order-by as descend. <br>
-     * (定価)REGULAR_PRICE: {INT(10)}
+     * (定価)REGULAR_PRICE: {NotNull, INT(10)}
      * @return this. (NotNull)
      */
     public BsProductCQ addOrderBy_RegularPrice_Desc() { regOBD("REGULAR_PRICE"); return this; }

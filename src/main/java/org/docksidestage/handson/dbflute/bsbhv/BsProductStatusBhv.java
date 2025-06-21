@@ -157,6 +157,31 @@ public abstract class BsProductStatusBhv extends AbstractBehaviorWritable<Produc
         return newConditionBean().acceptPK(productStatusCode);
     }
 
+    /**
+     * Select the entity by the unique-key value.
+     * @param displayOrder (表示順): UQ, NotNull, INT(10). (NotNull)
+     * @return The optional entity selected by the unique key. (NotNull: if no data, empty entity)
+     * @throws EntityAlreadyDeletedException When get(), required() of return value is called and the value is null, which means entity has already been deleted (not found).
+     * @throws EntityDuplicatedException When the entity has been duplicated.
+     * @throws SelectEntityConditionNotFoundException When the condition for selecting an entity is not found.
+     */
+    public OptionalEntity<ProductStatus> selectByUniqueOf(Integer displayOrder) {
+        return facadeSelectByUniqueOf(displayOrder);
+    }
+
+    protected OptionalEntity<ProductStatus> facadeSelectByUniqueOf(Integer displayOrder) {
+        return doSelectByUniqueOf(displayOrder, typeOfSelectedEntity());
+    }
+
+    protected <ENTITY extends ProductStatus> OptionalEntity<ENTITY> doSelectByUniqueOf(Integer displayOrder, Class<? extends ENTITY> tp) {
+        return createOptionalEntity(doSelectEntity(xprepareCBAsUniqueOf(displayOrder), tp), displayOrder);
+    }
+
+    protected ProductStatusCB xprepareCBAsUniqueOf(Integer displayOrder) {
+        assertObjectNotNull("displayOrder", displayOrder);
+        return newConditionBean().acceptUniqueOf(displayOrder);
+    }
+
     // ===================================================================================
     //                                                                         List Select
     //                                                                         ===========
@@ -409,6 +434,14 @@ public abstract class BsProductStatusBhv extends AbstractBehaviorWritable<Produc
      */
     public List<String> extractProductStatusCodeList(List<ProductStatus> productStatusList)
     { return helpExtractListInternally(productStatusList, "productStatusCode"); }
+
+    /**
+     * Extract the value list of (single) unique key displayOrder.
+     * @param productStatusList The list of productStatus. (NotNull, EmptyAllowed)
+     * @return The list of the column value. (NotNull, EmptyAllowed, NotNullElement)
+     */
+    public List<Integer> extractDisplayOrderList(List<ProductStatus> productStatusList)
+    { return helpExtractListInternally(productStatusList, "displayOrder"); }
 
     // ===================================================================================
     //                                                                       Entity Update

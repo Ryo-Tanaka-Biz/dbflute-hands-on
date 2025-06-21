@@ -153,6 +153,26 @@ public class BsMemberSecurityCQ extends AbstractBsMemberSecurityCQ {
      */
     public BsMemberSecurityCQ addOrderBy_ReminderAnswer_Desc() { regOBD("REMINDER_ANSWER"); return this; }
 
+    protected ConditionValue _reminderUseCount;
+    public ConditionValue xdfgetReminderUseCount()
+    { if (_reminderUseCount == null) { _reminderUseCount = nCV(); }
+      return _reminderUseCount; }
+    protected ConditionValue xgetCValueReminderUseCount() { return xdfgetReminderUseCount(); }
+
+    /**
+     * Add order-by as ascend. <br>
+     * (リマインダ回数)REMINDER_USE_COUNT: {NotNull, INT(10)}
+     * @return this. (NotNull)
+     */
+    public BsMemberSecurityCQ addOrderBy_ReminderUseCount_Asc() { regOBA("REMINDER_USE_COUNT"); return this; }
+
+    /**
+     * Add order-by as descend. <br>
+     * (リマインダ回数)REMINDER_USE_COUNT: {NotNull, INT(10)}
+     * @return this. (NotNull)
+     */
+    public BsMemberSecurityCQ addOrderBy_ReminderUseCount_Desc() { regOBD("REMINDER_USE_COUNT"); return this; }
+
     protected ConditionValue _registerDatetime;
     public ConditionValue xdfgetRegisterDatetime()
     { if (_registerDatetime == null) { _registerDatetime = nCV(); }
