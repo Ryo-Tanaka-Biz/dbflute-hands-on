@@ -21,7 +21,7 @@ public class HandsOn11Logic {
     // ===================================================================================
     //                                                                          Definition
     //                                                                          ==========
-    private static final Logger logger = LoggerFactory.getLogger(HandsOn06Logic.class);
+    private static final Logger logger = LoggerFactory.getLogger(HandsOn11Logic.class);
 
     // ===================================================================================
     //                                                                           Attribute
@@ -149,7 +149,6 @@ public class HandsOn11Logic {
             });
         }
         return members;
-
     }
 
     // ===================================================================================
