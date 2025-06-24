@@ -32,7 +32,7 @@ public class HandsOn11Logic {
     // ===================================================================================
     //                                                                               Logic
     //                                                                        ============
-    // TODO done tanaryo javadoc, ぜひ戻り値にも (NotNull) を by jflute (2025/06/24)
+    // done tanaryo javadoc, ぜひ戻り値にも (NotNull) を by jflute (2025/06/24)
     /**
      * 指定された memberName を含んでいる会員名称の会員を検索する
      * その会員に紐づく支払済み購入のデータも取得する
@@ -68,7 +68,7 @@ public class HandsOn11Logic {
                 subCB.query().setPaymentCompleteFlg_Equal_False();
             });//存在する購入が全て未払いというわけではない
         });
-        // TODO done tanaryo こっちはテスト都合のloadなので、テスト側で実施しましょう by jflute (2025/06/24)
+        // done tanaryo こっちはテスト都合のloadなので、テスト側で実施しましょう by jflute (2025/06/24)
     }
 
     /**
@@ -83,7 +83,7 @@ public class HandsOn11Logic {
 
         List<Member> members = memberBhv.selectList(cb -> {
             cb.query().setMemberName_LikeSearch(memberName, op -> op.likeContain());
-            // TODO done tanaryo 要件的には最終ログイン日時が必須というわけではないので絞らなくてもOK by jflute (2025/06/24)
+            // done tanaryo 要件的には最終ログイン日時が必須というわけではないので絞らなくてもOK by jflute (2025/06/24)
             // (最終ログイン日時がnullの会員がいても良いということで)
             cb.specify().derivedMemberLogin().max(loginCB -> {
                 //あくまでここで取得するのは、特定カラム。上のexistないと、ここで取得するカラムはnullの場合あり
@@ -116,8 +116,8 @@ public class HandsOn11Logic {
                 loginCB.specify().columnMemberLoginId();
             }, Member.ALIAS_mobileLoginCount);//ログインしたことなければnull
             if (completeOnly) {
-                // TODO done tanaryo [いいね] 確かに、existsも必要だね！ by jflute (2025/06/24)
-                // TODO done tanaryo subCBではなく、purchaseCB というようにテーブル名キーワードを入れて欲しい by jflute (2025/06/24)
+                // done tanaryo [いいね] 確かに、existsも必要だね！ by jflute (2025/06/24)
+                // done tanaryo subCBではなく、purchaseCB というようにテーブル名キーワードを入れて欲しい by jflute (2025/06/24)
                 // (subCBはJava6版の慣習で、Java8版から非推奨、10年経った...けどドキュメント直ってないところあるかも)
                 cb.query().existsPurchase(purchaseCB -> {});
                 cb.query().notExistsPurchase(purchaseCB -> {
@@ -126,7 +126,7 @@ public class HandsOn11Logic {
             }
         });
 
-        // TODO done tanaryo 修行++: これはこれでOKとして、loader方式のLoadReferrerの書き方もやってみましょう by jflute (2025/06/24)
+        // done tanaryo 修行++: これはこれでOKとして、loader方式のLoadReferrerの書き方もやってみましょう by jflute (2025/06/24)
         // (↓は思い出コメントアウトして残しておくとして)
         // Loader方式の活用するので、こっちはコメントアウト
         //        memberBhv.loadPurchase(members, purchaseCB -> {
@@ -139,6 +139,7 @@ public class HandsOn11Logic {
         //        });
 
         // こっちのほうが他のテーブルも辿れて拡張性の観点で便利？
+        // TODO tanaryo loader方式でpulloutの方も混ぜることできます。 by jflute (2025/06/25)
         memberBhv.load(members, memberLoader -> {
             memberLoader.loadPurchase(purchaseCB -> {
                 purchaseCB.query().queryProduct().addOrderBy_RegularPrice_Desc();
@@ -184,7 +185,7 @@ public class HandsOn11Logic {
         MemberStatus status = member.getMemberStatus().orElseThrow();
         int loginCount = status.getMemberLoginList().size();
         String purchaseList = member.getPurchaseList().toString();
-        // TODO done tanaryo ちょこちょこ空白のフォーマットが不統一 by jflute (2025/06/24)
+        // done tanaryo ちょこちょこ空白のフォーマットが不統一 by jflute (2025/06/24)
         // フォーマッターをかけていなかったですね。。by tanayro (2025/06/24))
         String purchasePaymentList = member.getPurchaseList()
                 .stream()
