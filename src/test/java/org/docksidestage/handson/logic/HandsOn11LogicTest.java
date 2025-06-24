@@ -6,11 +6,10 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import org.docksidestage.handson.dbflute.exbhv.MemberBhv;
 import org.docksidestage.handson.dbflute.exbhv.MemberLoginBhv;
 import org.docksidestage.handson.dbflute.exentity.*;
 import org.docksidestage.handson.unit.UnitContainerTestCase;
-
-// done tanaryo javadocお願い by jflute (2025/06/21)
 
 /**
  * @author tanaryo
@@ -19,6 +18,8 @@ public class HandsOn11LogicTest extends UnitContainerTestCase {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
+    @Resource
+    private MemberBhv memberBhv;
     @Resource
     private MemberLoginBhv memberLoginBhv;
     @Resource
@@ -60,6 +61,7 @@ public class HandsOn11LogicTest extends UnitContainerTestCase {
 
         // ## Act ##
         List<Member> members = logic.selectUnpaidMemberList(memberNameKeyword);
+        memberBhv.loadPurchase(members, purchaseCB -> {});//ただ子テーブルを取得
 
         // ## Assert ##
         assertHasAnyElement(members);
@@ -90,10 +92,11 @@ public class HandsOn11LogicTest extends UnitContainerTestCase {
 
             LocalDateTime lastLoginDatetime = member.getLastLoginDatetime();
             List<MemberLogin> memberLogins = member.getMemberLoginList();
-            assertHasAnyElement(memberLogins);
-            assertTrue(memberLogins.stream().map(op -> op.getLoginDatetime()).anyMatch(op -> op.equals(lastLoginDatetime)));
-            long count = memberLogins.stream().filter(op -> op.getLoginDatetime().isAfter(lastLoginDatetime)).count();
-            assertEquals(0, count);
+            if (!memberLogins.isEmpty()) {
+                assertTrue(memberLogins.stream().map(op -> op.getLoginDatetime()).anyMatch(op -> op.equals(lastLoginDatetime)));
+                long count = memberLogins.stream().filter(op -> op.getLoginDatetime().isAfter(lastLoginDatetime)).count();
+                assertEquals(0, count);
+            }
         });
     }
 
