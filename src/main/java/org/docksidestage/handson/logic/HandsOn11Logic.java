@@ -38,7 +38,7 @@ public class HandsOn11Logic {
     // ===================================================================================
     //                                                                               Logic
     //                                                                        ============
-
+    // TODO tanaryo javadoc, ぜひ戻り値にも (NotNull) を by jflute (2025/06/24)
     /**
      * 指定された memberName を含んでいる会員名称の会員を検索する
      * その会員に紐づく支払済み購入のデータも取得する
@@ -75,6 +75,7 @@ public class HandsOn11Logic {
             });//存在する購入が全て未払いというわけではない
         });
 
+        // TODO tanaryo こっちはテスト都合のloadなので、テスト側で実施しましょう by jflute (2025/06/24)
         memberBhv.loadPurchase(members, purchaseCB -> {});//ただ子テーブルを取得
 
         return members;
@@ -92,6 +93,8 @@ public class HandsOn11Logic {
 
         List<Member> members = memberBhv.selectList(cb -> {
             cb.query().setMemberName_LikeSearch(memberName, op -> op.likeContain());
+            // TODO tanaryo 要件的には最終ログイン日時が必須というわけではないので絞らなくてもOK by jflute (2025/06/24)
+            // (最終ログイン日時がnullの会員がいても良いということで)
             cb.query().existsMemberLogin(subCB -> {});//MemberLoginテーブルを最低でも1つ持っている
             cb.specify().derivedMemberLogin().max(loginCB -> {
                 //あくまでここで取得するのは、特定カラム。上のexistないと、ここで取得するカラムはnullの場合あり
@@ -124,6 +127,9 @@ public class HandsOn11Logic {
                 loginCB.specify().columnMemberLoginId();
             }, Member.ALIAS_mobileLoginCount);//ログインしたことなければnull
             if (completeOnly) {
+            	// TODO tanaryo [いいね] 確かに、existsも必要だね！ by jflute (2025/06/24)
+            	// TODO tanaryo subCBではなく、purchaseCB というようにテーブル名キーワードを入れて欲しい by jflute (2025/06/24)
+            	// (subCBはJava6版の慣習で、Java8版から非推奨、10年経った...けどドキュメント直ってないところあるかも)
                 cb.query().existsPurchase(subCB -> {});
                 cb.query().notExistsPurchase(subCB -> {
                     subCB.query().setPaymentCompleteFlg_Equal_False();
@@ -131,6 +137,8 @@ public class HandsOn11Logic {
             }
         });
 
+        // TODO tanaryo 修行++: これはこれでOKとして、loader方式のLoadReferrerの書き方もやってみましょう by jflute (2025/06/24)
+        // (↓は思い出コメントアウトして残しておくとして)
         memberBhv.loadPurchase(members, purchaseCB -> {
             purchaseCB.query().queryProduct().addOrderBy_RegularPrice_Desc();
             purchaseCB.query().addOrderBy_PurchasePrice_Desc();
@@ -174,6 +182,7 @@ public class HandsOn11Logic {
         MemberStatus status = member.getMemberStatus().orElseThrow();
         int loginCount = status.getMemberLoginList().size();
         String purchaseList = member.getPurchaseList().toString();
+        // TODO tanaryo ちょこちょこ空白のフォーマットが不統一 by jflute (2025/06/24)
         String purchasePaymentList =member.getPurchaseList().stream().flatMap(op ->op.getPurchasePaymentList().stream()).collect(
                 Collectors.toList()).toString();
         logger.debug("ログイン回数={}, 購入リスト={}, 購入支払い一覧={}", loginCount, purchaseList, purchasePaymentList);
