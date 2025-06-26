@@ -233,7 +233,7 @@ public class HandsOn11Logic {
     /**
      * 会員のログイン回数と購入一覧と購入支払一覧をデバッグログに出力する
      *
-     * @param member 会員クラス(NotNull)
+     * @param member 会員(NotNull)
      */
     private void debugFirstStepMember(Member member) {
         MemberStatus status = member.getMemberStatus().orElseThrow();
@@ -252,7 +252,7 @@ public class HandsOn11Logic {
     /**
      * 会員ごとの購入一覧と商品名称、購入商品種類数をデバッグログに綺麗に出力する
      *
-     * @param member 会員クラス(NotNull)
+     * @param member 会員(NotNull)
      */
     private void debugSecondStepMember(Member member) {
         String purchaseList = member.getPurchaseList().toString();
