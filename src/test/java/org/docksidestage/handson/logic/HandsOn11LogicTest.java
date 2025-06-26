@@ -6,8 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
-import org.docksidestage.handson.dbflute.exbhv.MemberBhv;
-import org.docksidestage.handson.dbflute.exbhv.MemberLoginBhv;
+import org.docksidestage.handson.dbflute.exbhv.*;
 import org.docksidestage.handson.dbflute.exentity.*;
 import org.docksidestage.handson.unit.UnitContainerTestCase;
 
@@ -22,6 +21,12 @@ public class HandsOn11LogicTest extends UnitContainerTestCase {
     private MemberBhv memberBhv;
     @Resource
     private MemberLoginBhv memberLoginBhv;
+    @Resource
+    private PurchaseBhv purchaseBhv;
+    @Resource
+    private PurchasePaymentBhv purchasePaymentBhv;
+    @Resource
+    private MemberFollowingBhv memberFollowingBhv;
     @Resource
     private HandsOn11Logic logic;
 
@@ -154,6 +159,46 @@ public class HandsOn11LogicTest extends UnitContainerTestCase {
             sum = sum + purchaseList.stream().map(op -> op.getPurchasePrice()).mapToInt(Integer::intValue).sum();
         }
         log("検索された全会員の購入支払金額の合計={}", sum + "円");
+    }
+
+    /**
+     * 商品も取得できることをアサート
+     * 購入商品種類数が妥当であることをアサート
+     * 生産中止の商品を買ったことのある会員が(一人でも)検索されていることをアサート
+     * どんな手段でもいいので、手渡しだけでも...(略)ている会員が(一人でも)検索されていることを目視確認
+     */
+    public void test_selectOnParadeSecondStepMember_購入のみならず商品も検索() {
+        // ## Arrange ##
+        // memberId=20は商品ステータスが "生産中止" の商品を買ったことがあり、購入商品種類数が3である
+        int count = purchaseBhv.selectCount(cb -> {
+            cb.query().setMemberId_Equal(20);
+            cb.query().queryProduct().setProductStatusCode_Equal_生産中止();
+        });
+        assertTrue(count > 0);
+
+        int kindCount = purchaseBhv.selectScalar(Integer.class).countDistinct(cb -> {
+            cb.specify().columnProductId();
+            cb.query().setMemberId_Equal(20);
+        });
+        assertEquals(3, kindCount);
+
+        // ## Act ##
+        List<Member> members = logic.selectOnParadeSecondStepMember();
+
+        // ## Assert ##
+        assertHasAnyElement(members);
+        assertTrue(members.stream().map(Member::getMemberId).anyMatch(id -> id.equals(20)));
+        members.forEach(member -> {
+            List<Purchase> purchaseList = member.getPurchaseList();
+            if (!purchaseList.isEmpty()) {
+                List<Product> productList = purchaseList.stream().flatMap(op -> op.getProduct().stream()).collect(Collectors.toList());
+                assertHasAnyElement(productList);
+            }
+            if (member.getMemberId().equals(20)) {
+                assertEquals(3, member.getProductKindCount());
+            }
+        });
+        // memberId=4のデバッグログより、purchaseId=31において、購入価格:1700円で未払い、支払い価格:1700.85円（手渡し）を確認
     }
 
     // ===================================================================================

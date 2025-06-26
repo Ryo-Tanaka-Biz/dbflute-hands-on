@@ -7,8 +7,10 @@ import javax.annotation.Resource;
 
 import org.docksidestage.handson.dbflute.exbhv.MemberBhv;
 import org.docksidestage.handson.dbflute.exbhv.MemberStatusBhv;
+import org.docksidestage.handson.dbflute.exbhv.PurchaseBhv;
 import org.docksidestage.handson.dbflute.exentity.Member;
 import org.docksidestage.handson.dbflute.exentity.MemberStatus;
+import org.docksidestage.handson.dbflute.exentity.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +28,8 @@ public class HandsOn11Logic {
     //                                                                           =========
     @Resource
     private MemberBhv memberBhv;
+    @Resource
+    private PurchaseBhv purchaseBhv;
     @Resource
     private MemberStatusBhv memberStatusBhv;
 
@@ -149,14 +153,66 @@ public class HandsOn11Logic {
                     paymentCB.query().setPaymentMethodCode_Equal_ByHand();
                 });
             });
-            memberLoader.pulloutMemberStatus().loadMemberLogin(status ->{});
+            memberLoader.pulloutMemberStatus().loadMemberLogin(status -> {});
         });
 
         if (logger.isDebugEnabled()) {
             members.forEach(member -> {
-                debugMember(member);
+                debugFirstStepMember(member);
             });
         }
+        return members;
+    }
+
+    /**
+     * 会員ステータス、購入と商品と購入商品種類数(*1)を一緒に検索
+     * 商品ステータスが "生産中止" の商品を買ったことのある会員...もしくは(続く)
+     * (続き)手渡しだけでも払い過ぎてるのに未払いになっている購入を持ってる会員にフォローされている会員
+     * 購入は商品ステータスの表示順の昇順、購入日時の降順で並べる
+     * 会員ごとの購入一覧と商品名称、購入商品種類数をデバッグログに綺麗に出力する
+     * *1: 購入商品種類数は、例えば、A, B, C という商品を買ったことがあるなら 3 (種類)
+     *
+     * @return 会員リスト(NotNull)
+     */
+    public List<Member> selectOnParadeSecondStepMember() {
+        List<Member> members = memberBhv.selectList(cb -> {
+            cb.orScopeQuery(orCB -> {
+                orCB.query().existsPurchase(purchaseCB -> {
+                    purchaseCB.query().queryProduct().setProductStatusCode_Equal_生産中止();
+                });
+                orCB.query().existsMemberFollowingByYourMemberId(followingCB -> {
+                    followingCB.query().queryMemberByYourMemberId().existsPurchase(purchaseCB -> {
+                        purchaseCB.query().setPaymentCompleteFlg_Equal_False();
+                        purchaseCB.query().existsPurchasePayment(paymentCB -> {
+                            paymentCB.query().setPaymentMethodCode_Equal_ByHand();
+                            paymentCB.columnQuery(colCB -> {
+                                colCB.specify().columnPaymentAmount();
+                            }).greaterThan(colCB -> {
+                                colCB.specify().specifyPurchase().columnPurchasePrice();//形違うけど比較できてる？
+                            });
+                        });
+                    });
+                });
+            });
+            cb.specify().derivedPurchase().countDistinct(purchaseCB -> {
+                purchaseCB.specify().columnProductId();
+            }, Member.ALIAS_productKindCount);
+        });
+
+        memberBhv.load(members, memberLoader -> {
+            memberLoader.loadPurchase(purchaseCB -> {
+                purchaseCB.setupSelect_Product();
+                purchaseCB.query().queryProduct().queryProductStatus().addOrderBy_DisplayOrder_Asc();
+                purchaseCB.query().addOrderBy_PurchaseDatetime_Desc();
+            });
+        });
+
+        if (logger.isDebugEnabled()) {
+            members.forEach(member -> {
+                debugSecondStepMember(member);
+            });
+        }
+
         return members;
     }
 
@@ -179,7 +235,7 @@ public class HandsOn11Logic {
      *
      * @param member 会員クラス(NotNull)
      */
-    private void debugMember(Member member) {
+    private void debugFirstStepMember(Member member) {
         MemberStatus status = member.getMemberStatus().orElseThrow();
         int loginCount = status.getMemberLoginList().size();
         String purchaseList = member.getPurchaseList().toString();
@@ -191,5 +247,22 @@ public class HandsOn11Logic {
                 .collect(Collectors.toList())
                 .toString();
         logger.debug("ログイン回数={}, 購入リスト={}, 購入支払い一覧={}", loginCount, purchaseList, purchasePaymentList);
+    }
+
+    /**
+     * 会員ごとの購入一覧と商品名称、購入商品種類数をデバッグログに綺麗に出力する
+     *
+     * @param member 会員クラス(NotNull)
+     */
+    private void debugSecondStepMember(Member member) {
+        String purchaseList = member.getPurchaseList().toString();
+        String productNameList = member.getPurchaseList()
+                .stream()
+                .flatMap(op -> op.getProduct().stream())
+                .map(Product::getProductName)
+                .collect(Collectors.toList())
+                .toString();
+        int count = member.getProductKindCount();
+        logger.debug("購入一覧={}, 商品名称={}, 商品購入数={}", purchaseList, productNameList, count);
     }
 }

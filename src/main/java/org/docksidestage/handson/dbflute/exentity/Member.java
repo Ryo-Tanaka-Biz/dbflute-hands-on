@@ -22,9 +22,13 @@ public class Member extends BsMember {
 
     public static final String ALIAS_mobileLoginCount = "MOBILE_LOGIN_COUNT";
 
+    public static final String ALIAS_productKindCount= "PRODUCT_KIND_COUNT";
+
     protected LocalDateTime lastLoginDatetime;
 
     protected Integer mobileLoginCount;
+
+    protected Integer productKindCount;
 
     public LocalDateTime getLastLoginDatetime() {
         return lastLoginDatetime;
@@ -34,11 +38,19 @@ public class Member extends BsMember {
         return mobileLoginCount;
     }
 
+    public Integer getProductKindCount() {
+        return productKindCount;
+    }
+
     public void setLastLoginDatetime(LocalDateTime latestLoginDatetime) {
         this.lastLoginDatetime = latestLoginDatetime;
     }
 
     public void setMobileLoginCount(Integer mobileLoginCount) {
         this.mobileLoginCount = mobileLoginCount;
+    }
+
+    public void setProductKindCount(Integer productKindCount) {
+        this.productKindCount = productKindCount;
     }
 }
