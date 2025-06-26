@@ -139,7 +139,7 @@ public class HandsOn11Logic {
         //        });
 
         // こっちのほうが他のテーブルも辿れて拡張性の観点で便利？
-        // TODO tanaryo loader方式でpulloutの方も混ぜることできます。 by jflute (2025/06/25)
+        // TODO done tanaryo loader方式でpulloutの方も混ぜることできます。 by jflute (2025/06/25)
         memberBhv.load(members, memberLoader -> {
             memberLoader.loadPurchase(purchaseCB -> {
                 purchaseCB.query().queryProduct().addOrderBy_RegularPrice_Desc();
@@ -149,10 +149,8 @@ public class HandsOn11Logic {
                     paymentCB.query().setPaymentMethodCode_Equal_ByHand();
                 });
             });
+            memberLoader.pulloutMemberStatus().loadMemberLogin(status ->{});
         });
-
-        List<MemberStatus> statusList = memberBhv.pulloutMemberStatus(members);
-        memberStatusBhv.loadMemberLogin(statusList, loginCB -> {});
 
         if (logger.isDebugEnabled()) {
             members.forEach(member -> {
