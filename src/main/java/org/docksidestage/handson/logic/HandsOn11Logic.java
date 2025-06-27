@@ -6,11 +6,11 @@ import java.util.stream.Collectors;
 import javax.annotation.Resource;
 
 import org.docksidestage.handson.dbflute.exbhv.MemberBhv;
-import org.docksidestage.handson.dbflute.exbhv.MemberStatusBhv;
-import org.docksidestage.handson.dbflute.exbhv.PurchaseBhv;
+import org.docksidestage.handson.dbflute.exbhv.ServiceRankBhv;
 import org.docksidestage.handson.dbflute.exentity.Member;
 import org.docksidestage.handson.dbflute.exentity.MemberStatus;
 import org.docksidestage.handson.dbflute.exentity.Product;
+import org.docksidestage.handson.dbflute.exentity.ServiceRank;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,9 +29,7 @@ public class HandsOn11Logic {
     @Resource
     private MemberBhv memberBhv;
     @Resource
-    private PurchaseBhv purchaseBhv;
-    @Resource
-    private MemberStatusBhv memberStatusBhv;
+    private ServiceRankBhv serviceRankBhv;
 
     // ===================================================================================
     //                                                                               Logic
@@ -86,14 +84,14 @@ public class HandsOn11Logic {
         assertNotNull(memberName);
 
         List<Member> members = memberBhv.selectList(cb -> {
-        	// TODO tanaryo specify()上の方が嬉しい by jflute (2025/06/27)
-            cb.query().setMemberName_LikeSearch(memberName, op -> op.likeContain());
             // done tanaryo 要件的には最終ログイン日時が必須というわけではないので絞らなくてもOK by jflute (2025/06/24)
             // (最終ログイン日時がnullの会員がいても良いということで)
             cb.specify().derivedMemberLogin().max(loginCB -> {
                 //あくまでここで取得するのは、特定カラム。上のexistないと、ここで取得するカラムはnullの場合あり
                 loginCB.specify().columnLoginDatetime();
             }, Member.ALIAS_lastLoginDatetime);
+            // TODO donetanaryo specify()上の方が嬉しい by jflute (2025/06/27)
+            cb.query().setMemberName_LikeSearch(memberName, op -> op.likeContain());
         });
 
         memberBhv.loadMemberLogin(members, loginCB -> {}); //テストするために関連テーブル取得している
@@ -114,14 +112,14 @@ public class HandsOn11Logic {
      */
     public List<Member> selectOnParadeFirstStepMember(boolean completeOnly) {
         List<Member> members = memberBhv.selectList(cb -> {
+            cb.specify().derivedMemberLogin().count(loginCB -> {
+                // TODO done tanaryo specify()上の方が嬉しい by jflute (2025/06/27)
+                loginCB.specify().columnMemberLoginId();
+                loginCB.query().setMobileLoginFlg_Equal_True();
+            }, Member.ALIAS_mobileLoginCount);//ログインしたことなければnull
             cb.setupSelect_MemberStatus();
             cb.setupSelect_MemberServiceAsOne().withServiceRank();//one-to-oneはAsOneがつく
-            // TODO tanaryo Entity側もauthorを追加で by jflute (2025/06/27)
-            cb.specify().derivedMemberLogin().count(loginCB -> {
-            	// TODO tanaryo specify()上の方が嬉しい by jflute (2025/06/27)
-                loginCB.query().setMobileLoginFlg_Equal_True();
-                loginCB.specify().columnMemberLoginId();
-            }, Member.ALIAS_mobileLoginCount);//ログインしたことなければnull
+            // TODO done tanaryo Entity側もauthorを追加で by jflute (2025/06/27)
             if (completeOnly) {
                 // done tanaryo [いいね] 確かに、existsも必要だね！ by jflute (2025/06/24)
                 // done tanaryo subCBではなく、purchaseCB というようにテーブル名キーワードを入れて欲しい by jflute (2025/06/24)
@@ -179,8 +177,8 @@ public class HandsOn11Logic {
      */
     public List<Member> selectOnParadeSecondStepMember() {
         List<Member> members = memberBhv.selectList(cb -> {
-        	// done tanaryo select句に関するspecifyは、絞り込み条件(query)よりも前に定義でお願い by jflute (2025/06/27)
-        	// https://dbflute.seasar.org/ja/manual/function/ormapper/conditionbean/effective.html#implorder
+            // done tanaryo select句に関するspecifyは、絞り込み条件(query)よりも前に定義でお願い by jflute (2025/06/27)
+            // https://dbflute.seasar.org/ja/manual/function/ormapper/conditionbean/effective.html#implorder
             cb.specify().derivedPurchase().countDistinct(purchaseCB -> {
                 purchaseCB.specify().columnProductId();
             }, Member.ALIAS_productKindCount);
@@ -189,9 +187,9 @@ public class HandsOn11Logic {
                     purchaseCB.query().queryProduct().setProductStatusCode_Equal_生産中止();
                 });
                 orCB.query().existsMemberFollowingByYourMemberId(followingCB -> {
-                	// TODO tanaryo Yourで降りてYourで上がったら同じ人になっちゃう by jflute (2025/06/27)
-                	// (現状だと、検索される会員自体が払いすぎ購入をもっていて、かつ、誰かしらからフォローされている)
-                    followingCB.query().queryMemberByYourMemberId().existsPurchase(purchaseCB -> {
+                    // TODO done tanaryo Yourで降りてYourで上がったら同じ人になっちゃう by jflute (2025/06/27)
+                    // (現状だと、検索される会員自体が払いすぎ購入をもっていて、かつ、誰かしらからフォローされている)
+                    followingCB.query().queryMemberByMyMemberId().existsPurchase(purchaseCB -> {
                         purchaseCB.query().setPaymentCompleteFlg_Equal_False();
                         // done tanaryo "手渡しだけでも払い過ぎ" ですが、分割支払いできるので手渡しが複数ありえる by jflute (2025/06/27)
                         purchaseCB.columnQuery(colCB -> {
@@ -244,13 +242,13 @@ public class HandsOn11Logic {
         List<Member> members = memberBhv.selectList(cb -> {
             cb.specify().derivedMemberLogin().max(loginCB -> {
                 loginCB.specify().columnLoginDatetime();
-                // TODO tanaryo login自体がコードを持っているので、queryMemberStatus()まで行かなくてOK by jflute (2025/06/27)
-                loginCB.query().queryMemberStatus().setMemberStatusCode_Equal_正式会員();
+                // TODO done tanaryo login自体がコードを持っているので、queryMemberStatus()まで行かなくてOK by jflute (2025/06/27)
+                loginCB.query().setLoginMemberStatusCode_Equal_正式会員();
             }, Member.ALIAS_lastLoginDatetime);
 
             cb.specify().derivedMemberLogin().count(loginCB -> {
                 loginCB.specify().columnMemberLoginId();
-                loginCB.query().queryMemberStatus().setMemberStatusCode_Equal_正式会員();
+                loginCB.query().setLoginMemberStatusCode_Equal_正式会員();
             }, Member.ALIAS_fmlLoginCount);
 
             cb.specify().derivedPurchase().max(purchaseCB -> {
@@ -258,33 +256,31 @@ public class HandsOn11Logic {
                 purchaseCB.query().setPaymentCompleteFlg_Equal_True();
             }, Member.ALIAS_payedMaxPurchasePrice);
 
-            // TODO tanaryo ここは count() なので、nullにならないから coalesce() なくてもいい by jflute (2025/06/27)
+            // TODO done tanaryo ここは count() なので、nullにならないから coalesce() なくてもいい by jflute (2025/06/27)
             cb.query().derivedMemberLogin().count(loginCB -> {
                 loginCB.specify().columnMemberLoginId();
-            }, op ->op.coalesce(0)).greaterEqual(leastLoginCount);
+            }).greaterEqual(leastLoginCount);
 
             cb.query().existsMemberLogin(loginCB -> {
                 loginCB.query().queryMemberStatus().setMemberStatusCode_Equal_仮会員();
             });
 
-            // TODO tanaryo [いいね] 絞り込み論理は合ってます。素晴らしい。 by jflute (2025/06/27)
-            // TODO tanaryo [ひんと] 絞り込み論理は二種類あります。その片方は自分で導き出すことができています。 by jflute (2025/06/27)
+            // TODO done tanaryo [いいね] 絞り込み論理は合ってます。素晴らしい。 by jflute (2025/06/27)
+            // TODO done tanaryo [ひんと] 絞り込み論理は二種類あります。その片方は自分で導き出すことができています。 by jflute (2025/06/27)
             // ただ、いま導いてもらった絞り込み論理を実装しようとすると、ちょっとトリッキーな技を知らないとできない。
             // (逆に言うと、もう一つのまだ見ぬ絞り込み論理は、実装はもう片方ほどトリッキーではない)
             cb.query().existsPurchase(purchaseCB -> {
-                purchaseCB.query().queryProduct().notExistsPurchase(pchCB -> {
-                    pchCB.columnQuery(colCB -> {
-                        colCB.specify().columnMemberId();
-                    }).notEqual(colCB -> {
-                    	// TODO tanaryo existsPurchase()のpurchaseCBは絞り込み専用なので、specify()は呼べない by jflute (2025/06/27)
-                    	// cbのspecify()だと、全体の検索のカラム指定をするspecify()なので、関係ない。
-                    	// あくまで、ここのcolCBに紐づけてあげないといけない。
-                        purchaseCB.specify().columnMemberId();
-                    });
-                });
+                // TODO done tanaryo existsPurchase()のpurchaseCBは絞り込み専用なので、specify()は呼べない by jflute (2025/06/27)
+                // cbのspecify()だと、全体の検索のカラム指定をするspecify()なので、関係ない。
+                // あくまで、ここのcolCBに紐づけてあげないといけない。
+                purchaseCB.query().queryProduct().derivedPurchase().countDistinct(pchCB -> {
+                    pchCB.specify().columnMemberId();
+                }).equal(1);
             });
-        });
 
+            cb.query().addSpecifiedDerivedOrderBy_Desc(Member.ALIAS_lastLoginDatetime);
+            cb.query().addOrderBy_MemberId_Asc();
+        });
         memberBhv.load(members, memberLoader -> {
             memberLoader.loadPurchase(purchaseCB -> {
                 purchaseCB.setupSelect_Product().withProductStatus();
@@ -295,13 +291,70 @@ public class HandsOn11Logic {
             });
 
             memberLoader.loadMemberLogin(loginCB -> {
-                loginCB.query().addSpecifiedDerivedOrderBy_Desc(Member.ALIAS_lastLoginDatetime);
-                loginCB.query().addOrderBy_MemberId_Asc();
                 loginCB.query().addOrderBy_LoginDatetime_Desc();
             });
 
         });
         return members;
+    }
+
+    /**
+     * サービスランクごとの会員数、合計購入価格、平均最大購入価格(*1)、ログイン数を検索
+     *      紐付く会員とその会員に紐付く購入と会員ログインも取得する
+     *     会員数の多い順に並べる
+     * *1: 会員ごとの最大購入価格のサービスランクごとの平均 (nullにならないようにすること)
+     *
+     * @return サービスランクリスト(NotNull)
+     */
+    public List<ServiceRank> selectServiceRankSummary() {
+        List<ServiceRank> serviceRanks = serviceRankBhv.selectList(cb -> {
+            cb.specify().derivedMemberService().count(serviceCB -> {
+                serviceCB.specify().columnMemberServiceId();
+            }, ServiceRank.ALIAS_memberCount);
+
+            cb.specify().derivedMemberService().sum(serviceCB -> {//各会員の合計
+                serviceCB.specify().specifyMember().derivedPurchase().sum(purchaseCB -> {//1人の会員の合計購入価格
+                    purchaseCB.specify().columnPurchasePrice();
+                }, null);
+            }, ServiceRank.ALIAS_totalPurchasePrice);
+
+            cb.specify().derivedMemberService().avg(serviceCB -> {//各会員の平均
+                serviceCB.specify().specifyMember().derivedPurchase().max(purchaseCB -> {//1人の会員の最大購入価格
+                    purchaseCB.specify().columnPurchasePrice();
+                }, null);
+            }, ServiceRank.ALIAS_avgMaxPurchasePrice);
+
+            cb.specify().derivedMemberService().sum(serviceCB -> {//各会員の合計
+                serviceCB.specify().specifyMember().derivedMemberLogin().count(purchaseCB -> {//1人の会員のログイン数
+                    purchaseCB.specify().columnMemberLoginId();
+                }, null);
+            }, ServiceRank.ALIAS_totalLoginCount);
+
+            cb.query().addSpecifiedDerivedOrderBy_Desc(ServiceRank.ALIAS_memberCount);
+        });
+
+        serviceRankBhv.load(serviceRanks, serviceRankLoader -> {
+            serviceRankLoader.loadMemberService(serviceCB -> {
+                serviceCB.setupSelect_Member();
+            }).withNestedReferrer(serviceLoader -> {
+                serviceLoader.pulloutMember().loadPurchase(purchaseCB -> {});
+                serviceLoader.pulloutMember().loadMemberLogin(loginCB -> {});
+            });
+        });
+        return serviceRanks;
+    }
+
+    /**
+     * それぞれの会員の平均購入価格の会員全体での最大値を検索
+     *
+     * @return Integer
+     */
+    public Integer selectMaxAvgPurchasePrice() {
+        return memberBhv.selectScalar(Integer.class).max(memberCB -> {
+            memberCB.specify().derivedPurchase().avg(purchaseCB -> {
+                purchaseCB.specify().columnPurchasePrice();
+            }, null);
+        }).orElseThrow();
     }
 
     // ===================================================================================

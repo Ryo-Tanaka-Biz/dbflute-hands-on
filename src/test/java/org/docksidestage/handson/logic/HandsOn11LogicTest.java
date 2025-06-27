@@ -1,6 +1,7 @@
 package org.docksidestage.handson.logic;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,10 +24,6 @@ public class HandsOn11LogicTest extends UnitContainerTestCase {
     private MemberLoginBhv memberLoginBhv;
     @Resource
     private PurchaseBhv purchaseBhv;
-    @Resource
-    private PurchasePaymentBhv purchasePaymentBhv;
-    @Resource
-    private MemberFollowingBhv memberFollowingBhv;
     @Resource
     private HandsOn11Logic logic;
 
@@ -202,30 +199,116 @@ public class HandsOn11LogicTest extends UnitContainerTestCase {
         // 手渡しの分割払い考慮しても、memberId=4のデバックログが出ることを確認
     }
     /**
-     *     ログイン回数が 2 回より多い会員を検索し、結果がその通りであることをアサート
-     *             最終ログイン日時の降順と会員IDの昇順で並んでいることをアサート
-     *     支払済み購入の最大購入価格が妥当であることをアサート
-     *             仮会員のときにログインをしたことのある会員であることをアサート
-     *     自分だけが購入している商品を買ったことのある会員であることをアサート
+     * ログイン回数が 2 回より多い会員を検索し、結果がその通りであることをアサート
+     * 最終ログイン日時の降順と会員IDの昇順で並んでいることをアサート
+     * 支払済み購入の最大購入価格が妥当であることをアサート
+     * 仮会員のときにログインをしたことのある会員であることをアサート
+     * 自分だけが購入している商品を買ったことのある会員であることをアサート
      */
-    public void test_selectOnParadeXStepMember_オンパレードであること(){
+    public void test_selectOnParadeXStepMember_オンパレードであること() {
         // ## Arrange ##
-        // memberId=6はログイン回数が2回より多い
-        int loginCount = memberLoginBhv.selectCount(cb -> {
-            cb.query().setMemberId_Equal(6);
-        });
-        assertTrue(loginCount > 2);
-
         // ## Act ##
-        List<Member> members = logic.selectOnParadeXStepMember(2);
+        List<Member> members = logic.selectOnParadeXStepMember(3);
+
         // ## Assert ##
         assertHasAnyElement(members);
-        assertTrue(members.stream().anyMatch(member -> member.getMemberId().equals(6)));
-        // テスト通らない
+        List<Member> sortedMembers = members.stream()
+                .sorted(Comparator.comparing(Member::getLastLoginDatetime).reversed().thenComparing(Member::getMemberId))
+                .collect(Collectors.toList());
+        // 該当データが１件なので、アサートの意味があまりないか。
+        // ヒットするデータを作るのが大変そうだ。。。。
+        assertEquals(sortedMembers, members);
+        for (Member member : members) {
+            Integer memberId = member.getMemberId();
+            int loginCount = memberLoginBhv.selectCount(cb -> {
+                cb.query().setMemberId_Equal(memberId);
+            });
+            assertTrue(loginCount > 2);
+
+            int payedMaxPurchasePrice = member.getPayedMaxPurchasePrice();
+            int maxPrice = purchaseBhv.selectScalar(Integer.class).max(purchaseCB -> {
+                purchaseCB.specify().columnPurchasePrice();
+                purchaseCB.query().setMemberId_Equal(memberId);
+                purchaseCB.query().setPaymentCompleteFlg_Equal_True();
+            }).orElseThrow();
+            assertEquals(maxPrice, payedMaxPurchasePrice);
+
+            int loginCountPRV = memberLoginBhv.selectCount(cb -> {
+                cb.query().setMemberId_Equal(memberId);
+                cb.query().setLoginMemberStatusCode_Equal_仮会員();
+            });
+            assertTrue(loginCountPRV > 0);
+
+            List<Integer> productIdList = purchaseBhv.selectList(cb -> {
+                cb.query().setMemberId_Equal(memberId);
+            }).stream().map(Purchase::getProductId).collect(Collectors.toList());
+            boolean isOnlyMePurchase = checkOnlyMePurchase(productIdList);
+            assertTrue(isOnlyMePurchase);
+        }
+    }
+
+    /**
+     * 会員数が妥当であることをアサート
+     * 検索した内容をログに綺麗に出して目視で確認すること
+     */
+    public void test_selectServiceRankSummary_集計されていること() {
+        // ## Arrange ##
+        int memberTotalCount = memberBhv.selectCount(cb -> {});
+
+        // ## Act ##
+        List<ServiceRank> serviceRanks = logic.selectServiceRankSummary();
+
+        // ## Assert ##
+        assertHasAnyElement(serviceRanks);
+        int sum = serviceRanks.stream().map(ServiceRank::getMemberCount).mapToInt(Integer::intValue).sum();
+        assertEquals(memberTotalCount, sum);
+        serviceRanks.forEach(serviceRank -> {
+            Integer memberCount = serviceRank.getMemberCount();
+            Integer totalPurchasePrice = serviceRank.getTotalPurchasePrice();
+            Integer avgMaxPurchasePrice = serviceRank.getAvgMaxPurchasePrice();
+            Integer totalLoginCount = serviceRank.getTotalLoginCount();
+            log("会員数={}, 合計購入価格={}, 平均最大購入価格={},ログイン数={}", memberCount, totalPurchasePrice, avgMaxPurchasePrice,
+                    totalLoginCount);
+        });
+    }
+
+    /**
+     * 平均の最大価格に該当する会員が存在することをアサート
+     */
+    public void test_selectMaxAvgPurchasePrice_平均の最大の会員() {
+        // ## Arrange ##
+        // ## Act ##
+        Integer value = logic.selectMaxAvgPurchasePrice();
+
+        // ## Assert ##
+        assertNotNull(value);
+        int count = memberBhv.selectCount(cb -> {
+            cb.query().derivedPurchase().avg(purchaseCB -> {
+                purchaseCB.specify().columnPurchasePrice();
+            }).equal(value);
+        });
+        assertTrue(count > 0);
     }
 
     // ===================================================================================
     //                                                                   Assist Test Logic
     //                                                                        ============
-
+    /**
+     * 自分だけが購入している商品を買ったことのある会員であるか調べる
+     * @param productIdList 商品Idリスト(NotNull)
+     * @return boolean
+     */
+    private boolean checkOnlyMePurchase(List<Integer> productIdList) {
+        boolean isOnlyMePurchase = false;
+        for (Integer productId : productIdList) {
+            int recordCount = purchaseBhv.selectScalar(Integer.class).countDistinct(purchaseCB -> {
+                purchaseCB.specify().columnMemberId();
+                purchaseCB.query().setProductId_Equal(productId);
+            });
+            if (recordCount == 1) {
+                isOnlyMePurchase = true;
+            }
+        }
+        return isOnlyMePurchase;
+    }
 }

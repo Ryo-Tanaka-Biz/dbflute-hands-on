@@ -1,7 +1,6 @@
 package org.docksidestage.handson.dbflute.exentity;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import org.docksidestage.handson.dbflute.bsentity.BsMember;
 
@@ -12,6 +11,7 @@ import org.docksidestage.handson.dbflute.bsentity.BsMember;
  * This class remains when re-generating.
  * </p>
  * @author DBFlute(AutoGenerator)
+ * @author tanaryo
  */
 public class Member extends BsMember {
 
