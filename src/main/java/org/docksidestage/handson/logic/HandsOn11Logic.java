@@ -176,30 +176,30 @@ public class HandsOn11Logic {
      */
     public List<Member> selectOnParadeSecondStepMember() {
         List<Member> members = memberBhv.selectList(cb -> {
+            cb.specify().derivedPurchase().countDistinct(purchaseCB -> {
+                purchaseCB.specify().columnProductId();
+            }, Member.ALIAS_productKindCount);
             cb.orScopeQuery(orCB -> {
+                // TODO done tanaryo select句に関するspecifyは、絞り込み条件(query)よりも前に定義でお願い by jflute (2025/06/27)
+                // https://dbflute.seasar.org/ja/manual/function/ormapper/conditionbean/effective.html#implorder
                 orCB.query().existsPurchase(purchaseCB -> {
                     purchaseCB.query().queryProduct().setProductStatusCode_Equal_生産中止();
                 });
                 orCB.query().existsMemberFollowingByYourMemberId(followingCB -> {
                     followingCB.query().queryMemberByYourMemberId().existsPurchase(purchaseCB -> {
                         purchaseCB.query().setPaymentCompleteFlg_Equal_False();
-                        // TODO tanaryo "手渡しだけでも払い過ぎ" ですが、分割支払いできるので手渡しが複数ありえる by jflute (2025/06/27)
-                        purchaseCB.query().existsPurchasePayment(paymentCB -> {
-                            paymentCB.query().setPaymentMethodCode_Equal_ByHand();
-                            paymentCB.columnQuery(colCB -> {
-                                colCB.specify().columnPaymentAmount();
-                            }).greaterThan(colCB -> {
-                                colCB.specify().specifyPurchase().columnPurchasePrice();//形違うけど比較できてる？
-                            });
+                        // TODO done tanaryo "手渡しだけでも払い過ぎ" ですが、分割支払いできるので手渡しが複数ありえる by jflute (2025/06/27)
+                        purchaseCB.columnQuery(colCB -> {
+                            colCB.specify().derivedPurchasePayment().sum(paymentCB -> {
+                                paymentCB.specify().columnPaymentAmount();
+                                paymentCB.query().setPaymentMethodCode_Equal_ByHand();
+                            }, null, op -> op.coalesce(0));
+                        }).greaterThan(colCB -> {
+                            colCB.specify().columnPurchasePrice();
                         });
                     });
                 });
             });
-            // TODO tanaryo select句に関するspecifyは、絞り込み条件(query)よりも前に定義でお願い by jflute (2025/06/27)
-            // https://dbflute.seasar.org/ja/manual/function/ormapper/conditionbean/effective.html#implorder
-            cb.specify().derivedPurchase().countDistinct(purchaseCB -> {
-                purchaseCB.specify().columnProductId();
-            }, Member.ALIAS_productKindCount);
         });
 
         memberBhv.load(members, memberLoader -> {
