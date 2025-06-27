@@ -20,18 +20,30 @@ public class Member extends BsMember {
 
     public static final String ALIAS_lastLoginDatetime = "LAST_LOGIN_DATETIME";
 
+    public static final String ALIAS_fmlLoginCount = "FML_LOGIN_COUNT";
+
     public static final String ALIAS_mobileLoginCount = "MOBILE_LOGIN_COUNT";
 
-    public static final String ALIAS_productKindCount= "PRODUCT_KIND_COUNT";
+    public static final String ALIAS_productKindCount = "PRODUCT_KIND_COUNT";
+
+    public static final String ALIAS_payedMaxPurchasePrice = "PAYED_MAX_PURCHASE_PRICE";
 
     protected LocalDateTime lastLoginDatetime;
+
+    protected Integer fmlLoginCount;
 
     protected Integer mobileLoginCount;
 
     protected Integer productKindCount;
 
+    protected Integer payedMaxPurchasePrice;
+
     public LocalDateTime getLastLoginDatetime() {
         return lastLoginDatetime;
+    }
+
+    public Integer getFmlLoginCount() {
+        return fmlLoginCount;
     }
 
     public Integer getMobileLoginCount() {
@@ -42,8 +54,16 @@ public class Member extends BsMember {
         return productKindCount;
     }
 
+    public Integer getPayedMaxPurchasePrice() {
+        return payedMaxPurchasePrice;
+    }
+
     public void setLastLoginDatetime(LocalDateTime latestLoginDatetime) {
         this.lastLoginDatetime = latestLoginDatetime;
+    }
+
+    public void setFmlLoginCount(Integer fmlLoginCount) {
+        this.fmlLoginCount = fmlLoginCount;
     }
 
     public void setMobileLoginCount(Integer mobileLoginCount) {
@@ -52,5 +72,9 @@ public class Member extends BsMember {
 
     public void setProductKindCount(Integer productKindCount) {
         this.productKindCount = productKindCount;
+    }
+
+    public void setPayedMaxPurchasePrice(Integer payedMaxPurchasePrice) {
+        this.payedMaxPurchasePrice = payedMaxPurchasePrice;
     }
 }

@@ -219,6 +219,77 @@ public class HandsOn11Logic {
         return members;
     }
 
+    /**
+     * 正式会員のときにログインした最終ログイン日時とログイン回数を導出して会員を検索
+     * さらに、支払済み購入の最大購入価格を導出して取得
+     * もっとさらに、購入と商品と商品ステータスと商品カテゴリと親商品カテゴリ(*1)も取得
+     * もっともっとさらに、会員ログイン情報も取得
+     * 正式会員のときにログインした最終ログイン日時の降順、会員IDの昇順で並べる
+     * ログイン回数が指定された回数以上で絞り込み
+     * 仮会員のときにログインをしたことのある会員を検索
+     * 自分だけが購入している商品を買ったことのある会員を検索
+     * 購入は商品カテゴリ(*1)の親カテゴリ名称の昇順、子カテゴリ名称の昇順、購入日時の降順
+     * 会員ログイン情報はログイン日時の降順
+     * *1: 商品カテゴリは、二階層になっていることが前提として
+     *
+     * @param leastLoginCount ログイン回数(NotNull)
+     * @return 会員リスト(NotNull)
+     */
+    public List<Member> selectOnParadeXStepMember(int leastLoginCount) {
+        List<Member> members = memberBhv.selectList(cb -> {
+            cb.specify().derivedMemberLogin().max(loginCB -> {
+                loginCB.specify().columnLoginDatetime();
+                loginCB.query().queryMemberStatus().setMemberStatusCode_Equal_正式会員();
+            }, Member.ALIAS_lastLoginDatetime);
+
+            cb.specify().derivedMemberLogin().count(loginCB -> {
+                loginCB.specify().columnMemberLoginId();
+                loginCB.query().queryMemberStatus().setMemberStatusCode_Equal_正式会員();
+            }, Member.ALIAS_fmlLoginCount);
+
+            cb.specify().derivedPurchase().max(purchaseCB -> {
+                purchaseCB.specify().columnPurchasePrice();
+                purchaseCB.query().setPaymentCompleteFlg_Equal_True();
+            }, Member.ALIAS_payedMaxPurchasePrice);
+
+            cb.query().derivedMemberLogin().count(loginCB -> {
+                loginCB.specify().columnMemberLoginId();
+            }, null).greaterEqual(leastLoginCount);
+
+            cb.query().existsMemberLogin(loginCB -> {
+                loginCB.query().queryMemberStatus().setMemberStatusCode_Equal_仮会員();
+            });
+
+            cb.query().existsPurchase(purchaseCB -> {
+                purchaseCB.query().queryProduct().notExistsPurchase(pchCB -> {
+                    pchCB.columnQuery(colCB -> {
+                        colCB.specify().columnMemberId();
+                    }).notEqual(colCB -> {
+                        purchaseCB.specify().columnMemberId();
+                    });
+                });
+            });
+        });
+
+        memberBhv.load(members, memberLoader -> {
+            memberLoader.loadPurchase(purchaseCB -> {
+                purchaseCB.setupSelect_Product().withProductStatus();
+                purchaseCB.setupSelect_Product().withProductCategory().withProductCategorySelf();
+                purchaseCB.query().queryProduct().queryProductCategory().queryProductCategorySelf().addOrderBy_ProductCategoryName_Asc();
+                purchaseCB.query().queryProduct().queryProductCategory().addOrderBy_ProductCategoryName_Asc();
+                purchaseCB.query().addOrderBy_PurchaseDatetime_Desc();
+            });
+
+            memberLoader.loadMemberLogin(loginCB -> {
+                loginCB.query().addSpecifiedDerivedOrderBy_Desc(Member.ALIAS_lastLoginDatetime);
+                loginCB.query().addOrderBy_MemberId_Asc();
+                loginCB.query().addOrderBy_LoginDatetime_Desc();
+            });
+
+        });
+        return members;
+    }
+
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
