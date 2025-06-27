@@ -143,7 +143,7 @@ public class HandsOn11Logic {
         //        });
 
         // こっちのほうが他のテーブルも辿れて拡張性の観点で便利？
-        // TODO done tanaryo loader方式でpulloutの方も混ぜることできます。 by jflute (2025/06/25)
+        // done tanaryo loader方式でpulloutの方も混ぜることできます。 by jflute (2025/06/25)
         memberBhv.load(members, memberLoader -> {
             memberLoader.loadPurchase(purchaseCB -> {
                 purchaseCB.query().queryProduct().addOrderBy_RegularPrice_Desc();
@@ -183,6 +183,7 @@ public class HandsOn11Logic {
                 orCB.query().existsMemberFollowingByYourMemberId(followingCB -> {
                     followingCB.query().queryMemberByYourMemberId().existsPurchase(purchaseCB -> {
                         purchaseCB.query().setPaymentCompleteFlg_Equal_False();
+                        // TODO tanaryo "手渡しだけでも払い過ぎ" ですが、分割支払いできるので手渡しが複数ありえる by jflute (2025/06/27)
                         purchaseCB.query().existsPurchasePayment(paymentCB -> {
                             paymentCB.query().setPaymentMethodCode_Equal_ByHand();
                             paymentCB.columnQuery(colCB -> {
@@ -194,6 +195,8 @@ public class HandsOn11Logic {
                     });
                 });
             });
+            // TODO tanaryo select句に関するspecifyは、絞り込み条件(query)よりも前に定義でお願い by jflute (2025/06/27)
+            // https://dbflute.seasar.org/ja/manual/function/ormapper/conditionbean/effective.html#implorder
             cb.specify().derivedPurchase().countDistinct(purchaseCB -> {
                 purchaseCB.specify().columnProductId();
             }, Member.ALIAS_productKindCount);
