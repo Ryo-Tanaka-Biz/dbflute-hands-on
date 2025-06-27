@@ -3,6 +3,9 @@ package org.docksidestage.handson.logic;
 import javax.annotation.Resource;
 
 import org.dbflute.exception.EntityAlreadyUpdatedException;
+import org.dbflute.helper.thread.CountDownRace;
+import org.dbflute.helper.thread.CountDownRaceExecution;
+import org.dbflute.helper.thread.CountDownRaceRunner;
 import org.dbflute.utflute.core.cannonball.CannonballOption;
 import org.docksidestage.handson.dbflute.exbhv.MemberBhv;
 import org.docksidestage.handson.dbflute.exbhv.ProductBhv;
@@ -193,6 +196,10 @@ public class HandsOn08LogicTest extends UnitContainerTestCase {
         //A->B->C->Dの順の場合、お互いが相手のロックを待つ状態になる
         //A->D->B->Cの場合、スレッド2がロックを待つ状態で、スレッド1はロック待ちしない
         //ロックを保持したまま、別のロックの取得を待つのが前提？
+        // AさんもBさんも、その行に対する更新ロックを取得している。
+        //
+        // 更新ロックは、他人が取得することができないので、誰かが取得している間は、他の人が取得待ちになる。
+        // トランザクションが終われば、更新ロックが開放されるので、待ってた人が今度はロックを取得する。
     }
 
     // ===================================================================================
