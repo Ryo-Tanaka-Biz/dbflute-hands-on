@@ -86,6 +86,7 @@ public class HandsOn11Logic {
         assertNotNull(memberName);
 
         List<Member> members = memberBhv.selectList(cb -> {
+        	// TODO tanaryo specify()上の方が嬉しい by jflute (2025/06/27)
             cb.query().setMemberName_LikeSearch(memberName, op -> op.likeContain());
             // done tanaryo 要件的には最終ログイン日時が必須というわけではないので絞らなくてもOK by jflute (2025/06/24)
             // (最終ログイン日時がnullの会員がいても良いということで)
@@ -115,7 +116,9 @@ public class HandsOn11Logic {
         List<Member> members = memberBhv.selectList(cb -> {
             cb.setupSelect_MemberStatus();
             cb.setupSelect_MemberServiceAsOne().withServiceRank();//one-to-oneはAsOneがつく
+            // TODO tanaryo Entity側もauthorを追加で by jflute (2025/06/27)
             cb.specify().derivedMemberLogin().count(loginCB -> {
+            	// TODO tanaryo specify()上の方が嬉しい by jflute (2025/06/27)
                 loginCB.query().setMobileLoginFlg_Equal_True();
                 loginCB.specify().columnMemberLoginId();
             }, Member.ALIAS_mobileLoginCount);//ログインしたことなければnull
@@ -186,6 +189,8 @@ public class HandsOn11Logic {
                     purchaseCB.query().queryProduct().setProductStatusCode_Equal_生産中止();
                 });
                 orCB.query().existsMemberFollowingByYourMemberId(followingCB -> {
+                	// TODO tanaryo Yourで降りてYourで上がったら同じ人になっちゃう by jflute (2025/06/27)
+                	// (現状だと、検索される会員自体が払いすぎ購入をもっていて、かつ、誰かしらからフォローされている)
                     followingCB.query().queryMemberByYourMemberId().existsPurchase(purchaseCB -> {
                         purchaseCB.query().setPaymentCompleteFlg_Equal_False();
                         // done tanaryo "手渡しだけでも払い過ぎ" ですが、分割支払いできるので手渡しが複数ありえる by jflute (2025/06/27)
@@ -239,6 +244,7 @@ public class HandsOn11Logic {
         List<Member> members = memberBhv.selectList(cb -> {
             cb.specify().derivedMemberLogin().max(loginCB -> {
                 loginCB.specify().columnLoginDatetime();
+                // TODO tanaryo login自体がコードを持っているので、queryMemberStatus()まで行かなくてOK by jflute (2025/06/27)
                 loginCB.query().queryMemberStatus().setMemberStatusCode_Equal_正式会員();
             }, Member.ALIAS_lastLoginDatetime);
 
@@ -252,6 +258,7 @@ public class HandsOn11Logic {
                 purchaseCB.query().setPaymentCompleteFlg_Equal_True();
             }, Member.ALIAS_payedMaxPurchasePrice);
 
+            // TODO tanaryo ここは count() なので、nullにならないから coalesce() なくてもいい by jflute (2025/06/27)
             cb.query().derivedMemberLogin().count(loginCB -> {
                 loginCB.specify().columnMemberLoginId();
             }, op ->op.coalesce(0)).greaterEqual(leastLoginCount);
@@ -260,11 +267,18 @@ public class HandsOn11Logic {
                 loginCB.query().queryMemberStatus().setMemberStatusCode_Equal_仮会員();
             });
 
+            // TODO tanaryo [いいね] 絞り込み論理は合ってます。素晴らしい。 by jflute (2025/06/27)
+            // TODO tanaryo [ひんと] 絞り込み論理は二種類あります。その片方は自分で導き出すことができています。 by jflute (2025/06/27)
+            // ただ、いま導いてもらった絞り込み論理を実装しようとすると、ちょっとトリッキーな技を知らないとできない。
+            // (逆に言うと、もう一つのまだ見ぬ絞り込み論理は、実装はもう片方ほどトリッキーではない)
             cb.query().existsPurchase(purchaseCB -> {
                 purchaseCB.query().queryProduct().notExistsPurchase(pchCB -> {
                     pchCB.columnQuery(colCB -> {
                         colCB.specify().columnMemberId();
                     }).notEqual(colCB -> {
+                    	// TODO tanaryo existsPurchase()のpurchaseCBは絞り込み専用なので、specify()は呼べない by jflute (2025/06/27)
+                    	// cbのspecify()だと、全体の検索のカラム指定をするspecify()なので、関係ない。
+                    	// あくまで、ここのcolCBに紐づけてあげないといけない。
                         purchaseCB.specify().columnMemberId();
                     });
                 });
