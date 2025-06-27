@@ -254,7 +254,7 @@ public class HandsOn11Logic {
 
             cb.query().derivedMemberLogin().count(loginCB -> {
                 loginCB.specify().columnMemberLoginId();
-            }, null).greaterEqual(leastLoginCount);
+            }, op ->op.coalesce(0)).greaterEqual(leastLoginCount);
 
             cb.query().existsMemberLogin(loginCB -> {
                 loginCB.query().queryMemberStatus().setMemberStatusCode_Equal_仮会員();

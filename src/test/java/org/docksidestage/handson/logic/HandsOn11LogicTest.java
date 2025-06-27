@@ -201,6 +201,28 @@ public class HandsOn11LogicTest extends UnitContainerTestCase {
         // memberId=4のデバッグログより、purchaseId=31において、購入価格:1700円で未払い、支払い価格:1700.85円（手渡し）を確認
         // 手渡しの分割払い考慮しても、memberId=4のデバックログが出ることを確認
     }
+    /**
+     *     ログイン回数が 2 回より多い会員を検索し、結果がその通りであることをアサート
+     *             最終ログイン日時の降順と会員IDの昇順で並んでいることをアサート
+     *     支払済み購入の最大購入価格が妥当であることをアサート
+     *             仮会員のときにログインをしたことのある会員であることをアサート
+     *     自分だけが購入している商品を買ったことのある会員であることをアサート
+     */
+    public void test_selectOnParadeXStepMember_オンパレードであること(){
+        // ## Arrange ##
+        // memberId=6はログイン回数が2回より多い
+        int loginCount = memberLoginBhv.selectCount(cb -> {
+            cb.query().setMemberId_Equal(6);
+        });
+        assertTrue(loginCount > 2);
+
+        // ## Act ##
+        List<Member> members = logic.selectOnParadeXStepMember(2);
+        // ## Assert ##
+        assertHasAnyElement(members);
+        assertTrue(members.stream().anyMatch(member -> member.getMemberId().equals(6)));
+        // テスト通らない
+    }
 
     // ===================================================================================
     //                                                                   Assist Test Logic
